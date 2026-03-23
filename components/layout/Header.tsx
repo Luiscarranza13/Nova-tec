@@ -4,7 +4,8 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useState, useEffect } from 'react'
-import { Menu, X, Code2, Sparkles } from 'lucide-react'
+import { Menu, X, Code2, Sun, Moon } from 'lucide-react'
+import { useTheme } from 'next-themes'
 import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
 import { NAV_ITEMS } from '@/lib/constants'
@@ -12,12 +13,13 @@ import { NAV_ITEMS } from '@/lib/constants'
 export function Header() {
   const [isScrolled, setIsScrolled] = useState(false)
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
+  const [mounted, setMounted] = useState(false)
   const pathname = usePathname()
+  const { theme, setTheme } = useTheme()
 
   useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 20)
-    }
+    setMounted(true)
+    const handleScroll = () => setIsScrolled(window.scrollY > 20)
     window.addEventListener('scroll', handleScroll)
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
@@ -69,6 +71,18 @@ export function Header() {
           </div>
 
           <div className="hidden md:flex items-center gap-3">
+            {/* Theme toggle */}
+            <button
+              onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
+              className="w-9 h-9 rounded-lg border border-border/50 bg-muted/40 flex items-center justify-center text-muted-foreground hover:text-foreground hover:border-primary/30 hover:bg-primary/5 transition-all duration-200"
+              aria-label="Cambiar tema"
+            >
+              {mounted && theme === 'dark' ? (
+                <Sun className="h-4 w-4" />
+              ) : (
+                <Moon className="h-4 w-4" />
+              )}
+            </button>
             <Link href="/login">
               <Button variant="ghost" size="sm">
                 Iniciar Sesión
@@ -82,7 +96,7 @@ export function Header() {
           </div>
 
           <button
-            className="md:hidden p-2 rounded-lg hover:bg-muted transition-colors"
+            className="md:hidden flex items-center gap-2 p-2 rounded-lg hover:bg-muted transition-colors"
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
           >
             {isMobileMenuOpen ? (

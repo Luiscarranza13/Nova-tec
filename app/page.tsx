@@ -9,6 +9,9 @@ import { Portfolio } from '@/components/home/Portfolio'
 import { Testimonials } from '@/components/home/Testimonials'
 import { Pricing } from '@/components/home/Pricing'
 import { Contact } from '@/components/home/Contact'
+import { CTA } from '@/components/home/CTA'
+import { WhatsAppButton } from '@/components/ui/whatsapp-button'
+import { ScrollToTop } from '@/components/ui/scroll-to-top'
 
 export default function HomePage() {
   return (
@@ -16,16 +19,19 @@ export default function HomePage() {
       <Header />
       <main>
         <Hero />
+        <Stats />
         <Services />
         <WhyUs />
         <Process />
-        <Stats />
         <Portfolio />
         <Testimonials />
         <Pricing />
         <Contact />
+        <CTA />
       </main>
       <Footer />
+      <WhatsAppButton />
+      <ScrollToTop />
     </>
   )
 }

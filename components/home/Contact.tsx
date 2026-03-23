@@ -2,224 +2,213 @@
 
 import { useState } from 'react'
 import { motion } from 'framer-motion'
-import { Mail, MapPin, Phone, Send } from 'lucide-react'
-import { Card } from '@/components/ui/card'
+import { Mail, MapPin, Phone, Send, ArrowRight, MessageSquare } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
 import { Label } from '@/components/ui/label'
 import { toast } from 'sonner'
 
+const contactInfo = [
+  {
+    icon: MapPin,
+    label: 'Dirección',
+    value: 'Av. Tecnológico 123, Ciudad de México',
+    sub: 'CP 06000, México',
+  },
+  {
+    icon: Phone,
+    label: 'Teléfono',
+    value: '+52 (55) 1234 5678',
+    sub: '+52 (55) 9876 5432',
+  },
+  {
+    icon: Mail,
+    label: 'Email',
+    value: 'hola@novatec.mx',
+    sub: 'proyectos@novatec.mx',
+  },
+]
+
 export function Contact() {
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    phone: '',
-    company: '',
-    message: '',
+    name: '', email: '', phone: '', company: '', message: '',
   })
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setIsSubmitting(true)
-    
-    await new Promise((resolve) => setTimeout(resolve, 1500))
-    
+    await new Promise((r) => setTimeout(r, 1500))
     toast.success('Mensaje enviado correctamente', {
       description: 'Nos pondremos en contacto contigo pronto.',
     })
-    
     setFormData({ name: '', email: '', phone: '', company: '', message: '' })
     setIsSubmitting(false)
   }
 
   return (
-    <section id="contacto" className="py-24 bg-card/50">
-      <div className="container max-w-7xl mx-auto px-4">
+    <section id="contacto" className="py-32 relative overflow-hidden">
+      <div className="absolute inset-0 bg-gradient-to-b from-transparent via-card/40 to-transparent" />
+      <div className="absolute bottom-0 left-1/4 w-[500px] h-[500px] bg-primary/5 rounded-full blur-[100px] pointer-events-none" />
+
+      <div className="container relative z-10 max-w-7xl mx-auto px-4">
+        {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="text-center mb-16"
+          className="text-center max-w-2xl mx-auto mb-20"
         >
-          <span className="text-primary font-medium">CONTACTO</span>
-          <h2 className="text-3xl md:text-4xl font-bold font-heading mt-2">
-            ¿Listo para
+          <span className="inline-flex items-center gap-2 text-xs font-semibold text-primary uppercase tracking-widest mb-4">
+            <span className="w-8 h-px bg-primary" />
+            Contacto
+            <span className="w-8 h-px bg-primary" />
+          </span>
+          <h2 className="text-4xl md:text-5xl font-bold font-heading leading-tight mb-4">
+            ¿Listo para transformar
             <br />
-            <span className="text-primary">Transformar tu Idea?</span>
+            <span className="text-gradient">tu idea en realidad?</span>
           </h2>
-          <p className="text-muted-foreground mt-4 max-w-2xl mx-auto">
-            Estamos listos para escuchar sobre tu proyecto. Contáctanos y descubre
-            cómo podemos hacer realidad tu visión.
+          <p className="text-muted-foreground text-lg">
+            Estamos listos para escuchar sobre tu proyecto. Cuéntanos tu visión.
           </p>
         </motion.div>
 
-        <div className="grid lg:grid-cols-2 gap-12 max-w-5xl mx-auto">
+        <div className="grid lg:grid-cols-5 gap-10 max-w-5xl mx-auto">
+          {/* Form */}
           <motion.div
-            initial={{ opacity: 0, x: -20 }}
+            initial={{ opacity: 0, x: -30 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
+            className="lg:col-span-3"
           >
-            <Card className="h-full p-8">
-              <h3 className="text-xl font-semibold font-heading mb-6">
-                Envíanos un Mensaje
-              </h3>
-              
-              <form onSubmit={handleSubmit} className="space-y-6">
+            <div className="rounded-2xl border border-border/50 bg-card/60 backdrop-blur-sm p-8">
+              <div className="flex items-center gap-3 mb-8">
+                <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center">
+                  <MessageSquare className="h-5 w-5 text-primary" />
+                </div>
+                <h3 className="text-lg font-semibold font-heading">Envíanos un mensaje</h3>
+              </div>
+
+              <form onSubmit={handleSubmit} className="space-y-5">
                 <div className="grid sm:grid-cols-2 gap-4">
                   <div className="space-y-2">
-                    <Label htmlFor="name">Nombre completo *</Label>
+                    <Label htmlFor="name" className="text-sm">Nombre completo *</Label>
                     <Input
                       id="name"
                       placeholder="Juan Pérez"
                       value={formData.name}
-                      onChange={(e) =>
-                        setFormData({ ...formData, name: e.target.value })
-                      }
+                      onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                       required
+                      className="bg-background/50"
                     />
                   </div>
                   <div className="space-y-2">
-                    <Label htmlFor="email">Email *</Label>
+                    <Label htmlFor="email" className="text-sm">Email *</Label>
                     <Input
                       id="email"
                       type="email"
                       placeholder="juan@empresa.com"
                       value={formData.email}
-                      onChange={(e) =>
-                        setFormData({ ...formData, email: e.target.value })
-                      }
+                      onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                       required
+                      className="bg-background/50"
                     />
                   </div>
                 </div>
-                
+
                 <div className="grid sm:grid-cols-2 gap-4">
                   <div className="space-y-2">
-                    <Label htmlFor="phone">Teléfono</Label>
+                    <Label htmlFor="phone" className="text-sm">Teléfono</Label>
                     <Input
                       id="phone"
                       type="tel"
                       placeholder="+52 (55) 1234 5678"
                       value={formData.phone}
-                      onChange={(e) =>
-                        setFormData({ ...formData, phone: e.target.value })
-                      }
+                      onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+                      className="bg-background/50"
                     />
                   </div>
                   <div className="space-y-2">
-                    <Label htmlFor="company">Empresa</Label>
+                    <Label htmlFor="company" className="text-sm">Empresa</Label>
                     <Input
                       id="company"
                       placeholder="Nombre de tu empresa"
                       value={formData.company}
-                      onChange={(e) =>
-                        setFormData({ ...formData, company: e.target.value })
-                      }
+                      onChange={(e) => setFormData({ ...formData, company: e.target.value })}
+                      className="bg-background/50"
                     />
                   </div>
                 </div>
-                
+
                 <div className="space-y-2">
-                  <Label htmlFor="message">Mensaje *</Label>
+                  <Label htmlFor="message" className="text-sm">Mensaje *</Label>
                   <Textarea
                     id="message"
                     placeholder="Cuéntanos sobre tu proyecto..."
                     rows={5}
                     value={formData.message}
-                    onChange={(e) =>
-                      setFormData({ ...formData, message: e.target.value })
-                    }
+                    onChange={(e) => setFormData({ ...formData, message: e.target.value })}
                     required
+                    className="bg-background/50 resize-none"
                   />
                 </div>
-                
-                <Button type="submit" size="lg" className="w-full" disabled={isSubmitting}>
+
+                <Button type="submit" size="lg" className="w-full group shadow-lg shadow-primary/20" disabled={isSubmitting}>
                   {isSubmitting ? (
-                    <>
-                      <span className="animate-spin mr-2">⏳</span>
+                    <span className="flex items-center gap-2">
+                      <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
                       Enviando...
-                    </>
+                    </span>
                   ) : (
                     <>
                       <Send className="mr-2 h-4 w-4" />
                       Enviar Mensaje
+                      <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
                     </>
                   )}
                 </Button>
               </form>
-            </Card>
+            </div>
           </motion.div>
 
+          {/* Info */}
           <motion.div
-            initial={{ opacity: 0, x: 20 }}
+            initial={{ opacity: 0, x: 30 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
-            className="space-y-6"
+            className="lg:col-span-2 flex flex-col gap-5"
           >
-            <Card className="p-8">
-              <h3 className="text-xl font-semibold font-heading mb-6">
-                Información de Contacto
-              </h3>
-              
-              <div className="space-y-6">
-                <div className="flex items-start gap-4">
-                  <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center shrink-0">
-                    <MapPin className="h-6 w-6 text-primary" />
+            {/* Contact details */}
+            <div className="rounded-2xl border border-border/50 bg-card/60 backdrop-blur-sm p-6 space-y-6">
+              {contactInfo.map(({ icon: Icon, label, value, sub }) => (
+                <div key={label} className="flex items-start gap-4">
+                  <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center shrink-0">
+                    <Icon className="h-5 w-5 text-primary" />
                   </div>
                   <div>
-                    <h4 className="font-medium">Dirección</h4>
-                    <p className="text-muted-foreground text-sm mt-1">
-                      Av. Tecnológico 123<br />
-                      Ciudad de México, CP 06000<br />
-                      México
-                    </p>
+                    <p className="text-xs text-muted-foreground mb-0.5">{label}</p>
+                    <p className="text-sm font-medium">{value}</p>
+                    <p className="text-sm text-muted-foreground">{sub}</p>
                   </div>
                 </div>
-                
-                <div className="flex items-start gap-4">
-                  <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center shrink-0">
-                    <Phone className="h-6 w-6 text-primary" />
-                  </div>
-                  <div>
-                    <h4 className="font-medium">Teléfono</h4>
-                    <p className="text-muted-foreground text-sm mt-1">
-                      +52 (55) 1234 5678<br />
-                      +52 (55) 9876 5432
-                    </p>
-                  </div>
-                </div>
-                
-                <div className="flex items-start gap-4">
-                  <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center shrink-0">
-                    <Mail className="h-6 w-6 text-primary" />
-                  </div>
-                  <div>
-                    <h4 className="font-medium">Email</h4>
-                    <p className="text-muted-foreground text-sm mt-1">
-                      hola@novatec.mx<br />
-                      proyectos@novatec.mx
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </Card>
-            
-            <Card className="p-8 bg-gradient-to-br from-primary/10 to-accent/10 border-primary/20">
-              <h3 className="text-xl font-semibold font-heading mb-4">
-                ¿Necesitas una Reunión?
-              </h3>
-              <p className="text-muted-foreground text-sm mb-6">
-                Agenda una llamada de 30 minutos con nuestro equipo para discutir tu proyecto
-                y descubrir cómo podemos ayudarte.
+              ))}
+            </div>
+
+            {/* CTA card */}
+            <div className="rounded-2xl border border-primary/20 bg-gradient-to-br from-primary/10 to-chart-2/5 p-6">
+              <h3 className="font-semibold font-heading mb-2">¿Prefieres una llamada?</h3>
+              <p className="text-sm text-muted-foreground mb-5">
+                Agenda una sesión de 30 minutos con nuestro equipo para discutir tu proyecto.
               </p>
-              <Button className="w-full" asChild>
+              <Button className="w-full group" asChild>
                 <a href="https://calendly.com/novatec" target="_blank" rel="noopener noreferrer">
                   Agendar Reunión
+                  <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
                 </a>
               </Button>
-            </Card>
+            </div>
           </motion.div>
         </div>
       </div>

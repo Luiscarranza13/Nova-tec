@@ -1,31 +1,36 @@
 import { Header } from '@/components/layout/Header'
 import { Footer } from '@/components/layout/Footer'
+import { NosotrosHero } from '@/components/nosotros/NosotrosHero'
+import { MisionVision } from '@/components/nosotros/MisionVision'
+import { Historia } from '@/components/nosotros/Historia'
+import { Valores } from '@/components/nosotros/Valores'
+import { Equipo } from '@/components/nosotros/Equipo'
+import { TechStack } from '@/components/nosotros/TechStack'
+import { CTA } from '@/components/home/CTA'
+import { WhatsAppButton } from '@/components/ui/whatsapp-button'
+import { ScrollToTop } from '@/components/ui/scroll-to-top'
 
 export const metadata = {
   title: 'Nosotros',
-  description: 'Conoce más sobre NovaTec, nuestra misión, visión y valores.',
+  description: 'Conoce más sobre NovaTec: nuestra misión, visión, historia, valores y el equipo detrás de cada proyecto.',
 }
 
 export default function NosotrosPage() {
   return (
     <>
       <Header />
-      <main className="pt-24">
-        <section className="py-24">
-          <div className="container max-w-7xl mx-auto px-4">
-            <div className="max-w-3xl mx-auto text-center">
-              <h1 className="text-4xl md:text-5xl font-bold font-heading mb-6">
-                Sobre <span className="text-primary">NovaTec</span>
-              </h1>
-              <p className="text-xl text-muted-foreground">
-                Somos una empresa de desarrollo de software comprometida con la excelencia
-                y la innovación tecnológica.
-              </p>
-            </div>
-          </div>
-        </section>
+      <main>
+        <NosotrosHero />
+        <MisionVision />
+        <Historia />
+        <Valores />
+        <Equipo />
+        <TechStack />
+        <CTA />
       </main>
       <Footer />
+      <WhatsAppButton />
+      <ScrollToTop />
     </>
   )
 }
