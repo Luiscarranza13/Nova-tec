@@ -1,111 +1,116 @@
-export type Profile = {
+// =============================================
+// NovaTec - Tipos de Base de Datos
+// =============================================
+
+export type Usuario = {
   id: string
-  email: string
-  full_name: string | null
-  avatar_url: string | null
-  role: 'admin' | 'user'
-  phone: string | null
-  created_at: string
-  updated_at: string
+  correo: string
+  nombre_completo: string | null
+  foto_url: string | null
+  rol: 'admin' | 'usuario'
+  telefono: string | null
+  creado_en: string
+  actualizado_en: string
 }
 
-export type Client = {
+export type Cliente = {
   id: string
-  name: string
-  email: string
-  company: string | null
-  phone: string | null
-  notes: string | null
-  created_by: string | null
-  created_at: string
-  updated_at: string
+  nombre: string
+  correo: string
+  empresa: string | null
+  telefono: string | null
+  notas: string | null
+  creado_por: string | null
+  creado_en: string
+  actualizado_en: string
 }
 
-export type ProjectStatus = 'pending' | 'in_progress' | 'review' | 'completed' | 'cancelled'
+export type EstadoProyecto = 'pendiente' | 'en_progreso' | 'en_revision' | 'completado' | 'cancelado'
 
-export type Project = {
+export type Proyecto = {
   id: string
-  name: string
-  description: string | null
-  client_id: string | null
-  client?: Client
-  status: ProjectStatus
-  budget: number | null
-  progress: number
-  start_date: string | null
-  end_date: string | null
-  created_by: string | null
-  created_at: string
-  updated_at: string
+  nombre: string
+  descripcion: string | null
+  cliente_id: string | null
+  cliente?: Cliente
+  estado: EstadoProyecto
+  presupuesto: number | null
+  progreso: number
+  fecha_inicio: string | null
+  fecha_fin: string | null
+  creado_por: string | null
+  creado_en: string
+  actualizado_en: string
 }
 
-export type Service = {
+export type Servicio = {
   id: string
-  name: string
-  description: string | null
-  category: string | null
-  price: number | null
-  icon: string | null
-  order_index: number
-  is_active: boolean
-  created_at: string
-  updated_at: string
+  nombre: string
+  descripcion: string | null
+  categoria: 'Desarrollo' | 'Diseño' | 'Infraestructura' | 'Consultoría' | null
+  precio: number | null
+  icono: string | null
+  orden: number
+  activo: boolean
+  creado_en: string
+  actualizado_en: string
 }
 
-export type QuotationStatus = 'draft' | 'sent' | 'accepted' | 'rejected'
+export type EstadoCotizacion = 'borrador' | 'enviada' | 'aceptada' | 'rechazada'
 
-export type Quotation = {
+export type Cotizacion = {
   id: string
-  client_id: string | null
-  client?: Client
-  status: QuotationStatus
+  numero: string
+  cliente_id: string | null
+  cliente?: Cliente
+  estado: EstadoCotizacion
   subtotal: number
-  tax: number
+  impuesto: number
   total: number
-  notes: string | null
-  valid_until: string | null
-  created_by: string | null
-  created_at: string
-  updated_at: string
-  items?: QuotationItem[]
+  notas: string | null
+  valida_hasta: string | null
+  creado_por: string | null
+  creado_en: string
+  actualizado_en: string
+  items?: CotizacionItem[]
 }
 
-export type QuotationItem = {
+export type CotizacionItem = {
   id: string
-  quotation_id: string
-  service_id: string | null
-  service?: Service
-  description: string | null
-  quantity: number
-  unit_price: number
+  cotizacion_id: string
+  servicio_id: string | null
+  servicio?: Servicio
+  descripcion: string | null
+  cantidad: number
+  precio_unitario: number
   total: number
 }
 
-export type Testimonial = {
+export type Testimonio = {
   id: string
-  client_name: string
-  client_company: string | null
-  client_avatar: string | null
-  quote: string
-  rating: number
-  is_featured: boolean
-  created_at: string
+  nombre_cliente: string
+  empresa: string | null
+  foto_url: string | null
+  comentario: string
+  calificacion: number
+  destacado: boolean
+  creado_en: string
 }
 
-export type ContactMessage = {
+export type Mensaje = {
   id: string
-  name: string
-  email: string
-  subject: string | null
-  message: string
-  is_read: boolean
-  is_resolved: boolean
-  created_at: string
+  nombre: string
+  correo: string
+  asunto: string | null
+  mensaje: string
+  leido: boolean
+  resuelto: boolean
+  creado_en: string
 }
 
-export type SiteSetting = {
+export type Configuracion = {
   id: string
-  key: string
-  value: string | null
-  updated_at: string
+  clave: string
+  valor: string | null
+  actualizado_en: string
 }

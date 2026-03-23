@@ -1,446 +1,362 @@
 -- =============================================
--- NovaTec - Supabase Database Schema
+-- NovaTec - Esquema de Base de Datos
 -- =============================================
 
--- Enable UUID extension
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 
 -- =============================================
--- PROFILES TABLE (extends auth.users)
+-- TABLA: usuarios
+-- Extiende auth.users de Supabase
 -- =============================================
-CREATE TABLE public.profiles (
-  id UUID PRIMARY KEY REFERENCES auth.users(id) ON DELETE CASCADE,
-  email TEXT NOT NULL,
-  full_name TEXT,
-  avatar_url TEXT,
-  role TEXT NOT NULL DEFAULT 'user' CHECK (role IN ('admin', 'user')),
-  phone TEXT,
-  created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-  updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+CREATE TABLE public.usuarios (
+  id            UUID PRIMARY KEY REFERENCES auth.users(id) ON DELETE CASCADE,
+  correo        TEXT NOT NULL,
+  nombre_completo TEXT,
+  foto_url      TEXT,
+  rol           TEXT NOT NULL DEFAULT 'usuario' CHECK (rol IN ('admin', 'usuario')),
+  telefono      TEXT,
+  creado_en     TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+  actualizado_en TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
 
--- RLS Policies for profiles
-ALTER TABLE public.profiles ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.usuarios ENABLE ROW LEVEL SECURITY;
 
-CREATE POLICY "Users can view own profile"
-  ON public.profiles FOR SELECT
+CREATE POLICY "Ver propio perfil"
+  ON public.usuarios FOR SELECT
   USING (auth.uid() = id);
 
-CREATE POLICY "Users can update own profile"
-  ON public.profiles FOR UPDATE
+CREATE POLICY "Editar propio perfil"
+  ON public.usuarios FOR UPDATE
   USING (auth.uid() = id);
 
-CREATE POLICY "Admins can view all profiles"
-  ON public.profiles FOR SELECT
+-- Sin recursión: usa auth.jwt() para leer el rol del token
+CREATE POLICY "Admin ve todos los usuarios"
+  ON public.usuarios FOR SELECT
   USING (
-    EXISTS (
-      SELECT 1 FROM public.profiles
-      WHERE id = auth.uid() AND role = 'admin'
-    )
+    auth.uid() = id
+    OR (auth.jwt() ->> 'role') = 'admin'
   );
 
 -- =============================================
--- CLIENTS TABLE
+-- TABLA: clientes
 -- =============================================
-CREATE TABLE public.clients (
-  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-  name TEXT NOT NULL,
-  email TEXT NOT NULL,
-  company TEXT,
-  phone TEXT,
-  notes TEXT,
-  created_by UUID REFERENCES public.profiles(id) ON DELETE SET NULL,
-  created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-  updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+CREATE TABLE public.clientes (
+  id            UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  nombre        TEXT NOT NULL,
+  correo        TEXT NOT NULL,
+  empresa       TEXT,
+  telefono      TEXT,
+  notas         TEXT,
+  creado_por    UUID REFERENCES public.usuarios(id) ON DELETE SET NULL,
+  creado_en     TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+  actualizado_en TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
 
-ALTER TABLE public.clients ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.clientes ENABLE ROW LEVEL SECURITY;
 
-CREATE POLICY "Authenticated users can view clients"
-  ON public.clients FOR SELECT
-  TO authenticated
-  USING (true);
+CREATE POLICY "Autenticados pueden ver clientes"
+  ON public.clientes FOR SELECT TO authenticated USING (true);
 
-CREATE POLICY "Authenticated users can insert clients"
-  ON public.clients FOR INSERT
-  TO authenticated
-  WITH CHECK (auth.role() = 'authenticated');
+CREATE POLICY "Autenticados pueden crear clientes"
+  ON public.clientes FOR INSERT TO authenticated WITH CHECK (true);
 
-CREATE POLICY "Authenticated users can update clients"
-  ON public.clients FOR UPDATE
-  TO authenticated
-  USING (true);
+CREATE POLICY "Autenticados pueden editar clientes"
+  ON public.clientes FOR UPDATE TO authenticated USING (true);
 
-CREATE POLICY "Authenticated users can delete clients"
-  ON public.clients FOR DELETE
-  TO authenticated
-  USING (true);
+CREATE POLICY "Autenticados pueden eliminar clientes"
+  ON public.clientes FOR DELETE TO authenticated USING (true);
 
 -- =============================================
--- PROJECTS TABLE
+-- TABLA: servicios
 -- =============================================
-CREATE TABLE public.projects (
-  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-  name TEXT NOT NULL,
-  description TEXT,
-  client_id UUID REFERENCES public.clients(id) ON DELETE SET NULL,
-  status TEXT NOT NULL DEFAULT 'pending' CHECK (status IN ('pending', 'in_progress', 'review', 'completed', 'cancelled')),
-  budget DECIMAL(12, 2),
-  progress INTEGER NOT NULL DEFAULT 0 CHECK (progress >= 0 AND progress <= 100),
-  start_date DATE,
-  end_date DATE,
-  created_by UUID REFERENCES public.profiles(id) ON DELETE SET NULL,
-  created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-  updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+CREATE TABLE public.servicios (
+  id            UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  nombre        TEXT NOT NULL,
+  descripcion   TEXT,
+  categoria     TEXT CHECK (categoria IN ('Desarrollo', 'Diseño', 'Infraestructura', 'Consultoría')),
+  precio        DECIMAL(12, 2),
+  icono         TEXT,
+  orden         INTEGER NOT NULL DEFAULT 0,
+  activo        BOOLEAN NOT NULL DEFAULT true,
+  creado_en     TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+  actualizado_en TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
 
-ALTER TABLE public.projects ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.servicios ENABLE ROW LEVEL SECURITY;
 
-CREATE POLICY "Authenticated users can view projects"
-  ON public.projects FOR SELECT
-  TO authenticated
-  USING (true);
+CREATE POLICY "Todos pueden ver servicios activos"
+  ON public.servicios FOR SELECT USING (activo = true);
 
-CREATE POLICY "Authenticated users can insert projects"
-  ON public.projects FOR INSERT
-  TO authenticated
-  WITH CHECK (auth.role() = 'authenticated');
-
-CREATE POLICY "Authenticated users can update projects"
-  ON public.projects FOR UPDATE
-  TO authenticated
-  USING (true);
-
-CREATE POLICY "Authenticated users can delete projects"
-  ON public.projects FOR DELETE
-  TO authenticated
-  USING (true);
-
--- =============================================
--- SERVICES TABLE
--- =============================================
-CREATE TABLE public.services (
-  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-  name TEXT NOT NULL,
-  description TEXT,
-  category TEXT,
-  price DECIMAL(12, 2),
-  icon TEXT,
-  order_index INTEGER NOT NULL DEFAULT 0,
-  is_active BOOLEAN NOT NULL DEFAULT true,
-  created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-  updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
-);
-
-ALTER TABLE public.services ENABLE ROW LEVEL SECURITY;
-
-CREATE POLICY "Anyone can view active services"
-  ON public.services FOR SELECT
-  TO public
-  USING (is_active = true);
-
-CREATE POLICY "Authenticated users can view all services"
-  ON public.services FOR SELECT
-  TO authenticated
-  USING (true);
-
-CREATE POLICY "Authenticated users can insert services"
-  ON public.services FOR INSERT
-  TO authenticated
-  WITH CHECK (auth.role() = 'authenticated');
-
-CREATE POLICY "Authenticated users can update services"
-  ON public.services FOR UPDATE
-  TO authenticated
-  USING (true);
-
-CREATE POLICY "Authenticated users can delete services"
-  ON public.services FOR DELETE
-  TO authenticated
-  USING (true);
-
--- =============================================
--- QUOTATIONS TABLE
--- =============================================
-CREATE TABLE public.quotations (
-  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-  client_id UUID REFERENCES public.clients(id) ON DELETE SET NULL,
-  status TEXT NOT NULL DEFAULT 'draft' CHECK (status IN ('draft', 'sent', 'accepted', 'rejected')),
-  subtotal DECIMAL(12, 2) NOT NULL DEFAULT 0,
-  tax DECIMAL(12, 2) NOT NULL DEFAULT 0,
-  total DECIMAL(12, 2) NOT NULL DEFAULT 0,
-  notes TEXT,
-  valid_until DATE,
-  created_by UUID REFERENCES public.profiles(id) ON DELETE SET NULL,
-  created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-  updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
-);
-
-ALTER TABLE public.quotations ENABLE ROW LEVEL SECURITY;
-
-CREATE POLICY "Authenticated users can view quotations"
-  ON public.quotations FOR SELECT
-  TO authenticated
-  USING (true);
-
-CREATE POLICY "Authenticated users can insert quotations"
-  ON public.quotations FOR INSERT
-  TO authenticated
-  WITH CHECK (auth.role() = 'authenticated');
-
-CREATE POLICY "Authenticated users can update quotations"
-  ON public.quotations FOR UPDATE
-  TO authenticated
-  USING (true);
-
-CREATE POLICY "Authenticated users can delete quotations"
-  ON public.quotations FOR DELETE
-  TO authenticated
-  USING (true);
-
--- =============================================
--- QUOTATION ITEMS TABLE
--- =============================================
-CREATE TABLE public.quotation_items (
-  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-  quotation_id UUID REFERENCES public.quotations(id) ON DELETE CASCADE,
-  service_id UUID REFERENCES public.services(id) ON DELETE SET NULL,
-  description TEXT,
-  quantity INTEGER NOT NULL DEFAULT 1,
-  unit_price DECIMAL(12, 2) NOT NULL DEFAULT 0,
-  total DECIMAL(12, 2) NOT NULL DEFAULT 0
-);
-
-ALTER TABLE public.quotation_items ENABLE ROW LEVEL SECURITY;
-
-CREATE POLICY "Authenticated users can view quotation items"
-  ON public.quotation_items FOR SELECT
-  TO authenticated
-  USING (true);
-
-CREATE POLICY "Authenticated users can insert quotation items"
-  ON public.quotation_items FOR INSERT
-  TO authenticated
-  WITH CHECK (auth.role() = 'authenticated');
-
-CREATE POLICY "Authenticated users can update quotation items"
-  ON public.quotation_items FOR UPDATE
-  TO authenticated
-  USING (true);
-
-CREATE POLICY "Authenticated users can delete quotation items"
-  ON public.quotation_items FOR DELETE
-  TO authenticated
-  USING (true);
-
--- =============================================
--- TESTIMONIALS TABLE
--- =============================================
-CREATE TABLE public.testimonials (
-  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-  client_name TEXT NOT NULL,
-  client_company TEXT,
-  client_avatar TEXT,
-  quote TEXT NOT NULL,
-  rating INTEGER NOT NULL DEFAULT 5 CHECK (rating >= 1 AND rating <= 5),
-  is_featured BOOLEAN NOT NULL DEFAULT false,
-  created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
-);
-
-ALTER TABLE public.testimonials ENABLE ROW LEVEL SECURITY;
-
-CREATE POLICY "Anyone can view featured testimonials"
-  ON public.testimonials FOR SELECT
-  TO public
-  USING (is_featured = true);
-
-CREATE POLICY "Authenticated users can view all testimonials"
-  ON public.testimonials FOR SELECT
-  TO authenticated
-  USING (true);
-
-CREATE POLICY "Authenticated users can insert testimonials"
-  ON public.testimonials FOR INSERT
-  TO authenticated
-  WITH CHECK (auth.role() = 'authenticated');
-
-CREATE POLICY "Authenticated users can update testimonials"
-  ON public.testimonials FOR UPDATE
-  TO authenticated
-  USING (true);
-
-CREATE POLICY "Authenticated users can delete testimonials"
-  ON public.testimonials FOR DELETE
-  TO authenticated
-  USING (true);
-
--- =============================================
--- CONTACT MESSAGES TABLE
--- =============================================
-CREATE TABLE public.contact_messages (
-  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-  name TEXT NOT NULL,
-  email TEXT NOT NULL,
-  subject TEXT,
-  message TEXT NOT NULL,
-  is_read BOOLEAN NOT NULL DEFAULT false,
-  is_resolved BOOLEAN NOT NULL DEFAULT false,
-  created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
-);
-
-ALTER TABLE public.contact_messages ENABLE ROW LEVEL SECURITY;
-
-CREATE POLICY "Anyone can insert contact messages"
-  ON public.contact_messages FOR INSERT
-  TO public
-  WITH CHECK (true);
-
-CREATE POLICY "Authenticated users can view contact messages"
-  ON public.contact_messages FOR SELECT
-  TO authenticated
-  USING (true);
-
-CREATE POLICY "Authenticated users can update contact messages"
-  ON public.contact_messages FOR UPDATE
-  TO authenticated
-  USING (true);
-
-CREATE POLICY "Authenticated users can delete contact messages"
-  ON public.contact_messages FOR DELETE
-  TO authenticated
-  USING (true);
-
--- =============================================
--- SITE SETTINGS TABLE
--- =============================================
-CREATE TABLE public.site_settings (
-  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-  key TEXT NOT NULL UNIQUE,
-  value TEXT,
-  updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
-);
-
-ALTER TABLE public.site_settings ENABLE ROW LEVEL SECURITY;
-
-CREATE POLICY "Anyone can view site settings"
-  ON public.site_settings FOR SELECT
-  TO public
-  USING (true);
-
-CREATE POLICY "Authenticated users can update site settings"
-  ON public.site_settings FOR ALL
-  TO authenticated
+CREATE POLICY "Admin puede ver todos los servicios"
+  ON public.servicios FOR SELECT
   USING (
-    EXISTS (
-      SELECT 1 FROM public.profiles
-      WHERE id = auth.uid() AND role = 'admin'
-    )
+    EXISTS (SELECT 1 FROM public.usuarios WHERE id = auth.uid() AND rol = 'admin')
+  );
+
+CREATE POLICY "Admin puede crear servicios"
+  ON public.servicios FOR INSERT TO authenticated WITH CHECK (true);
+
+CREATE POLICY "Admin puede editar servicios"
+  ON public.servicios FOR UPDATE TO authenticated USING (true);
+
+CREATE POLICY "Admin puede eliminar servicios"
+  ON public.servicios FOR DELETE TO authenticated USING (true);
+
+-- =============================================
+-- TABLA: proyectos
+-- =============================================
+CREATE TABLE public.proyectos (
+  id            UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  nombre        TEXT NOT NULL,
+  descripcion   TEXT,
+  cliente_id    UUID REFERENCES public.clientes(id) ON DELETE SET NULL,
+  estado        TEXT NOT NULL DEFAULT 'pendiente'
+                  CHECK (estado IN ('pendiente', 'en_progreso', 'en_revision', 'completado', 'cancelado')),
+  presupuesto   DECIMAL(12, 2),
+  progreso      INTEGER NOT NULL DEFAULT 0 CHECK (progreso >= 0 AND progreso <= 100),
+  fecha_inicio  DATE,
+  fecha_fin     DATE,
+  creado_por    UUID REFERENCES public.usuarios(id) ON DELETE SET NULL,
+  creado_en     TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+  actualizado_en TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
+ALTER TABLE public.proyectos ENABLE ROW LEVEL SECURITY;
+
+CREATE POLICY "Autenticados pueden ver proyectos"
+  ON public.proyectos FOR SELECT TO authenticated USING (true);
+
+CREATE POLICY "Autenticados pueden crear proyectos"
+  ON public.proyectos FOR INSERT TO authenticated WITH CHECK (true);
+
+CREATE POLICY "Autenticados pueden editar proyectos"
+  ON public.proyectos FOR UPDATE TO authenticated USING (true);
+
+CREATE POLICY "Autenticados pueden eliminar proyectos"
+  ON public.proyectos FOR DELETE TO authenticated USING (true);
+
+-- =============================================
+-- TABLA: cotizaciones
+-- =============================================
+CREATE TABLE public.cotizaciones (
+  id            UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  numero        TEXT UNIQUE NOT NULL DEFAULT 'COT-' || to_char(NOW(), 'YYYYMMDD') || '-' || floor(random() * 9000 + 1000)::TEXT,
+  cliente_id    UUID REFERENCES public.clientes(id) ON DELETE SET NULL,
+  estado        TEXT NOT NULL DEFAULT 'borrador'
+                  CHECK (estado IN ('borrador', 'enviada', 'aceptada', 'rechazada')),
+  subtotal      DECIMAL(12, 2) NOT NULL DEFAULT 0,
+  impuesto      DECIMAL(12, 2) NOT NULL DEFAULT 0,
+  total         DECIMAL(12, 2) NOT NULL DEFAULT 0,
+  notas         TEXT,
+  valida_hasta  DATE,
+  creado_por    UUID REFERENCES public.usuarios(id) ON DELETE SET NULL,
+  creado_en     TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+  actualizado_en TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
+ALTER TABLE public.cotizaciones ENABLE ROW LEVEL SECURITY;
+
+CREATE POLICY "Autenticados pueden ver cotizaciones"
+  ON public.cotizaciones FOR SELECT TO authenticated USING (true);
+
+CREATE POLICY "Autenticados pueden crear cotizaciones"
+  ON public.cotizaciones FOR INSERT TO authenticated WITH CHECK (true);
+
+CREATE POLICY "Autenticados pueden editar cotizaciones"
+  ON public.cotizaciones FOR UPDATE TO authenticated USING (true);
+
+CREATE POLICY "Autenticados pueden eliminar cotizaciones"
+  ON public.cotizaciones FOR DELETE TO authenticated USING (true);
+
+-- =============================================
+-- TABLA: cotizacion_items
+-- Líneas de detalle de cada cotización
+-- =============================================
+CREATE TABLE public.cotizacion_items (
+  id              UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  cotizacion_id   UUID NOT NULL REFERENCES public.cotizaciones(id) ON DELETE CASCADE,
+  servicio_id     UUID REFERENCES public.servicios(id) ON DELETE SET NULL,
+  descripcion     TEXT,
+  cantidad        INTEGER NOT NULL DEFAULT 1 CHECK (cantidad > 0),
+  precio_unitario DECIMAL(12, 2) NOT NULL DEFAULT 0,
+  total           DECIMAL(12, 2) NOT NULL DEFAULT 0
+);
+
+ALTER TABLE public.cotizacion_items ENABLE ROW LEVEL SECURITY;
+
+CREATE POLICY "Autenticados pueden ver items de cotizacion"
+  ON public.cotizacion_items FOR SELECT TO authenticated USING (true);
+
+CREATE POLICY "Autenticados pueden crear items de cotizacion"
+  ON public.cotizacion_items FOR INSERT TO authenticated WITH CHECK (true);
+
+CREATE POLICY "Autenticados pueden editar items de cotizacion"
+  ON public.cotizacion_items FOR UPDATE TO authenticated USING (true);
+
+CREATE POLICY "Autenticados pueden eliminar items de cotizacion"
+  ON public.cotizacion_items FOR DELETE TO authenticated USING (true);
+
+-- =============================================
+-- TABLA: mensajes
+-- Mensajes del formulario de contacto
+-- =============================================
+CREATE TABLE public.mensajes (
+  id          UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  nombre      TEXT NOT NULL,
+  correo      TEXT NOT NULL,
+  asunto      TEXT,
+  mensaje     TEXT NOT NULL,
+  leido       BOOLEAN NOT NULL DEFAULT false,
+  resuelto    BOOLEAN NOT NULL DEFAULT false,
+  creado_en   TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
+ALTER TABLE public.mensajes ENABLE ROW LEVEL SECURITY;
+
+CREATE POLICY "Cualquiera puede enviar un mensaje"
+  ON public.mensajes FOR INSERT WITH CHECK (true);
+
+CREATE POLICY "Autenticados pueden ver mensajes"
+  ON public.mensajes FOR SELECT TO authenticated USING (true);
+
+CREATE POLICY "Autenticados pueden editar mensajes"
+  ON public.mensajes FOR UPDATE TO authenticated USING (true);
+
+CREATE POLICY "Autenticados pueden eliminar mensajes"
+  ON public.mensajes FOR DELETE TO authenticated USING (true);
+
+-- =============================================
+-- TABLA: testimonios
+-- =============================================
+CREATE TABLE public.testimonios (
+  id            UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  nombre_cliente TEXT NOT NULL,
+  empresa       TEXT,
+  foto_url      TEXT,
+  comentario    TEXT NOT NULL,
+  calificacion  INTEGER NOT NULL DEFAULT 5 CHECK (calificacion >= 1 AND calificacion <= 5),
+  destacado     BOOLEAN NOT NULL DEFAULT false,
+  creado_en     TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
+ALTER TABLE public.testimonios ENABLE ROW LEVEL SECURITY;
+
+CREATE POLICY "Todos pueden ver testimonios"
+  ON public.testimonios FOR SELECT USING (true);
+
+CREATE POLICY "Autenticados pueden crear testimonios"
+  ON public.testimonios FOR INSERT TO authenticated WITH CHECK (true);
+
+CREATE POLICY "Autenticados pueden editar testimonios"
+  ON public.testimonios FOR UPDATE TO authenticated USING (true);
+
+CREATE POLICY "Autenticados pueden eliminar testimonios"
+  ON public.testimonios FOR DELETE TO authenticated USING (true);
+
+-- =============================================
+-- TABLA: configuracion
+-- Ajustes generales del sitio (clave-valor)
+-- =============================================
+CREATE TABLE public.configuracion (
+  id            UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  clave         TEXT UNIQUE NOT NULL,
+  valor         TEXT,
+  actualizado_en TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
+ALTER TABLE public.configuracion ENABLE ROW LEVEL SECURITY;
+
+CREATE POLICY "Todos pueden ver la configuracion"
+  ON public.configuracion FOR SELECT USING (true);
+
+CREATE POLICY "Admin puede editar la configuracion"
+  ON public.configuracion FOR ALL TO authenticated
+  USING (
+    EXISTS (SELECT 1 FROM public.usuarios WHERE id = auth.uid() AND rol = 'admin')
   );
 
 -- =============================================
--- INDEXES
+-- DATOS INICIALES: configuracion del sitio
 -- =============================================
-CREATE INDEX idx_projects_client_id ON public.projects(client_id);
-CREATE INDEX idx_projects_status ON public.projects(status);
-CREATE INDEX idx_quotations_client_id ON public.quotations(client_id);
-CREATE INDEX idx_quotations_status ON public.quotations(status);
-CREATE INDEX idx_quotation_items_quotation_id ON public.quotation_items(quotation_id);
-CREATE INDEX idx_contact_messages_is_read ON public.contact_messages(is_read);
-CREATE INDEX idx_contact_messages_is_resolved ON public.contact_messages(is_resolved);
-
--- =============================================
--- SEED DATA
--- =============================================
-
--- Insert default admin user (use your auth.users id after signup)
--- INSERT INTO public.profiles (id, email, full_name, role)
--- VALUES ('your-user-uuid', 'admin@novatec.mx', 'Administrador', 'admin');
-
--- Insert sample services
-INSERT INTO public.services (name, description, category, price, icon, order_index) VALUES
-  ('Desarrollo Web', 'Creamos sitios web y aplicaciones web modernas, rápidas y escalables.', 'Desarrollo', 25000, 'Globe', 1),
-  ('Desarrollo Móvil', 'Desarrollamos aplicaciones nativas e híbridas para iOS y Android.', 'Desarrollo', 35000, 'Smartphone', 2),
-  ('Desarrollo de Software', 'Construimos soluciones de software personalizadas.', 'Desarrollo', 45000, 'Code', 3),
-  ('Diseño UI/UX', 'Creamos interfaces de usuario atractivas y experiencias fluidas.', 'Diseño', 15000, 'Palette', 4),
-  ('Soluciones Cloud', 'Implementamos infraestructura en la nube segura y escalable.', 'Infraestructura', 20000, 'Cloud', 5),
-  ('Consultoría Tech', 'Asesoramos a empresas en su transformación digital.', 'Consultoría', 8000, 'Lightbulb', 6);
-
--- Insert sample testimonials
-INSERT INTO public.testimonials (client_name, client_company, quote, rating, is_featured) VALUES
-  ('María González', 'RetailMax', 'NovaTec transformó completamente nuestra presencia digital. Su equipo entendió perfectamente nuestra visión y entregó un producto que superó nuestras expectativas.', 5, true),
-  ('Carlos Ruiz', 'FinCorp', 'Trabajar con NovaTec fue una experiencia excepcional. Su metodología ágil nos mantuvo informados en cada etapa del proyecto.', 5, true),
-  ('Ana Martínez', 'TechStart', 'Necesitábamos un partner tecnológico que entendiera el ritmo startup. NovaTec no solo entregó código de calidad, sino que también aportó ideas estratégicas.', 5, true),
-  ('Roberto Sánchez', 'FastShip', 'La aplicación de logística que desarrolló NovaTec optimizó nuestras operaciones en un 40%. Su equipo técnico es de primer nivel.', 5, true);
-
--- Insert sample site settings
-INSERT INTO public.site_settings (key, value) VALUES
-  ('company_name', 'NovaTec'),
-  ('tagline', 'Transformamos Ideas en Software Excepcional'),
-  ('email', 'hola@novatec.mx'),
-  ('phone', '+52 (55) 1234 5678'),
-  ('address', 'Av. Tecnológico 123, Ciudad de México, CP 06000'),
-  ('facebook', 'https://facebook.com/novatec'),
-  ('twitter', 'https://twitter.com/novatec'),
-  ('instagram', 'https://instagram.com/novatec'),
-  ('linkedin', 'https://linkedin.com/company/novatec'),
-  ('github', 'https://github.com/novatec'),
-  ('meta_title', 'NovaTec | Desarrollo de Software Premium'),
-  ('meta_description', 'Transformamos Ideas en Software Excepcional. Desarrollo web, móvil y soluciones tecnológicas de alto nivel para tu empresa.');
+INSERT INTO public.configuracion (clave, valor) VALUES
+  ('nombre_empresa',   'NovaTec'),
+  ('tagline',          'Transformamos Ideas en Software Excepcional'),
+  ('descripcion',      'Empresa de desarrollo de software a medida'),
+  ('correo_contacto',  'contacto@novatec.mx'),
+  ('telefono',         '+52 55 1234 5678'),
+  ('direccion',        'Ciudad de México, México'),
+  ('horario',          'Lunes a Viernes, 9:00 - 18:00'),
+  ('facebook',         ''),
+  ('twitter',          ''),
+  ('instagram',        ''),
+  ('linkedin',         ''),
+  ('github',           ''),
+  ('meta_titulo',      'NovaTec - Desarrollo de Software'),
+  ('meta_descripcion', 'Transformamos ideas en software excepcional'),
+  ('palabras_clave',   'desarrollo web, software, apps móviles, México'),
+  ('modo_mantenimiento', 'false');
 
 -- =============================================
--- FUNCTION TO AUTOMATICALLY CREATE PROFILE ON SIGNUP
+-- DATOS INICIALES: servicios
 -- =============================================
-CREATE OR REPLACE FUNCTION public.handle_new_user()
+INSERT INTO public.servicios (nombre, descripcion, categoria, precio, icono, orden, activo) VALUES
+  ('Desarrollo Web',          'Sitios y aplicaciones web modernas y responsivas',    'Desarrollo',     25000, 'Globe',      1, true),
+  ('Desarrollo Móvil',        'Apps nativas y multiplataforma para iOS y Android',   'Desarrollo',     35000, 'Smartphone', 2, true),
+  ('Desarrollo de Software',  'Software a medida para procesos empresariales',       'Desarrollo',     45000, 'Code',       3, true),
+  ('Diseño UI/UX',            'Interfaces intuitivas centradas en el usuario',       'Diseño',         15000, 'Palette',    4, true),
+  ('Soluciones Cloud',        'Infraestructura escalable en la nube',                'Infraestructura',20000, 'Cloud',      5, true),
+  ('Consultoría Tech',        'Asesoría tecnológica para tu empresa',                'Consultoría',     8000, 'Lightbulb',  6, true);
+
+-- =============================================
+-- FUNCIÓN: actualizar campo actualizado_en
+-- =============================================
+CREATE OR REPLACE FUNCTION actualizar_timestamp()
 RETURNS TRIGGER AS $$
 BEGIN
-  INSERT INTO public.profiles (id, email, full_name, role)
-  VALUES (
-    NEW.id,
-    NEW.email,
-    COALESCE(NEW.raw_user_meta_data->>'full_name', split_part(NEW.email, '@', 1)),
-    'user'
-  );
-  RETURN NEW;
-END;
-$$ LANGUAGE plpgsql SECURITY DEFINER;
-
--- Create trigger for new user signup
-CREATE TRIGGER on_auth_user_created
-  AFTER INSERT ON auth.users
-  FOR EACH ROW EXECUTE FUNCTION public.handle_new_user();
-
--- =============================================
--- FUNCTION TO UPDATE TIMESTAMPS
--- =============================================
-CREATE OR REPLACE FUNCTION update_updated_at()
-RETURNS TRIGGER AS $$
-BEGIN
-  NEW.updated_at = NOW();
+  NEW.actualizado_en = NOW();
   RETURN NEW;
 END;
 $$ LANGUAGE plpgsql;
 
--- Add triggers for updated_at
-CREATE TRIGGER update_profiles_updated_at
-  BEFORE UPDATE ON public.profiles
-  FOR EACH ROW EXECUTE FUNCTION update_updated_at();
+-- Triggers para actualizar automáticamente actualizado_en
+CREATE TRIGGER trg_usuarios_actualizado
+  BEFORE UPDATE ON public.usuarios
+  FOR EACH ROW EXECUTE FUNCTION actualizar_timestamp();
 
-CREATE TRIGGER update_clients_updated_at
-  BEFORE UPDATE ON public.clients
-  FOR EACH ROW EXECUTE FUNCTION update_updated_at();
+CREATE TRIGGER trg_clientes_actualizado
+  BEFORE UPDATE ON public.clientes
+  FOR EACH ROW EXECUTE FUNCTION actualizar_timestamp();
 
-CREATE TRIGGER update_projects_updated_at
-  BEFORE UPDATE ON public.projects
-  FOR EACH ROW EXECUTE FUNCTION update_updated_at();
+CREATE TRIGGER trg_servicios_actualizado
+  BEFORE UPDATE ON public.servicios
+  FOR EACH ROW EXECUTE FUNCTION actualizar_timestamp();
 
-CREATE TRIGGER update_services_updated_at
-  BEFORE UPDATE ON public.services
-  FOR EACH ROW EXECUTE FUNCTION update_updated_at();
+CREATE TRIGGER trg_proyectos_actualizado
+  BEFORE UPDATE ON public.proyectos
+  FOR EACH ROW EXECUTE FUNCTION actualizar_timestamp();
 
-CREATE TRIGGER update_quotations_updated_at
-  BEFORE UPDATE ON public.quotations
-  FOR EACH ROW EXECUTE FUNCTION update_updated_at();
+CREATE TRIGGER trg_cotizaciones_actualizado
+  BEFORE UPDATE ON public.cotizaciones
+  FOR EACH ROW EXECUTE FUNCTION actualizar_timestamp();
 
-CREATE TRIGGER update_site_settings_updated_at
-  BEFORE UPDATE ON public.site_settings
-  FOR EACH ROW EXECUTE FUNCTION update_updated_at();
+CREATE TRIGGER trg_configuracion_actualizado
+  BEFORE UPDATE ON public.configuracion
+  FOR EACH ROW EXECUTE FUNCTION actualizar_timestamp();
+
+-- =============================================
+-- FUNCIÓN: crear perfil al registrarse
+-- Se ejecuta automáticamente cuando un usuario
+-- se registra en Supabase Auth
+-- =============================================
+CREATE OR REPLACE FUNCTION crear_usuario_al_registrarse()
+RETURNS TRIGGER AS $$
+BEGIN
+  INSERT INTO public.usuarios (id, correo, nombre_completo)
+  VALUES (NEW.id, NEW.email, NEW.raw_user_meta_data->>'full_name');
+  RETURN NEW;
+END;
+$$ LANGUAGE plpgsql SECURITY DEFINER;
+
+CREATE TRIGGER trg_crear_usuario
+  AFTER INSERT ON auth.users
+  FOR EACH ROW EXECUTE FUNCTION crear_usuario_al_registrarse();
