@@ -35,7 +35,7 @@ export default function ProyectosPage() {
   const [isDialogOpen, setIsDialogOpen] = useState(false)
   const [editando, setEditando] = useState<Proyecto | null>(null)
   const [saving, setSaving] = useState(false)
-  const [form, setForm] = useState({ nombre: '', cliente_id: '', estado: 'pendiente', presupuesto: '', progreso: '0', descripcion: '', fecha_inicio: '', fecha_fin: '' })
+  const [form, setForm] = useState({ nombre: '', cliente_id: '', estado: 'pendiente', presupuesto: '', progreso: '0', descripcion: '', imagen_url: '', tecnologias: '', url_demo: '', fecha_inicio: '', fecha_fin: '' })
 
   const cargar = async () => {
     setLoading(true)
@@ -52,20 +52,32 @@ export default function ProyectosPage() {
 
   const abrirNuevo = () => {
     setEditando(null)
-    setForm({ nombre: '', cliente_id: '', estado: 'pendiente', presupuesto: '', progreso: '0', descripcion: '', fecha_inicio: '', fecha_fin: '' })
+    setForm({ nombre: '', cliente_id: '', estado: 'pendiente', presupuesto: '', progreso: '0', descripcion: '', imagen_url: '', tecnologias: '', url_demo: '', fecha_inicio: '', fecha_fin: '' })
     setIsDialogOpen(true)
   }
 
   const abrirEditar = (p: Proyecto) => {
     setEditando(p)
-    setForm({ nombre: p.nombre, cliente_id: p.cliente_id || '', estado: p.estado, presupuesto: p.presupuesto?.toString() || '', progreso: p.progreso.toString(), descripcion: p.descripcion || '', fecha_inicio: p.fecha_inicio || '', fecha_fin: p.fecha_fin || '' })
+    setForm({ nombre: p.nombre, cliente_id: p.cliente_id || '', estado: p.estado, presupuesto: p.presupuesto?.toString() || '', progreso: p.progreso.toString(), descripcion: p.descripcion || '', imagen_url: p.imagen_url || '', tecnologias: (p.tecnologias || []).join(', '), url_demo: p.url_demo || '', fecha_inicio: p.fecha_inicio || '', fecha_fin: p.fecha_fin || '' })
     setIsDialogOpen(true)
   }
 
   const guardar = async () => {
     if (!form.nombre) return toast.error('El nombre es requerido')
     setSaving(true)
-    const payload = { nombre: form.nombre, cliente_id: form.cliente_id || null, estado: form.estado, presupuesto: form.presupuesto ? parseFloat(form.presupuesto) : null, progreso: parseInt(form.progreso) || 0, descripcion: form.descripcion || null, fecha_inicio: form.fecha_inicio || null, fecha_fin: form.fecha_fin || null }
+    const payload = {
+      nombre: form.nombre,
+      cliente_id: form.cliente_id || null,
+      estado: form.estado,
+      presupuesto: form.presupuesto ? parseFloat(form.presupuesto) : null,
+      progreso: parseInt(form.progreso) || 0,
+      descripcion: form.descripcion || null,
+      imagen_url: form.imagen_url || null,
+      tecnologias: form.tecnologias ? form.tecnologias.split(',').map(t => t.trim()).filter(Boolean) : null,
+      url_demo: form.url_demo || null,
+      fecha_inicio: form.fecha_inicio || null,
+      fecha_fin: form.fecha_fin || null,
+    }
     const { error } = editando
       ? await supabase.from('proyectos').update(payload).eq('id', editando.id)
       : await supabase.from('proyectos').insert(payload)
@@ -250,6 +262,21 @@ export default function ProyectosPage() {
             <div className="space-y-2">
               <Label className="text-sm font-medium text-slate-700">Descripción</Label>
               <Textarea value={form.descripcion} onChange={e => setForm(p => ({ ...p, descripcion: e.target.value }))} placeholder="Descripción del proyecto..." rows={3} className="resize-none" />
+            </div>
+            <div className="space-y-2">
+              <Label className="text-sm font-medium text-slate-700">URL de Imagen</Label>
+              <Input value={form.imagen_url} onChange={e => setForm(p => ({ ...p, imagen_url: e.target.value }))} placeholder="https://images.unsplash.com/..." />
+            </div>
+            <div className="grid sm:grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <Label className="text-sm font-medium text-slate-700">Tecnologías</Label>
+                <Input value={form.tecnologias} onChange={e => setForm(p => ({ ...p, tecnologias: e.target.value }))} placeholder="React, Node.js, Supabase" />
+                <p className="text-xs text-slate-400">Separadas por coma</p>
+              </div>
+              <div className="space-y-2">
+                <Label className="text-sm font-medium text-slate-700">URL Demo</Label>
+                <Input value={form.url_demo} onChange={e => setForm(p => ({ ...p, url_demo: e.target.value }))} placeholder="https://demo.proyecto.com" />
+              </div>
             </div>
           </div>
           <Separator className="bg-slate-100" />
