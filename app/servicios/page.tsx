@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Header } from '@/components/layout/Header'
 import { Footer } from '@/components/layout/Footer'
@@ -11,120 +11,98 @@ import { Button } from '@/components/ui/button'
 import {
   Globe, Smartphone, Code, Palette, Cloud, Lightbulb,
   ArrowRight, CheckCircle2, ChevronDown, Zap, Clock,
-  DollarSign, Star, ChevronRight,
+  DollarSign, Star, Loader2,
 } from 'lucide-react'
 import Link from 'next/link'
 import Image from 'next/image'
+import { supabase } from '@/lib/supabase/client'
+import type { Servicio } from '@/lib/supabase/types'
 
-// ─── Data ────────────────────────────────────────────────────────────────────
+// ─── Icon map ────────────────────────────────────────────────────────────────
 
-const categories = ['Todos', 'Web', 'Móvil', 'Software', 'Diseño', 'Cloud', 'Consultoría']
+const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
+  Globe, Smartphone, Code, Palette, Cloud, Lightbulb,
+}
 
-const services = [
-  {
-    id: 'desarrollo-web', name: 'Desarrollo Web', category: 'Web',
-    tagline: 'Aplicaciones web modernas y escalables',
-    description: 'Creamos sitios web y aplicaciones de alto rendimiento usando las tecnologías más modernas. Desde landing pages hasta plataformas SaaS complejas.',
-    icon: Globe,
-    image: 'https://images.unsplash.com/photo-1547658719-da2b51169166?w=800&q=80',
+// ─── Static enrichment data (keyed by categoria) ─────────────────────────────
+
+type EnrichData = {
+  gradient: string
+  iconBg: string
+  iconColor: string
+  border: string
+  image: string
+  techs: string[]
+  features: string[]
+  deliverables: string[]
+  caseStudy: { project: string; metric: string; detail: string }
+  testimonial: { name: string; role: string; quote: string }
+  duration: string
+}
+
+const enrichByCat: Record<string, EnrichData> = {
+  Desarrollo: {
     gradient: 'from-blue-500 to-cyan-500',
     iconBg: 'bg-blue-500/10', iconColor: 'text-blue-500',
     border: 'border-blue-500/20 hover:border-blue-500/40',
-    duration: '2 – 12 semanas', priceFrom: '$15,000 MXN',
-    features: ['Sitios web corporativos', 'E-commerce', 'Dashboards', 'PWA', 'APIs RESTful', 'SEO técnico'],
+    image: 'https://images.unsplash.com/photo-1547658719-da2b51169166?w=800&q=80',
     techs: ['Next.js', 'React', 'TypeScript', 'Node.js', 'PostgreSQL', 'Tailwind'],
+    features: ['Sitios web corporativos', 'E-commerce', 'Dashboards', 'PWA', 'APIs RESTful', 'SEO técnico'],
     deliverables: ['Código fuente completo', 'Documentación técnica', 'Deploy en producción', 'Soporte post-lanzamiento'],
     caseStudy: { project: 'E-commerce RetailMax', metric: '+65% conversiones', detail: 'Rediseño completo con Next.js y Stripe.' },
     testimonial: { name: 'María González', role: 'CEO, RetailMax', quote: 'NovaTec entregó exactamente lo que necesitábamos, a tiempo y con calidad excepcional.' },
+    duration: '2 – 12 semanas',
   },
-  {
-    id: 'desarrollo-mobile', name: 'Desarrollo Móvil', category: 'Móvil',
-    tagline: 'Apps nativas e híbridas para iOS y Android',
-    description: 'Desarrollamos aplicaciones móviles con experiencia de usuario excepcional. Desde apps simples hasta plataformas con integraciones avanzadas.',
-    icon: Smartphone,
-    image: 'https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?w=800&q=80',
-    gradient: 'from-violet-500 to-purple-500',
-    iconBg: 'bg-violet-500/10', iconColor: 'text-violet-500',
-    border: 'border-violet-500/20 hover:border-violet-500/40',
-    duration: '6 – 16 semanas', priceFrom: '$35,000 MXN',
-    features: ['iOS nativo (Swift)', 'Android (Kotlin)', 'React Native', 'Flutter', 'Push notifications', 'Integración APIs'],
-    techs: ['React Native', 'Flutter', 'Swift', 'Kotlin', 'Firebase', 'Expo'],
-    deliverables: ['App en App Store', 'App en Google Play', 'Panel admin', 'Analytics integrado'],
-    caseStudy: { project: 'Banking App FinCorp', metric: '4.8★ en stores', detail: 'App de banca con biometría y transferencias.' },
-    testimonial: { name: 'Carlos Ruiz', role: 'CTO, FinCorp', quote: 'La app superó nuestras expectativas. El equipo fue profesional y muy comunicativo.' },
-  },
-  {
-    id: 'desarrollo-software', name: 'Software a Medida', category: 'Software',
-    tagline: 'Soluciones personalizadas para tu negocio',
-    description: 'Construimos software empresarial adaptado a tus procesos. Automatizamos flujos de trabajo y digitalizamos operaciones completas.',
-    icon: Code,
-    image: 'https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=800&q=80',
-    gradient: 'from-primary to-indigo-500',
-    iconBg: 'bg-primary/10', iconColor: 'text-primary',
-    border: 'border-primary/20 hover:border-primary/40',
-    duration: '8 – 24 semanas', priceFrom: '$50,000 MXN',
-    features: ['Sistemas ERP', 'Automatización', 'Integración de sistemas', 'Microservicios', 'Migración legacy', 'Soporte continuo'],
-    techs: ['Node.js', 'Python', 'Go', 'NestJS', 'Docker', 'Kubernetes'],
-    deliverables: ['Sistema en producción', 'Manual de usuario', 'Capacitación', 'SLA de soporte'],
-    caseStudy: { project: 'CRM SalesForce Pro', metric: '-40% tiempo operativo', detail: 'CRM con automatización de ventas y pipelines.' },
-    testimonial: { name: 'Roberto Sánchez', role: 'Ops Manager, FastShip', quote: 'Optimizaron nuestras operaciones en un 40%. Soporte post-lanzamiento excelente.' },
-  },
-  {
-    id: 'ui-ux', name: 'Diseño UI/UX', category: 'Diseño',
-    tagline: 'Interfaces que enamoran a tus usuarios',
-    description: 'Diseñamos experiencias digitales centradas en el usuario. Combinamos estética y funcionalidad para crear productos que la gente ama usar.',
-    icon: Palette,
-    image: 'https://images.unsplash.com/photo-1561070791-2526d30994b5?w=800&q=80',
+  Diseño: {
     gradient: 'from-pink-500 to-rose-500',
     iconBg: 'bg-pink-500/10', iconColor: 'text-pink-500',
     border: 'border-pink-500/20 hover:border-pink-500/40',
-    duration: '2 – 8 semanas', priceFrom: '$12,000 MXN',
-    features: ['UX Research', 'Wireframes', 'Prototipos interactivos', 'Design systems', 'Pruebas de usabilidad', 'Diseño responsive'],
+    image: 'https://images.unsplash.com/photo-1561070791-2526d30994b5?w=800&q=80',
     techs: ['Figma', 'Adobe XD', 'Framer', 'Storybook', 'Zeplin', 'Maze'],
+    features: ['UX Research', 'Wireframes', 'Prototipos interactivos', 'Design systems', 'Pruebas de usabilidad', 'Diseño responsive'],
     deliverables: ['Prototipo interactivo', 'Design system', 'Assets exportados', 'Guía de estilos'],
     caseStudy: { project: 'Dashboard MediCare+', metric: '+80% satisfacción UX', detail: 'Rediseño completo del panel de gestión médica.' },
     testimonial: { name: 'Ana Martínez', role: 'Fundadora, TechStart', quote: 'Aportaron ideas estratégicas que mejoraron nuestro producto final enormemente.' },
+    duration: '2 – 8 semanas',
   },
-  {
-    id: 'cloud', name: 'Soluciones Cloud', category: 'Cloud',
-    tagline: 'Infraestructura segura y escalable',
-    description: 'Diseñamos e implementamos arquitecturas cloud robustas. Migramos tus sistemas y optimizamos costos sin sacrificar rendimiento.',
-    icon: Cloud,
-    image: 'https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=800&q=80',
+  Infraestructura: {
     gradient: 'from-cyan-500 to-teal-500',
     iconBg: 'bg-cyan-500/10', iconColor: 'text-cyan-500',
     border: 'border-cyan-500/20 hover:border-cyan-500/40',
-    duration: '4 – 12 semanas', priceFrom: '$25,000 MXN',
-    features: ['AWS / GCP / Azure', 'Migración a la nube', 'DevOps y CI/CD', 'Contenedores', 'Monitoreo 24/7', 'Optimización de costos'],
+    image: 'https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=800&q=80',
     techs: ['AWS', 'GCP', 'Azure', 'Docker', 'Kubernetes', 'Terraform'],
+    features: ['AWS / GCP / Azure', 'Migración a la nube', 'DevOps y CI/CD', 'Contenedores', 'Monitoreo 24/7', 'Optimización de costos'],
     deliverables: ['Infraestructura documentada', 'Pipelines CI/CD', 'Monitoreo activo', 'Runbooks operativos'],
     caseStudy: { project: 'Infra SaaS TechStart', metric: '-35% costos cloud', detail: 'Migración y optimización de infraestructura AWS.' },
     testimonial: { name: 'Carlos Ruiz', role: 'CTO, FinCorp', quote: 'La migración fue impecable. Cero downtime y mejor rendimiento desde el día uno.' },
+    duration: '4 – 12 semanas',
   },
-  {
-    id: 'consultoria', name: 'Consultoría Tech', category: 'Consultoría',
-    tagline: 'Estrategia tecnológica para crecer',
-    description: 'Asesoramos a empresas en su transformación digital. Auditamos sistemas, definimos roadmaps y acompañamos la implementación.',
-    icon: Lightbulb,
-    image: 'https://images.unsplash.com/photo-1552664730-d307ca884978?w=800&q=80',
+  Consultoría: {
     gradient: 'from-amber-500 to-orange-500',
     iconBg: 'bg-amber-500/10', iconColor: 'text-amber-500',
     border: 'border-amber-500/20 hover:border-amber-500/40',
-    duration: '1 – 4 semanas', priceFrom: '$8,000 MXN',
-    features: ['Auditorías técnicas', 'Arquitectura de software', 'Roadmap tecnológico', 'Code review', 'Selección de tecnologías', 'Mentoría a equipos'],
+    image: 'https://images.unsplash.com/photo-1552664730-d307ca884978?w=800&q=80',
     techs: ['Agile', 'Scrum', 'OKRs', 'TOGAF', 'ITIL', 'ISO 27001'],
+    features: ['Auditorías técnicas', 'Arquitectura de software', 'Roadmap tecnológico', 'Code review', 'Selección de tecnologías', 'Mentoría a equipos'],
     deliverables: ['Informe de auditoría', 'Roadmap detallado', 'Plan de acción', 'Sesiones de seguimiento'],
     caseStudy: { project: 'Auditoría RetailMax', metric: '3x velocidad de entrega', detail: 'Rediseño de arquitectura y procesos de desarrollo.' },
     testimonial: { name: 'María González', role: 'CEO, RetailMax', quote: 'La consultoría nos ahorró meses de trabajo y nos puso en el camino correcto.' },
+    duration: '1 – 4 semanas',
   },
-]
+}
 
-const faqs = [
-  { q: '¿Cuánto tiempo toma desarrollar un proyecto?', a: 'Depende del alcance. Una landing page puede estar lista en 2 semanas, mientras que una plataforma compleja puede tomar 3-6 meses. En la fase de discovery definimos tiempos exactos.' },
-  { q: '¿Cómo es el proceso de trabajo?', a: 'Trabajamos con metodología ágil en sprints de 2 semanas. Tendrás demos frecuentes, acceso a nuestro tablero de proyecto y comunicación directa con el equipo.' },
-  { q: '¿Qué pasa después del lanzamiento?', a: 'Todos nuestros proyectos incluyen soporte post-lanzamiento. También ofrecemos planes de mantenimiento continuo para garantizar que tu producto siga funcionando perfectamente.' },
-  { q: '¿Puedo ver el código fuente?', a: 'Sí, el código fuente es 100% tuyo. Al finalizar el proyecto te entregamos el repositorio completo con documentación técnica.' },
-]
+const defaultEnrich: EnrichData = {
+  gradient: 'from-primary to-indigo-500',
+  iconBg: 'bg-primary/10', iconColor: 'text-primary',
+  border: 'border-primary/20 hover:border-primary/40',
+  image: 'https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=800&q=80',
+  techs: ['Node.js', 'Python', 'Go', 'NestJS', 'Docker', 'Kubernetes'],
+  features: ['Sistemas ERP', 'Automatización', 'Integración de sistemas', 'Microservicios', 'Migración legacy', 'Soporte continuo'],
+  deliverables: ['Sistema en producción', 'Manual de usuario', 'Capacitación', 'SLA de soporte'],
+  caseStudy: { project: 'CRM SalesForce Pro', metric: '-40% tiempo operativo', detail: 'CRM con automatización de ventas y pipelines.' },
+  testimonial: { name: 'Roberto Sánchez', role: 'Ops Manager, FastShip', quote: 'Optimizaron nuestras operaciones en un 40%. Soporte post-lanzamiento excelente.' },
+  duration: '4 – 16 semanas',
+}
 
 // ─── Calculator ───────────────────────────────────────────────────────────────
 
@@ -157,13 +135,14 @@ function Calculator() {
   const [timeline, setTimeline] = useState(calcOptions.timeline[0])
 
   const fmt = (n: number) => n.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')
-
   const base = type.value + features.reduce((s, f) => s + f.value, 0)
   const total = Math.round(base * timeline.multiplier)
   const totalMax = Math.round(total * 1.4)
 
   const toggleFeature = (f: typeof calcOptions.features[0]) =>
-    setFeatures((prev) => prev.find((x) => x.label === f.label) ? prev.filter((x) => x.label !== f.label) : [...prev, f])
+    setFeatures((prev) =>
+      prev.find((x) => x.label === f.label) ? prev.filter((x) => x.label !== f.label) : [...prev, f]
+    )
 
   return (
     <section className="py-24 relative overflow-hidden">
@@ -172,13 +151,10 @@ function Calculator() {
       <div className="container relative z-10 max-w-4xl mx-auto px-4">
         <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="text-center mb-14">
           <span className="inline-flex items-center gap-2 text-xs font-semibold text-primary uppercase tracking-widest mb-4">
-            <span className="w-8 h-px bg-primary" />
-            Calculadora
-            <span className="w-8 h-px bg-primary" />
+            <span className="w-8 h-px bg-primary" />Calculadora<span className="w-8 h-px bg-primary" />
           </span>
           <h2 className="text-4xl md:text-5xl font-bold font-heading leading-tight mb-4">
-            Estima el costo
-            <br /><span className="text-gradient">de tu proyecto</span>
+            Estima el costo<br /><span className="text-gradient">de tu proyecto</span>
           </h2>
           <p className="text-muted-foreground text-lg">Selecciona las opciones y obtén un rango de precio orientativo al instante.</p>
         </motion.div>
@@ -187,7 +163,6 @@ function Calculator() {
           className="rounded-3xl border border-border/50 bg-card/60 backdrop-blur-sm p-8 md:p-10">
           <div className="grid md:grid-cols-2 gap-10">
             <div className="space-y-8">
-              {/* Type */}
               <div>
                 <p className="text-sm font-semibold mb-3 flex items-center gap-2"><Code className="h-4 w-4 text-primary" />Tipo de proyecto</p>
                 <div className="space-y-2">
@@ -199,8 +174,6 @@ function Calculator() {
                   ))}
                 </div>
               </div>
-
-              {/* Timeline */}
               <div>
                 <p className="text-sm font-semibold mb-3 flex items-center gap-2"><Clock className="h-4 w-4 text-primary" />Urgencia</p>
                 <div className="grid grid-cols-3 gap-2">
@@ -215,7 +188,6 @@ function Calculator() {
             </div>
 
             <div className="space-y-8">
-              {/* Features */}
               <div>
                 <p className="text-sm font-semibold mb-3 flex items-center gap-2"><Zap className="h-4 w-4 text-primary" />Funcionalidades adicionales</p>
                 <div className="space-y-2">
@@ -231,8 +203,6 @@ function Calculator() {
                   })}
                 </div>
               </div>
-
-              {/* Result */}
               <div className="rounded-2xl border border-primary/30 bg-gradient-to-br from-primary/10 to-chart-2/5 p-6">
                 <p className="text-xs text-muted-foreground uppercase tracking-widest mb-2">Estimado orientativo</p>
                 <div className="text-3xl font-bold font-heading text-gradient mb-1">
@@ -256,6 +226,13 @@ function Calculator() {
 
 // ─── FAQ ──────────────────────────────────────────────────────────────────────
 
+const faqs = [
+  { q: '¿Cuánto tiempo toma desarrollar un proyecto?', a: 'Depende del alcance. Una landing page puede estar lista en 2 semanas, mientras que una plataforma compleja puede tomar 3-6 meses. En la fase de discovery definimos tiempos exactos.' },
+  { q: '¿Cómo es el proceso de trabajo?', a: 'Trabajamos con metodología ágil en sprints de 2 semanas. Tendrás demos frecuentes, acceso a nuestro tablero de proyecto y comunicación directa con el equipo.' },
+  { q: '¿Qué pasa después del lanzamiento?', a: 'Todos nuestros proyectos incluyen soporte post-lanzamiento. También ofrecemos planes de mantenimiento continuo para garantizar que tu producto siga funcionando perfectamente.' },
+  { q: '¿Puedo ver el código fuente?', a: 'Sí, el código fuente es 100% tuyo. Al finalizar el proyecto te entregamos el repositorio completo con documentación técnica.' },
+]
+
 function FAQItem({ q, a }: { q: string; a: string }) {
   const [open, setOpen] = useState(false)
   return (
@@ -278,11 +255,35 @@ function FAQItem({ q, a }: { q: string; a: string }) {
 // ─── Page ─────────────────────────────────────────────────────────────────────
 
 export default function ServiciosPage() {
+  const [servicios, setServicios] = useState<Servicio[]>([])
+  const [loading, setLoading] = useState(true)
   const [activeCategory, setActiveCategory] = useState('Todos')
 
+  useEffect(() => {
+    const cargar = async () => {
+      const { data } = await supabase
+        .from('servicios')
+        .select('*')
+        .eq('activo', true)
+        .order('orden')
+      setServicios(data || [])
+      setLoading(false)
+    }
+    cargar()
+
+    const channel = supabase
+      .channel('servicios-public')
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'servicios' }, () => cargar())
+      .subscribe()
+
+    return () => { supabase.removeChannel(channel) }
+  }, [])
+
+  const categories = ['Todos', ...Array.from(new Set(servicios.map((s) => s.categoria).filter(Boolean)))]
+
   const filtered = activeCategory === 'Todos'
-    ? services
-    : services.filter((s) => s.category === activeCategory)
+    ? servicios
+    : servicios.filter((s) => s.categoria === activeCategory)
 
   return (
     <>
@@ -305,8 +306,7 @@ export default function ServiciosPage() {
 
             <motion.h1 initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: 0.1 }}
               className="text-5xl md:text-6xl lg:text-7xl font-bold font-heading leading-[1.05] tracking-tight mb-6">
-              Servicios que
-              <br /><span className="text-gradient">generan resultados</span>
+              Servicios que<br /><span className="text-gradient">generan resultados</span>
             </motion.h1>
 
             <motion.p initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: 0.2 }}
@@ -314,7 +314,6 @@ export default function ServiciosPage() {
               Desde el diseño hasta el despliegue, cubrimos todo el ciclo de vida de tu producto digital.
             </motion.p>
 
-            {/* Stats row */}
             <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: 0.3 }}
               className="flex flex-wrap justify-center gap-8 text-sm text-muted-foreground">
               {[['250+', 'Proyectos entregados'], ['120+', 'Clientes satisfechos'], ['8+', 'Años de experiencia'], ['6', 'Servicios especializados']].map(([v, l]) => (
@@ -344,123 +343,131 @@ export default function ServiciosPage() {
         {/* Services */}
         <section className="py-16">
           <div className="container max-w-7xl mx-auto px-4 space-y-10">
-            <AnimatePresence mode="wait">
-              {filtered.map((service, index) => {
-                const Icon = service.icon
-                return (
-                  <motion.div key={service.id} id={service.id}
-                    initial={{ opacity: 0, y: 40 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -20 }}
-                    transition={{ duration: 0.4, delay: index * 0.06 }}
-                    className={`group rounded-3xl border ${service.border} bg-card/60 backdrop-blur-sm overflow-hidden transition-all duration-300 hover:shadow-xl`}>
+            {loading ? (
+              <div className="flex justify-center py-24">
+                <Loader2 className="h-10 w-10 animate-spin text-primary" />
+              </div>
+            ) : filtered.length === 0 ? (
+              <p className="text-center text-muted-foreground py-24">No hay servicios disponibles por el momento.</p>
+            ) : (
+              <AnimatePresence mode="wait">
+                {filtered.map((service, index) => {
+                  const Icon = iconMap[service.icono || 'Code'] || Code
+                  const enrich = enrichByCat[service.categoria || ''] || defaultEnrich
 
-                    <div className={`grid lg:grid-cols-2 ${index % 2 === 1 ? '' : ''}`}>
-                      {/* Content */}
-                      <div className={`p-8 md:p-12 ${index % 2 === 1 ? 'lg:order-2' : ''}`}>
-                        <div className="flex items-start justify-between mb-6">
-                          <div className={`w-14 h-14 rounded-2xl ${service.iconBg} flex items-center justify-center group-hover:scale-110 transition-transform duration-300`}>
-                            <Icon className={`h-7 w-7 ${service.iconColor}`} />
-                          </div>
-                          {/* Duration + price badges */}
-                          <div className="flex flex-col gap-1.5 items-end">
-                            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium bg-muted/60 text-muted-foreground border border-border/50">
-                              <Clock className="h-3 w-3" />{service.duration}
-                            </span>
-                            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium bg-primary/10 text-primary border border-primary/20">
-                              <DollarSign className="h-3 w-3" />Desde {service.priceFrom}
-                            </span>
-                          </div>
-                        </div>
+                  return (
+                    <motion.div key={service.id} id={service.id}
+                      initial={{ opacity: 0, y: 40 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -20 }}
+                      transition={{ duration: 0.4, delay: index * 0.06 }}
+                      className={`group rounded-3xl border ${enrich.border} bg-card/60 backdrop-blur-sm overflow-hidden transition-all duration-300 hover:shadow-xl`}>
 
-                        <span className={`text-xs font-bold uppercase tracking-widest ${service.iconColor} mb-2 block`}>{service.tagline}</span>
-                        <h2 className="text-3xl md:text-4xl font-bold font-heading mb-4">{service.name}</h2>
-                        <p className="text-muted-foreground mb-8 leading-relaxed">{service.description}</p>
-
-                        <div className="grid sm:grid-cols-2 gap-2 mb-8">
-                          {service.features.map((f) => (
-                            <div key={f} className="flex items-center gap-2.5 text-sm">
-                              <CheckCircle2 className={`h-4 w-4 ${service.iconColor} shrink-0`} />
-                              <span className="text-muted-foreground">{f}</span>
+                      <div className="grid lg:grid-cols-2">
+                        {/* Content */}
+                        <div className={`p-8 md:p-12 ${index % 2 === 1 ? 'lg:order-2' : ''}`}>
+                          <div className="flex items-start justify-between mb-6">
+                            <div className={`w-14 h-14 rounded-2xl ${enrich.iconBg} flex items-center justify-center group-hover:scale-110 transition-transform duration-300`}>
+                              <Icon className={`h-7 w-7 ${enrich.iconColor}`} />
                             </div>
-                          ))}
-                        </div>
-
-                        {/* Case study */}
-                        <div className="rounded-xl border border-border/50 bg-muted/30 p-4 mb-6">
-                          <p className="text-xs font-semibold text-muted-foreground uppercase tracking-widest mb-2">Caso de éxito</p>
-                          <div className="flex items-center justify-between gap-4">
-                            <div>
-                              <p className="text-sm font-semibold">{service.caseStudy.project}</p>
-                              <p className="text-xs text-muted-foreground mt-0.5">{service.caseStudy.detail}</p>
-                            </div>
-                            <span className={`shrink-0 px-3 py-1.5 rounded-full text-xs font-bold bg-gradient-to-r ${service.gradient} text-white`}>
-                              {service.caseStudy.metric}
-                            </span>
-                          </div>
-                        </div>
-
-                        {/* Testimonial */}
-                        <div className="rounded-xl border border-border/50 bg-card/50 p-4 mb-8">
-                          <div className="flex gap-1 mb-2">
-                            {[...Array(5)].map((_, i) => <Star key={i} className="h-3 w-3 fill-yellow-400 text-yellow-400" />)}
-                          </div>
-                          <p className="text-sm text-muted-foreground italic mb-3">"{service.testimonial.quote}"</p>
-                          <p className="text-xs font-semibold">{service.testimonial.name} · <span className="font-normal text-muted-foreground">{service.testimonial.role}</span></p>
-                        </div>
-
-                        <Link href="/contacto">
-                          <Button className="group/btn shadow-md shadow-primary/10">
-                            Solicitar cotización
-                            <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover/btn:translate-x-1" />
-                          </Button>
-                        </Link>
-                      </div>
-
-                      {/* Visual panel */}
-                      <div className={`relative flex flex-col bg-gradient-to-br ${service.gradient} border-l border-border/30 ${index % 2 === 1 ? 'lg:order-1 border-l-0 border-r border-border/30' : ''} overflow-hidden`}>
-                        {/* Image */}
-                        <div className="relative h-56 w-full shrink-0">
-                          <Image
-                            src={service.image}
-                            alt={service.name}
-                            fill
-                            className="object-cover"
-                            sizes="(max-width: 1024px) 100vw, 50vw"
-                          />
-                          <div className={`absolute inset-0 bg-gradient-to-b from-transparent to-background/90`} />
-                          {/* Category pill over image */}
-                          <div className="absolute top-4 left-4">
-                            <span className={`px-3 py-1.5 rounded-full text-xs font-semibold bg-gradient-to-r ${service.gradient} text-white shadow-lg`}>
-                              {service.category}
-                            </span>
-                          </div>
-                        </div>
-
-                        {/* Tech + deliverables */}
-                        <div className="relative z-10 p-8 md:p-10 flex-1">
-                          <p className="text-xs font-semibold text-white/60 uppercase tracking-widest mb-4">Tecnologías</p>
-                          <div className="flex flex-wrap gap-2 mb-8">
-                            {service.techs.map((tech) => (
-                              <span key={tech} className="px-3 py-1.5 text-xs font-medium rounded-lg border border-white/30 bg-white/10 text-white backdrop-blur-sm">
-                                {tech}
+                            <div className="flex flex-col gap-1.5 items-end">
+                              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium bg-muted/60 text-muted-foreground border border-border/50">
+                                <Clock className="h-3 w-3" />{enrich.duration}
                               </span>
-                            ))}
+                              {service.precio != null && (
+                                <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium bg-primary/10 text-primary border border-primary/20">
+                                  <DollarSign className="h-3 w-3" />Desde ${service.precio.toLocaleString('es-MX')} MXN
+                                </span>
+                              )}
+                            </div>
                           </div>
-                          <p className="text-xs font-semibold text-white/60 uppercase tracking-widest mb-4">Entregables</p>
-                          <div className="space-y-2.5">
-                            {service.deliverables.map((d, i) => (
-                              <div key={d} className="flex items-center gap-3">
-                                <div className="w-6 h-6 rounded-full bg-white/20 border border-white/30 flex items-center justify-center text-white text-[10px] font-bold shrink-0">{i + 1}</div>
-                                <span className="text-sm text-white/80">{d}</span>
+
+                          {service.categoria && (
+                            <span className={`text-xs font-bold uppercase tracking-widest ${enrich.iconColor} mb-2 block`}>{service.categoria}</span>
+                          )}
+                          <h2 className="text-3xl md:text-4xl font-bold font-heading mb-4">{service.nombre}</h2>
+                          {service.descripcion && (
+                            <p className="text-muted-foreground mb-8 leading-relaxed">{service.descripcion}</p>
+                          )}
+
+                          <div className="grid sm:grid-cols-2 gap-2 mb-8">
+                            {enrich.features.map((f) => (
+                              <div key={f} className="flex items-center gap-2.5 text-sm">
+                                <CheckCircle2 className={`h-4 w-4 ${enrich.iconColor} shrink-0`} />
+                                <span className="text-muted-foreground">{f}</span>
                               </div>
                             ))}
                           </div>
+
+                          {/* Case study */}
+                          <div className="rounded-xl border border-border/50 bg-muted/30 p-4 mb-6">
+                            <p className="text-xs font-semibold text-muted-foreground uppercase tracking-widest mb-2">Caso de éxito</p>
+                            <div className="flex items-center justify-between gap-4">
+                              <div>
+                                <p className="text-sm font-semibold">{enrich.caseStudy.project}</p>
+                                <p className="text-xs text-muted-foreground mt-0.5">{enrich.caseStudy.detail}</p>
+                              </div>
+                              <span className={`shrink-0 px-3 py-1.5 rounded-full text-xs font-bold bg-gradient-to-r ${enrich.gradient} text-white`}>
+                                {enrich.caseStudy.metric}
+                              </span>
+                            </div>
+                          </div>
+
+                          {/* Testimonial */}
+                          <div className="rounded-xl border border-border/50 bg-card/50 p-4 mb-8">
+                            <div className="flex gap-1 mb-2">
+                              {[...Array(5)].map((_, i) => <Star key={i} className="h-3 w-3 fill-yellow-400 text-yellow-400" />)}
+                            </div>
+                            <p className="text-sm text-muted-foreground italic mb-3">"{enrich.testimonial.quote}"</p>
+                            <p className="text-xs font-semibold">{enrich.testimonial.name} · <span className="font-normal text-muted-foreground">{enrich.testimonial.role}</span></p>
+                          </div>
+
+                          <Link href="/contacto">
+                            <Button className="group/btn shadow-md shadow-primary/10">
+                              Solicitar cotización
+                              <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover/btn:translate-x-1" />
+                            </Button>
+                          </Link>
+                        </div>
+
+                        {/* Visual panel */}
+                        <div className={`relative flex flex-col bg-gradient-to-br ${enrich.gradient} border-l border-border/30 ${index % 2 === 1 ? 'lg:order-1 border-l-0 border-r border-border/30' : ''} overflow-hidden`}>
+                          <div className="relative h-56 w-full shrink-0">
+                            <Image src={enrich.image} alt={service.nombre} fill className="object-cover" sizes="(max-width: 1024px) 100vw, 50vw" />
+                            <div className="absolute inset-0 bg-gradient-to-b from-transparent to-background/90" />
+                            {service.categoria && (
+                              <div className="absolute top-4 left-4">
+                                <span className={`px-3 py-1.5 rounded-full text-xs font-semibold bg-gradient-to-r ${enrich.gradient} text-white shadow-lg`}>
+                                  {service.categoria}
+                                </span>
+                              </div>
+                            )}
+                          </div>
+
+                          <div className="relative z-10 p-8 md:p-10 flex-1">
+                            <p className="text-xs font-semibold text-white/60 uppercase tracking-widest mb-4">Tecnologías</p>
+                            <div className="flex flex-wrap gap-2 mb-8">
+                              {enrich.techs.map((tech) => (
+                                <span key={tech} className="px-3 py-1.5 text-xs font-medium rounded-lg border border-white/30 bg-white/10 text-white backdrop-blur-sm">
+                                  {tech}
+                                </span>
+                              ))}
+                            </div>
+                            <p className="text-xs font-semibold text-white/60 uppercase tracking-widest mb-4">Entregables</p>
+                            <div className="space-y-2.5">
+                              {enrich.deliverables.map((d, i) => (
+                                <div key={d} className="flex items-center gap-3">
+                                  <div className="w-6 h-6 rounded-full bg-white/20 border border-white/30 flex items-center justify-center text-white text-[10px] font-bold shrink-0">{i + 1}</div>
+                                  <span className="text-sm text-white/80">{d}</span>
+                                </div>
+                              ))}
+                            </div>
+                          </div>
                         </div>
                       </div>
-                    </div>
-                  </motion.div>
-                )
-              })}
-            </AnimatePresence>
+                    </motion.div>
+                  )
+                })}
+              </AnimatePresence>
+            )}
           </div>
         </section>
 

@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -8,12 +8,41 @@ import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
 import { Switch } from '@/components/ui/switch'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
+import { Loader2 } from 'lucide-react'
 import { toast } from 'sonner'
+import { supabase } from '@/lib/supabase/client'
+
+type Config = Record<string, string>
 
 export default function ConfiguracionPage() {
-  const handleSave = () => {
-    toast.success('Configuración guardada correctamente')
+  const [config, setConfig] = useState<Config>({})
+  const [loading, setLoading] = useState(true)
+  const [saving, setSaving] = useState(false)
+
+  useEffect(() => {
+    supabase.from('configuracion').select('clave,valor').then(({ data, error }) => {
+      if (error) toast.error('Error al cargar configuración')
+      else {
+        const map: Config = {}
+        data?.forEach(r => { map[r.clave] = r.valor || '' })
+        setConfig(map)
+      }
+      setLoading(false)
+    })
+  }, [])
+
+  const set = (clave: string, valor: string) => setConfig(p => ({ ...p, [clave]: valor }))
+
+  const guardar = async (claves: string[]) => {
+    setSaving(true)
+    const upserts = claves.map(clave => ({ clave, valor: config[clave] || '' }))
+    const { error } = await supabase.from('configuracion').upsert(upserts, { onConflict: 'clave' })
+    if (error) toast.error('Error al guardar')
+    else toast.success('Configuración guardada')
+    setSaving(false)
   }
+
+  if (loading) return <div className="flex justify-center py-24"><Loader2 className="h-8 w-8 animate-spin text-primary" /></div>
 
   return (
     <div className="space-y-6">
@@ -25,144 +54,80 @@ export default function ConfiguracionPage() {
       <Tabs defaultValue="general" className="space-y-6">
         <TabsList>
           <TabsTrigger value="general">General</TabsTrigger>
-          <TabsTrigger value="contact">Contacto</TabsTrigger>
+          <TabsTrigger value="contacto">Contacto</TabsTrigger>
           <TabsTrigger value="social">Redes Sociales</TabsTrigger>
           <TabsTrigger value="seo">SEO</TabsTrigger>
         </TabsList>
 
         <TabsContent value="general">
           <Card>
-            <CardHeader>
-              <CardTitle>Información General</CardTitle>
-              <CardDescription>
-                Configura la información básica de tu empresa
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-6">
+            <CardHeader><CardTitle>Información General</CardTitle><CardDescription>Configura la información básica de tu empresa</CardDescription></CardHeader>
+            <CardContent className="space-y-4">
               <div className="grid gap-4 md:grid-cols-2">
-                <div className="space-y-2">
-                  <Label htmlFor="companyName">Nombre de la Empresa</Label>
-                  <Input id="companyName" defaultValue="NovaTec" />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="tagline">Tagline</Label>
-                  <Input id="tagline" defaultValue="Transformamos Ideas en Software Excepcional" />
-                </div>
+                <div className="space-y-2"><Label>Nombre de la Empresa</Label><Input value={config.nombre_empresa || ''} onChange={e => set('nombre_empresa', e.target.value)} /></div>
+                <div className="space-y-2"><Label>Tagline</Label><Input value={config.tagline || ''} onChange={e => set('tagline', e.target.value)} /></div>
               </div>
-              <div className="space-y-2">
-                <Label htmlFor="description">Descripción</Label>
-                <Textarea id="description" rows={4} defaultValue="Somos una empresa de desarrollo de software comprometida con la excelencia y la innovación tecnológica." />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="logo">URL del Logo</Label>
-                <Input id="logo" type="url" placeholder="https://..." />
-              </div>
-              <Button onClick={handleSave}>Guardar Cambios</Button>
+              <div className="space-y-2"><Label>Descripción</Label><Textarea rows={3} value={config.descripcion || ''} onChange={e => set('descripcion', e.target.value)} /></div>
+              <Button onClick={() => guardar(['nombre_empresa', 'tagline', 'descripcion'])} disabled={saving}>
+                {saving && <Loader2 className="h-4 w-4 animate-spin mr-2" />}Guardar Cambios
+              </Button>
             </CardContent>
           </Card>
         </TabsContent>
 
-        <TabsContent value="contact">
+        <TabsContent value="contacto">
           <Card>
-            <CardHeader>
-              <CardTitle>Información de Contacto</CardTitle>
-              <CardDescription>
-                Configura la información de contacto que se muestra en el sitio
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-6">
+            <CardHeader><CardTitle>Información de Contacto</CardTitle><CardDescription>Configura la información de contacto del sitio</CardDescription></CardHeader>
+            <CardContent className="space-y-4">
               <div className="grid gap-4 md:grid-cols-2">
-                <div className="space-y-2">
-                  <Label htmlFor="email">Email Principal</Label>
-                  <Input id="email" type="email" defaultValue="hola@novatec.mx" />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="phone">Teléfono</Label>
-                  <Input id="phone" type="tel" defaultValue="+52 (55) 1234 5678" />
-                </div>
+                <div className="space-y-2"><Label>Correo Principal</Label><Input type="email" value={config.correo_contacto || ''} onChange={e => set('correo_contacto', e.target.value)} /></div>
+                <div className="space-y-2"><Label>Teléfono</Label><Input value={config.telefono || ''} onChange={e => set('telefono', e.target.value)} /></div>
               </div>
-              <div className="space-y-2">
-                <Label htmlFor="address">Dirección</Label>
-                <Textarea id="address" rows={2} defaultValue="Av. Tecnológico 123, Ciudad de México, CP 06000" />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="hours">Horario de Atención</Label>
-                <Input id="hours" defaultValue="Lunes a Viernes: 9:00 - 18:00" />
-              </div>
-              <Button onClick={handleSave}>Guardar Cambios</Button>
+              <div className="space-y-2"><Label>Dirección</Label><Textarea rows={2} value={config.direccion || ''} onChange={e => set('direccion', e.target.value)} /></div>
+              <div className="space-y-2"><Label>Horario de Atención</Label><Input value={config.horario || ''} onChange={e => set('horario', e.target.value)} /></div>
+              <Button onClick={() => guardar(['correo_contacto', 'telefono', 'direccion', 'horario'])} disabled={saving}>
+                {saving && <Loader2 className="h-4 w-4 animate-spin mr-2" />}Guardar Cambios
+              </Button>
             </CardContent>
           </Card>
         </TabsContent>
 
         <TabsContent value="social">
           <Card>
-            <CardHeader>
-              <CardTitle>Redes Sociales</CardTitle>
-              <CardDescription>
-                Configura los enlaces a tus redes sociales
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-6">
+            <CardHeader><CardTitle>Redes Sociales</CardTitle><CardDescription>Configura los enlaces a tus redes sociales</CardDescription></CardHeader>
+            <CardContent className="space-y-4">
               <div className="grid gap-4 md:grid-cols-2">
-                <div className="space-y-2">
-                  <Label htmlFor="facebook">Facebook</Label>
-                  <Input id="facebook" type="url" placeholder="https://facebook.com/..." />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="twitter">Twitter / X</Label>
-                  <Input id="twitter" type="url" placeholder="https://twitter.com/..." />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="instagram">Instagram</Label>
-                  <Input id="instagram" type="url" placeholder="https://instagram.com/..." />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="linkedin">LinkedIn</Label>
-                  <Input id="linkedin" type="url" placeholder="https://linkedin.com/..." />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="github">GitHub</Label>
-                  <Input id="github" type="url" placeholder="https://github.com/..." />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="youtube">YouTube</Label>
-                  <Input id="youtube" type="url" placeholder="https://youtube.com/..." />
-                </div>
+                {['facebook', 'twitter', 'instagram', 'linkedin', 'github'].map(red => (
+                  <div key={red} className="space-y-2">
+                    <Label className="capitalize">{red}</Label>
+                    <Input type="url" placeholder={`https://${red}.com/...`} value={config[red] || ''} onChange={e => set(red, e.target.value)} />
+                  </div>
+                ))}
               </div>
-              <Button onClick={handleSave}>Guardar Cambios</Button>
+              <Button onClick={() => guardar(['facebook', 'twitter', 'instagram', 'linkedin', 'github'])} disabled={saving}>
+                {saving && <Loader2 className="h-4 w-4 animate-spin mr-2" />}Guardar Cambios
+              </Button>
             </CardContent>
           </Card>
         </TabsContent>
 
         <TabsContent value="seo">
           <Card>
-            <CardHeader>
-              <CardTitle>Configuración SEO</CardTitle>
-              <CardDescription>
-                Optimiza tu sitio para los motores de búsqueda
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-6">
-              <div className="space-y-2">
-                <Label htmlFor="metaTitle">Título Meta (Title)</Label>
-                <Input id="metaTitle" defaultValue="NovaTec | Desarrollo de Software Premium" />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="metaDescription">Descripción Meta</Label>
-                <Textarea id="metaDescription" rows={3} defaultValue="Transformamos Ideas en Software Excepcional. Desarrollo web, móvil y soluciones tecnológicas de alto nivel para tu empresa." />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="keywords">Palabras Clave</Label>
-                <Input id="keywords" defaultValue="desarrollo de software, desarrollo web, desarrollo móvil, consultoría tecnológica" />
-              </div>
+            <CardHeader><CardTitle>Configuración SEO</CardTitle><CardDescription>Optimiza tu sitio para los motores de búsqueda</CardDescription></CardHeader>
+            <CardContent className="space-y-4">
+              <div className="space-y-2"><Label>Título Meta</Label><Input value={config.meta_titulo || ''} onChange={e => set('meta_titulo', e.target.value)} /></div>
+              <div className="space-y-2"><Label>Descripción Meta</Label><Textarea rows={3} value={config.meta_descripcion || ''} onChange={e => set('meta_descripcion', e.target.value)} /></div>
+              <div className="space-y-2"><Label>Palabras Clave</Label><Input value={config.palabras_clave || ''} onChange={e => set('palabras_clave', e.target.value)} /></div>
               <div className="flex items-center justify-between p-4 rounded-lg border">
-                <div className="space-y-0.5">
-                  <Label className="text-base">Modo Mantenimiento</Label>
-                  <p className="text-sm text-muted-foreground">Activa el modo de mantenimiento para mostrar una página de mantenimiento</p>
+                <div>
+                  <p className="font-medium">Modo Mantenimiento</p>
+                  <p className="text-sm text-muted-foreground">Muestra una página de mantenimiento a los visitantes</p>
                 </div>
-                <Switch />
+                <Switch checked={config.modo_mantenimiento === 'true'} onCheckedChange={v => set('modo_mantenimiento', v ? 'true' : 'false')} />
               </div>
-              <Button onClick={handleSave}>Guardar Cambios</Button>
+              <Button onClick={() => guardar(['meta_titulo', 'meta_descripcion', 'palabras_clave', 'modo_mantenimiento'])} disabled={saving}>
+                {saving && <Loader2 className="h-4 w-4 animate-spin mr-2" />}Guardar Cambios
+              </Button>
             </CardContent>
           </Card>
         </TabsContent>
