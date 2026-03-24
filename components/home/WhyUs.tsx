@@ -8,6 +8,13 @@ const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
   Users, Shield, Headphones, Agile: Zap,
 }
 
+const cardColors = [
+  { icon: 'text-blue-400', bg: 'bg-blue-500/10 group-hover:bg-blue-500/20', border: 'hover:border-blue-500/20' },
+  { icon: 'text-violet-400', bg: 'bg-violet-500/10 group-hover:bg-violet-500/20', border: 'hover:border-violet-500/20' },
+  { icon: 'text-amber-400', bg: 'bg-amber-500/10 group-hover:bg-amber-500/20', border: 'hover:border-amber-500/20' },
+  { icon: 'text-emerald-400', bg: 'bg-emerald-500/10 group-hover:bg-emerald-500/20', border: 'hover:border-emerald-500/20' },
+]
+
 const highlights = [
   'Código limpio y documentado',
   'Arquitectura escalable',
@@ -46,7 +53,6 @@ export function WhyUs() {
               satisfacción del cliente. Cada proyecto es una oportunidad de superar expectativas.
             </p>
 
-            {/* Highlights grid */}
             <div className="grid grid-cols-2 gap-3">
               {highlights.map((item, i) => (
                 <motion.div
@@ -55,10 +61,10 @@ export function WhyUs() {
                   whileInView={{ opacity: 1, x: 0 }}
                   viewport={{ once: true }}
                   transition={{ delay: i * 0.07 }}
-                  className="flex items-center gap-2.5 text-sm text-muted-foreground"
+                  className="flex items-center gap-2.5 text-sm text-muted-foreground group cursor-default"
                 >
-                  <CheckCircle2 className="h-4 w-4 text-primary shrink-0" />
-                  {item}
+                  <CheckCircle2 className="h-4 w-4 text-primary shrink-0 group-hover:scale-110 transition-transform" />
+                  <span className="group-hover:text-foreground transition-colors">{item}</span>
                 </motion.div>
               ))}
             </div>
@@ -73,6 +79,7 @@ export function WhyUs() {
           >
             {WHY_US.map((item, index) => {
               const Icon = iconMap[item.icon] || Users
+              const colors = cardColors[index]
               return (
                 <motion.div
                   key={item.title}
@@ -80,10 +87,10 @@ export function WhyUs() {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ delay: index * 0.1 }}
-                  className={`group rounded-2xl border border-border/50 bg-card/60 backdrop-blur-sm p-6 hover:border-primary/30 hover:shadow-lg hover:shadow-primary/5 transition-all duration-300 ${index === 1 ? 'mt-6' : ''} ${index === 3 ? '-mt-6' : ''}`}
+                  className={`group rounded-2xl border border-border/50 bg-card/60 backdrop-blur-sm p-6 hover:shadow-lg transition-all duration-300 ${colors.border} ${index === 1 ? 'mt-6' : ''} ${index === 3 ? '-mt-6' : ''}`}
                 >
-                  <div className="w-11 h-11 rounded-xl bg-primary/10 flex items-center justify-center mb-4 group-hover:scale-110 group-hover:bg-primary/20 transition-all duration-300">
-                    <Icon className="h-5 w-5 text-primary" />
+                  <div className={`w-11 h-11 rounded-xl flex items-center justify-center mb-4 transition-all duration-300 group-hover:scale-110 ${colors.bg}`}>
+                    <Icon className={`h-5 w-5 ${colors.icon}`} />
                   </div>
                   <h3 className="font-semibold font-heading mb-2 text-sm">{item.title}</h3>
                   <p className="text-xs text-muted-foreground leading-relaxed">{item.description}</p>
