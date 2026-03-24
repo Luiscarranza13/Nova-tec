@@ -16,7 +16,6 @@ import { toast } from 'sonner'
 
 const sidebarItems = [
   { label: 'Dashboard',     href: '/admin',                icon: LayoutDashboard },
-  { label: 'Clientes',      href: '/admin/clientes',       icon: Users },
   { label: 'Proyectos',     href: '/admin/proyectos',      icon: FolderKanban },
   { label: 'Servicios',     href: '/admin/servicios',      icon: Wrench },
   { label: 'Cotizaciones',  href: '/admin/cotizaciones',   icon: FileText },

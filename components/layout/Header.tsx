@@ -85,11 +85,6 @@ export function Header() {
                 <Moon className="h-4 w-4" />
               )}
             </button>
-            <Link href="/login">
-              <Button variant="ghost" size="sm">
-                Iniciar Sesión
-              </Button>
-            </Link>
             <Link href="/contacto">
               <Button size="sm" className="shadow-md shadow-primary/20">
                 Contactar
@@ -135,11 +130,6 @@ export function Header() {
                   </Link>
                 ))}
                 <div className="pt-4 flex flex-col gap-2">
-                  <Link href="/login" onClick={() => setIsMobileMenuOpen(false)}>
-                    <Button variant="outline" className="w-full">
-                      Iniciar Sesión
-                    </Button>
-                  </Link>
                   <Link href="/contacto" onClick={() => setIsMobileMenuOpen(false)}>
                     <Button className="w-full shadow-md">
                       Contactar
