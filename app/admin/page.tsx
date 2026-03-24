@@ -53,6 +53,7 @@ export default function DashboardPage() {
   const [proyectosChart, setProyectosChart] = useState<{ status: string; count: number }[]>([])
   const [loading, setLoading] = useState(true)
   const [lastUpdated, setLastUpdated] = useState<Date>(new Date())
+  const [mounted, setMounted] = useState(false)
 
   const cargar = async () => {
     const [
@@ -103,6 +104,7 @@ export default function DashboardPage() {
     )
     setProyectosChart(chartData)
     setLastUpdated(new Date())
+    setMounted(true)
     setLoading(false)
   }
 
@@ -328,7 +330,7 @@ export default function DashboardPage() {
       {/* Last updated */}
       <p className="text-xs text-muted-foreground text-right flex items-center justify-end gap-1.5">
         <Clock className="h-3 w-3" />
-        Última actualización: {lastUpdated.toLocaleTimeString('es-MX')}
+        Última actualización: {mounted ? lastUpdated.toLocaleTimeString('es-MX') : '—'}
       </p>
     </div>
   )
