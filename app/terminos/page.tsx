@@ -1,9 +1,13 @@
 import { Header } from '@/components/layout/Header'
 import { Footer } from '@/components/layout/Footer'
 
-export const metadata = {
+import type { Metadata } from 'next'
+
+export const metadata: Metadata = {
   title: 'Términos y Condiciones',
-  description: 'Términos y condiciones de NovaTec.',
+  description: 'Términos y condiciones de uso de los servicios de NovaTec, empresa de desarrollo de software en Lima, Perú.',
+  alternates: { canonical: '/terminos' },
+  robots: { index: false, follow: false },
 }
 
 export default function TerminosPage() {
@@ -61,7 +65,15 @@ export default function TerminosPage() {
               <div>
                 <h2 className="text-xl font-semibold mb-4">6. Contacto</h2>
                 <p className="text-muted-foreground">
-                  Para cualquier consulta sobre estos términos, contáctanos en hola@novatec.mx
+                  Para cualquier consulta sobre estos términos, escríbenos a{' '}
+                  <a href="mailto:NovaTec.Empresarial@gmail.com" className="text-primary hover:underline">
+                    NovaTec.Empresarial@gmail.com
+                  </a>{' '}
+                  o por WhatsApp al{' '}
+                  <a href="https://wa.me/51918146783" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">
+                    +51 918 146 783
+                  </a>.
+                  Dirección: Senati Cajamarca, Perú.
                 </p>
               </div>
             </div>

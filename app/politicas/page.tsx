@@ -1,9 +1,13 @@
 import { Header } from '@/components/layout/Header'
 import { Footer } from '@/components/layout/Footer'
 
-export const metadata = {
+import type { Metadata } from 'next'
+
+export const metadata: Metadata = {
   title: 'Política de Privacidad',
-  description: 'Política de privacidad de NovaTec.',
+  description: 'Política de privacidad de NovaTec. Conoce cómo protegemos y gestionamos tus datos personales.',
+  alternates: { canonical: '/politicas' },
+  robots: { index: false, follow: false },
 }
 
 export default function PoliticasPage() {
@@ -55,8 +59,15 @@ export default function PoliticasPage() {
               <div>
                 <h2 className="text-xl font-semibold mb-4">5. Contacto</h2>
                 <p className="text-muted-foreground">
-                  Si tienes alguna pregunta sobre esta política de privacidad, contáctanos en
-                  hola@novatec.mx
+                  Si tienes alguna pregunta sobre esta política de privacidad, contáctanos en{' '}
+                  <a href="mailto:NovaTec.Empresarial@gmail.com" className="text-primary hover:underline">
+                    NovaTec.Empresarial@gmail.com
+                  </a>{' '}
+                  o por WhatsApp al{' '}
+                  <a href="https://wa.me/51918146783" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">
+                    +51 918 146 783
+                  </a>.
+                  Dirección: Senati Cajamarca, Perú.
                 </p>
               </div>
             </div>

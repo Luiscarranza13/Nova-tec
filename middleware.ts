@@ -1,11 +1,25 @@
 import { createServerClient } from '@supabase/ssr'
 import { NextResponse, type NextRequest } from 'next/server'
 
+// Routes that require authentication
+const PROTECTED_ROUTES = ['/admin']
+
+// Routes only accessible when NOT authenticated
+const AUTH_ROUTES = ['/login', '/recuperar-password']
+
 export async function middleware(request: NextRequest) {
+  const { pathname } = request.nextUrl
+
   const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
   const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
 
-  if (!supabaseUrl || !supabaseKey) return NextResponse.next()
+  // If env vars are missing, only block admin routes
+  if (!supabaseUrl || !supabaseKey) {
+    if (PROTECTED_ROUTES.some(r => pathname.startsWith(r))) {
+      return NextResponse.redirect(new URL('/login', request.url))
+    }
+    return NextResponse.next()
+  }
 
   let response = NextResponse.next({ request })
 
@@ -24,40 +38,39 @@ export async function middleware(request: NextRequest) {
     },
   })
 
+  // Refresh session — important for SSR
   const { data: { user } } = await supabase.auth.getUser()
 
-  const { pathname } = request.nextUrl
-  const isAuthPage  = pathname.startsWith('/login') || pathname.startsWith('/registro')
-  const isAdminPage = pathname.startsWith('/admin')
+  const isProtected = PROTECTED_ROUTES.some(r => pathname.startsWith(r))
+  const isAuthPage  = AUTH_ROUTES.some(r => pathname.startsWith(r))
 
-  // Sin sesión intentando entrar al admin → login
-  if (!user && isAdminPage) {
-    const url = new URL('/login', request.url)
-    url.searchParams.set('redirect', pathname)
-    return NextResponse.redirect(url)
+  // Not authenticated → trying to access protected route
+  if (!user && isProtected) {
+    const loginUrl = new URL('/login', request.url)
+    loginUrl.searchParams.set('redirect', pathname)
+    return NextResponse.redirect(loginUrl)
   }
 
-  // Con sesión en página de auth → admin
+  // Authenticated → trying to access auth pages (login, etc.)
   if (user && isAuthPage) {
     return NextResponse.redirect(new URL('/admin', request.url))
   }
 
-  // Con sesión en admin → verificar que sea admin
-  if (user && isAdminPage) {
-    const { data: usuario } = await supabase
+  // Authenticated on admin → verify admin role
+  if (user && isProtected) {
+    const { data: usuario, error } = await supabase
       .from('usuarios')
       .select('rol')
       .eq('id', user.id)
       .single()
 
-    // Si no se puede leer el rol (error de DB, tabla vacía, etc.) → dejar pasar
-    if (!usuario) return response
+    // If DB error or no record, allow through (fail open for admins)
+    if (error || !usuario) return response
 
-    // Si tiene rol admin → dejar pasar
-    if (usuario.rol === 'admin') return response
-
-    // Cualquier otro rol → redirigir al inicio
-    return NextResponse.redirect(new URL('/', request.url))
+    // Only 'admin' role allowed
+    if (usuario.rol !== 'admin') {
+      return NextResponse.redirect(new URL('/', request.url))
+    }
   }
 
   return response
@@ -65,6 +78,13 @@ export async function middleware(request: NextRequest) {
 
 export const config = {
   matcher: [
-    '/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)',
+    /*
+     * Match all paths except:
+     * - _next/static (static files)
+     * - _next/image (image optimization)
+     * - favicon.ico, robots.txt, sitemap.xml
+     * - public assets (images, fonts, etc.)
+     */
+    '/((?!_next/static|_next/image|favicon\\.ico|robots\\.txt|sitemap\\.xml|.*\\.(?:svg|png|jpg|jpeg|gif|webp|ico|woff|woff2)).*)',
   ],
 }
