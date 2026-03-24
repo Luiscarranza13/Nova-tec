@@ -1,6 +1,6 @@
 import Link from 'next/link'
-import { Code2, Mail, MapPin, Phone, ArrowRight } from 'lucide-react'
-import { Button } from '@/components/ui/button'
+import Image from 'next/image'
+import { Mail, MapPin, Phone, ArrowRight } from 'lucide-react'
 import { NAV_ITEMS, SERVICES } from '@/lib/constants'
 
 export function Footer() {
@@ -16,12 +16,13 @@ export function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-12">
           <div className="lg:col-span-2 space-y-6">
             <Link href="/" className="flex items-center gap-2 group">
-              <div className="relative">
-                <div className="absolute inset-0 bg-gradient-to-r from-primary to-chart-2 rounded-lg blur opacity-30 group-hover:opacity-50 transition-opacity" />
-                <div className="relative bg-gradient-to-r from-primary to-chart-2 p-2 rounded-lg">
-                  <Code2 className="h-6 w-6 text-white" />
-                </div>
-              </div>
+              <Image
+                src="/logo.svg"
+                alt="NovaTec"
+                width={44}
+                height={44}
+                className="group-hover:scale-105 transition-transform duration-200"
+              />
               <span className="text-xl font-bold font-heading">
                 Nova<span className="text-gradient">Tec</span>
               </span>

@@ -4,8 +4,9 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useState, useEffect } from 'react'
-import { Menu, X, Code2, Sun, Moon } from 'lucide-react'
+import { Menu, X, Sun, Moon } from 'lucide-react'
 import { useTheme } from 'next-themes'
+import Image from 'next/image'
 import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
 import { NAV_ITEMS } from '@/lib/constants'
@@ -36,12 +37,13 @@ export function Header() {
       <div className="container max-w-7xl mx-auto px-4">
         <nav className="flex items-center justify-between h-16 md:h-20">
           <Link href="/" className="flex items-center gap-2 group">
-            <div className="relative">
-              <div className="absolute inset-0 bg-gradient-to-r from-primary to-chart-2 rounded-lg blur opacity-30 group-hover:opacity-50 transition-opacity" />
-              <div className="relative bg-gradient-to-r from-primary to-chart-2 p-2 rounded-lg">
-                <Code2 className="h-6 w-6 text-white" />
-              </div>
-            </div>
+            <Image
+              src="/logo.svg"
+              alt="NovaTec"
+              width={40}
+              height={40}
+              className="group-hover:scale-105 transition-transform duration-200"
+            />
             <span className="text-xl font-bold font-heading">
               Nova<span className="text-gradient">Tec</span>
             </span>
@@ -83,11 +85,6 @@ export function Header() {
                 <Moon className="h-4 w-4" />
               )}
             </button>
-            <Link href="/login">
-              <Button variant="ghost" size="sm">
-                Iniciar Sesión
-              </Button>
-            </Link>
             <Link href="/contacto">
               <Button size="sm" className="shadow-md shadow-primary/20">
                 Contactar
@@ -133,11 +130,6 @@ export function Header() {
                   </Link>
                 ))}
                 <div className="pt-4 flex flex-col gap-2">
-                  <Link href="/login" onClick={() => setIsMobileMenuOpen(false)}>
-                    <Button variant="outline" className="w-full">
-                      Iniciar Sesión
-                    </Button>
-                  </Link>
                   <Link href="/contacto" onClick={() => setIsMobileMenuOpen(false)}>
                     <Button className="w-full shadow-md">
                       Contactar
