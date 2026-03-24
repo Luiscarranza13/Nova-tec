@@ -1,7 +1,8 @@
 'use client'
 
-import { motion } from 'framer-motion'
-import { Quote, Star } from 'lucide-react'
+import { motion, AnimatePresence } from 'framer-motion'
+import { Quote, Star, ChevronLeft, ChevronRight } from 'lucide-react'
+import { useState, useEffect } from 'react'
 
 const testimonials = [
   {
@@ -9,10 +10,11 @@ const testimonials = [
     name: 'María González',
     position: 'CEO',
     company: 'RetailMax',
-    quote: 'NovaTec transformó completamente nuestra presencia digital. Su equipo entendió perfectamente nuestra visión y entregó un producto que superó nuestras expectativas.',
+    quote: 'NovaTec transformó completamente nuestra presencia digital. Su equipo entendió perfectamente nuestra visión y entregó un producto que superó nuestras expectativas en tiempo récord.',
     rating: 5,
     avatar: 'MG',
     gradient: 'from-blue-500 to-cyan-500',
+    result: '+180% ventas online',
   },
   {
     id: 2,
@@ -23,6 +25,7 @@ const testimonials = [
     rating: 5,
     avatar: 'CR',
     gradient: 'from-violet-500 to-purple-500',
+    result: '4.9★ en App Store',
   },
   {
     id: 3,
@@ -33,6 +36,7 @@ const testimonials = [
     rating: 5,
     avatar: 'AM',
     gradient: 'from-pink-500 to-rose-500',
+    result: 'Lanzamiento en 6 semanas',
   },
   {
     id: 4,
@@ -43,13 +47,54 @@ const testimonials = [
     rating: 5,
     avatar: 'RS',
     gradient: 'from-amber-500 to-orange-500',
+    result: '-40% costos operativos',
+  },
+  {
+    id: 5,
+    name: 'Laura Vega',
+    position: 'Product Manager',
+    company: 'MediCare+',
+    quote: 'El dashboard que desarrollaron para nosotros es increíblemente intuitivo. Nuestro equipo médico lo adoptó de inmediato y la productividad aumentó notablemente.',
+    rating: 5,
+    avatar: 'LV',
+    gradient: 'from-emerald-500 to-teal-500',
+    result: '+60% productividad',
   },
 ]
 
 export function Testimonials() {
+  const [current, setCurrent] = useState(0)
+  const [direction, setDirection] = useState(1)
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setDirection(1)
+      setCurrent((c) => (c + 1) % testimonials.length)
+    }, 5000)
+    return () => clearInterval(timer)
+  }, [])
+
+  const go = (idx: number) => {
+    setDirection(idx > current ? 1 : -1)
+    setCurrent(idx)
+  }
+
+  const prev = () => {
+    setDirection(-1)
+    setCurrent((c) => (c - 1 + testimonials.length) % testimonials.length)
+  }
+
+  const next = () => {
+    setDirection(1)
+    setCurrent((c) => (c + 1) % testimonials.length)
+  }
+
+  const t = testimonials[current]
+
   return (
     <section id="testimonios" className="py-32 relative overflow-hidden">
       <div className="absolute inset-0 bg-gradient-to-b from-transparent via-primary/3 to-transparent" />
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[400px] bg-primary/5 rounded-full blur-[100px] pointer-events-none" />
 
       <div className="container relative z-10 max-w-7xl mx-auto px-4">
         <motion.div
@@ -73,44 +118,110 @@ export function Testimonials() {
           </p>
         </motion.div>
 
-        <div className="grid md:grid-cols-2 gap-5">
-          {testimonials.map((t, index) => (
-            <motion.div
-              key={t.id}
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: index * 0.1 }}
-              className="group relative rounded-2xl border border-border/50 bg-card/60 backdrop-blur-sm p-8 hover:border-primary/30 hover:shadow-xl hover:shadow-primary/5 transition-all duration-300"
+        {/* Main carousel */}
+        <div className="max-w-4xl mx-auto">
+          <div className="relative overflow-hidden rounded-3xl border border-border/50 bg-card/60 backdrop-blur-sm min-h-[280px]">
+            <AnimatePresence mode="wait" custom={direction}>
+              <motion.div
+                key={t.id}
+                custom={direction}
+                initial={{ opacity: 0, x: direction * 60 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: direction * -60 }}
+                transition={{ duration: 0.35, ease: 'easeInOut' }}
+                className="p-10 md:p-14"
+              >
+                {/* Quote icon */}
+                <div className={`w-12 h-12 rounded-2xl bg-gradient-to-br ${t.gradient} opacity-20 flex items-center justify-center mb-8`}>
+                  <Quote className="h-6 w-6 text-foreground" />
+                </div>
+
+                {/* Stars */}
+                <div className="flex gap-1 mb-6">
+                  {[...Array(t.rating)].map((_, i) => (
+                    <Star key={i} className="w-5 h-5 fill-yellow-400 text-yellow-400" />
+                  ))}
+                </div>
+
+                {/* Quote */}
+                <blockquote className="text-xl md:text-2xl font-medium text-foreground/85 leading-relaxed mb-10">
+                  "{t.quote}"
+                </blockquote>
+
+                {/* Author + result */}
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                  <div className="flex items-center gap-4">
+                    <div className={`w-12 h-12 rounded-full bg-gradient-to-br ${t.gradient} flex items-center justify-center text-white font-bold shrink-0`}>
+                      {t.avatar}
+                    </div>
+                    <div>
+                      <p className="font-semibold">{t.name}</p>
+                      <p className="text-sm text-muted-foreground">{t.position} · {t.company}</p>
+                    </div>
+                  </div>
+                  <div className={`inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r ${t.gradient} bg-opacity-10 border border-border/50`}>
+                    <span className="text-sm font-semibold text-foreground">{t.result}</span>
+                  </div>
+                </div>
+              </motion.div>
+            </AnimatePresence>
+          </div>
+
+          {/* Controls */}
+          <div className="flex items-center justify-between mt-8">
+            {/* Dots */}
+            <div className="flex gap-2">
+              {testimonials.map((_, i) => (
+                <button
+                  key={i}
+                  onClick={() => go(i)}
+                  className={`transition-all duration-300 rounded-full ${
+                    i === current
+                      ? 'w-8 h-2 bg-primary'
+                      : 'w-2 h-2 bg-border hover:bg-muted-foreground'
+                  }`}
+                />
+              ))}
+            </div>
+
+            {/* Arrows */}
+            <div className="flex gap-2">
+              <button
+                onClick={prev}
+                className="w-10 h-10 rounded-full border border-border/50 bg-card/60 flex items-center justify-center text-muted-foreground hover:text-foreground hover:border-primary/30 transition-all"
+              >
+                <ChevronLeft className="h-4 w-4" />
+              </button>
+              <button
+                onClick={next}
+                className="w-10 h-10 rounded-full border border-border/50 bg-card/60 flex items-center justify-center text-muted-foreground hover:text-foreground hover:border-primary/30 transition-all"
+              >
+                <ChevronRight className="h-4 w-4" />
+              </button>
+            </div>
+          </div>
+        </div>
+
+        {/* Mini cards below */}
+        <div className="grid grid-cols-2 md:grid-cols-5 gap-3 mt-12 max-w-4xl mx-auto">
+          {testimonials.map((item, i) => (
+            <button
+              key={item.id}
+              onClick={() => go(i)}
+              className={`rounded-xl p-3 border transition-all duration-200 text-left ${
+                i === current
+                  ? 'border-primary/40 bg-primary/5'
+                  : 'border-border/40 bg-card/40 hover:border-border hover:bg-card/60'
+              }`}
             >
-              {/* Quote icon */}
-              <div className={`absolute top-6 right-6 w-10 h-10 rounded-xl bg-gradient-to-br ${t.gradient} opacity-10 group-hover:opacity-20 transition-opacity flex items-center justify-center`}>
-                <Quote className="h-5 w-5 text-foreground" />
-              </div>
-
-              {/* Stars */}
-              <div className="flex gap-1 mb-5">
-                {[...Array(t.rating)].map((_, i) => (
-                  <Star key={i} className="w-4 h-4 fill-yellow-400 text-yellow-400" />
-                ))}
-              </div>
-
-              {/* Quote */}
-              <blockquote className="text-foreground/80 mb-8 leading-relaxed text-[15px]">
-                "{t.quote}"
-              </blockquote>
-
-              {/* Author */}
-              <div className="flex items-center gap-4">
-                <div className={`w-11 h-11 rounded-full bg-gradient-to-br ${t.gradient} flex items-center justify-center text-white text-sm font-bold shrink-0`}>
-                  {t.avatar}
+              <div className="flex items-center gap-2 mb-1">
+                <div className={`w-6 h-6 rounded-full bg-gradient-to-br ${item.gradient} flex items-center justify-center text-white text-[9px] font-bold shrink-0`}>
+                  {item.avatar}
                 </div>
-                <div>
-                  <p className="font-semibold text-sm">{t.name}</p>
-                  <p className="text-xs text-muted-foreground">{t.position} · {t.company}</p>
-                </div>
+                <p className="text-xs font-medium truncate">{item.name}</p>
               </div>
-            </motion.div>
+              <p className="text-[10px] text-muted-foreground truncate">{item.company}</p>
+            </button>
           ))}
         </div>
       </div>

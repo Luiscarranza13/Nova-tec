@@ -5,6 +5,7 @@ import { Services } from '@/components/home/Services'
 import { WhyUs } from '@/components/home/WhyUs'
 import { Process } from '@/components/home/Process'
 import { Stats } from '@/components/home/Stats'
+import { TechBanner } from '@/components/home/TechBanner'
 import { Portfolio } from '@/components/home/Portfolio'
 import { Testimonials } from '@/components/home/Testimonials'
 import { Pricing } from '@/components/home/Pricing'
@@ -20,6 +21,7 @@ export default function HomePage() {
       <main>
         <Hero />
         <Stats />
+        <TechBanner />
         <Services />
         <WhyUs />
         <Process />
