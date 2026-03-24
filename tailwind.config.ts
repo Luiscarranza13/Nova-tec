@@ -91,14 +91,11 @@ module.exports = {
         xs: 'calc(var(--radius) - 6px)',
       },
       fontFamily: {
-        // Inter — best-in-class body font
         sans: ['var(--font-inter)', ...fontFamily.sans],
-        // Sora — premium geometric heading font
         heading: ['var(--font-sora)', ...fontFamily.sans],
         mono: ['var(--font-jetbrains)', ...fontFamily.mono],
       },
       fontSize: {
-        es
         'fluid-xs':   ['var(--text-xs)',   { lineHeight: 'var(--leading-normal)' }],
         'fluid-sm':   ['var(--text-sm)',   { lineHeight: 'var(--leading-normal)' }],
         'fluid-base': ['var(--text-base)', { lineHeight: 'var(--leading-relaxed)' }],
@@ -110,10 +107,9 @@ module.exports = {
         'fluid-5xl':  ['var(--text-5xl)',  { lineHeight: 'var(--leading-tight)' }],
         'fluid-6xl':  ['var(--text-6xl)',  { lineHeight: 'var(--leading-tight)' }],
         'fluid-7xl':  ['var(--text-7xl)',  { lineHeight: 'var(--leading-tight)' }],
-        // Display sizes for hero sections
-        'display-xl': [  { lineHeight: '1.05', letterSpacing: '-0.03em' }],
-        'display-lg': ['clamp(2.6rem, 2rem + 3vw, 3.75rem)', { lineHeight: '1.08', letterSpacing: '-0.025em' }],
-        'display-md': ['clamp(2.2rem, 1.8rem + 2vw, 3rem)',  { lineHeight: '1.1',  letterSpacing: '-0.02em' }],
+        'display-xl': ['clamp(3.5rem, 3rem + 4vw, 5rem)',      { lineHeight: '1.05', letterSpacing: '-0.03em' }],
+        'display-lg': ['clamp(2.6rem, 2rem + 3vw, 3.75rem)',   { lineHeight: '1.08', letterSpacing: '-0.025em' }],
+        'display-md': ['clamp(2.2rem, 1.8rem + 2vw, 3rem)',    { lineHeight: '1.1',  letterSpacing: '-0.02em' }],
         'display-sm': ['clamp(1.9rem, 1.6rem + 1.5vw, 2.25rem)', { lineHeight: '1.15', letterSpacing: '-0.015em' }],
       },
       letterSpacing: {
@@ -150,7 +146,7 @@ module.exports = {
         'fade-out': { from: { opacity: '1' }, to: { opacity: '0' } },
         'slide-in-from-top': {
           from: { transform: 'translateY(-100%)' },
-          (0)' },
+          to:   { transform: 'translateY(0)' },
         },
         'slide-in-from-bottom': {
           from: { transform: 'translateY(100%)' },
@@ -172,6 +168,14 @@ module.exports = {
           from: { transform: 'rotate(0deg)' },
           to:   { transform: 'rotate(360deg)' },
         },
+        'marquee': {
+          from: { transform: 'translateX(0)' },
+          to:   { transform: 'translateX(-50%)' },
+        },
+        'pulse-glow': {
+          '0%, 100%': { boxShadow: '0 0 20px hsl(var(--primary) / 0.15)' },
+          '50%':      { boxShadow: '0 0 40px hsl(var(--primary) / 0.35)' },
+        },
       },
       animation: {
         'accordion-down':       'accordion-down 0.2s ease-out',
@@ -184,10 +188,12 @@ module.exports = {
         shimmer:                'shimmer 2s infinite',
         float:                  'float 6s ease-in-out infinite',
         'spin-slow':            'spin-slow 8s linear infinite',
+        'marquee':              'marquee 30s linear infinite',
+        'pulse-glow':           'pulse-glow 3s ease-in-out infinite',
       },
       backgroundImage: {
         'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
-        'gradient-conic':  'conic-gradient(from 180deg atr(--tw-gradient-stops))',
+        'gradient-conic':  'conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))',
       },
       boxShadow: {
         'glow-sm':    '0 0 20px hsl(var(--primary) / 0.15)',
