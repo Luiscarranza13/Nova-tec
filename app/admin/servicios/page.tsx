@@ -187,7 +187,7 @@ export default function ServiciosPage() {
               </div>
             </div>
             <div className="space-y-2">
-              <Label className="text-sm font-medium">Precio (MXN)</Label>
+              <Label className="text-sm font-medium">Precio (PEN)</Label>
               <Input type="number" value={form.precio} onChange={e => setForm(p => ({ ...p, precio: e.target.value }))} placeholder="0.00" className="bg-muted/20 border-border/60" />
             </div>
             <div className="space-y-2">

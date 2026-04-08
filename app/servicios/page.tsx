@@ -208,7 +208,7 @@ function Calculator() {
                 <div className="text-3xl font-bold font-heading text-gradient mb-1">
                   ${fmt(total)} – ${fmt(totalMax)}
                 </div>
-                <p className="text-xs text-muted-foreground mb-5">MXN · El precio final depende del alcance detallado</p>
+                <p className="text-xs text-muted-foreground mb-5">PEN · El precio final depende del alcance detallado</p>
                 <Link href="/contacto">
                   <Button className="w-full group shadow-lg shadow-primary/20">
                     Solicitar cotización exacta
@@ -374,7 +374,7 @@ export default function ServiciosPage() {
                               </span>
                               {service.precio != null && (
                                 <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium bg-primary/10 text-primary border border-primary/20">
-                                  <DollarSign className="h-3 w-3" />Desde ${service.precio.toLocaleString('es-MX')} MXN
+                                  <DollarSign className="h-3 w-3" />Desde S/ {service.precio.toLocaleString('es-PE')}
                                 </span>
                               )}
                             </div>

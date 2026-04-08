@@ -48,7 +48,7 @@ const avatarColors = [
 ]
 
 const fmt = (n: number) =>
-  new Intl.NumberFormat('es-MX', { style: 'currency', currency: 'MXN', maximumFractionDigits: 0 }).format(n)
+  new Intl.NumberFormat('es-PE', { style: 'currency', currency: 'PEN', maximumFractionDigits: 0 }).format(n)
 
 const fmtDate = (d: string) =>
   new Date(d).toLocaleDateString('es-MX', { day: '2-digit', month: 'short', year: 'numeric' })
@@ -296,12 +296,12 @@ export default function CotizacionesPage() {
             </div>
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
-                <Label className="text-sm font-semibold text-slate-700">Subtotal (MXN)</Label>
+                <Label className="text-sm font-semibold text-slate-700">Subtotal (PEN)</Label>
                 <Input type="number" value={form.subtotal} onChange={e => setForm(p => ({ ...p, subtotal: e.target.value }))}
                   placeholder="0.00" className="bg-slate-50 border-slate-200 h-11 rounded-xl focus:border-violet-400" />
               </div>
               <div className="space-y-2">
-                <Label className="text-sm font-semibold text-slate-700">IVA (MXN)</Label>
+                <Label className="text-sm font-semibold text-slate-700">IVA (PEN)</Label>
                 <Input type="number" value={form.impuesto} onChange={e => setForm(p => ({ ...p, impuesto: e.target.value }))}
                   placeholder="0.00" className="bg-slate-50 border-slate-200 h-11 rounded-xl focus:border-violet-400" />
               </div>

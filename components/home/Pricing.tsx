@@ -68,7 +68,7 @@ export function Pricing() {
                   <span className="text-4xl font-bold font-heading">
                     {formatCurrency(plan.price)}
                   </span>
-                  <span className="text-sm text-muted-foreground">MXN</span>
+                  <span className="text-sm text-muted-foreground">PEN</span>
                 </div>
               </div>
 

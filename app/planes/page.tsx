@@ -175,7 +175,7 @@ export default function PlanesPage() {
                         <span className="text-4xl font-bold font-heading leading-none tracking-tight">
                           {formatCurrency(plan.price)}
                         </span>
-                        <span className={`text-xs font-mono mb-1 ${cfg.accentText}`}>MXN</span>
+                  <span className={`text-xs font-mono mb-1 ${cfg.accentText}`}>PEN</span>
                       </div>
                       <p className="text-xs text-muted-foreground/60 mt-2 font-mono">pago único · sin mensualidades</p>
                     </div>

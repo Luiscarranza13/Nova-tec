@@ -241,7 +241,7 @@ export default function ProyectosPage() {
             </div>
             <div className="grid sm:grid-cols-2 gap-4">
               <div className="space-y-2">
-                <Label className="text-sm font-medium text-slate-700">Presupuesto (MXN)</Label>
+                <Label className="text-sm font-medium text-slate-700">Presupuesto (PEN)</Label>
                 <Input type="number" value={form.presupuesto} onChange={e => setForm(p => ({ ...p, presupuesto: e.target.value }))} placeholder="0.00" />
               </div>
               <div className="space-y-2">
