@@ -31,11 +31,14 @@ export type Proyecto = {
   id: string
   nombre: string
   descripcion: string | null
+  imagen_url: string | null
   cliente_id: string | null
   cliente?: Cliente
   estado: EstadoProyecto
   presupuesto: number | null
   progreso: number
+  tecnologias: string[] | null
+  url_demo: string | null
   fecha_inicio: string | null
   fecha_fin: string | null
   creado_por: string | null

@@ -1,8 +1,8 @@
 import { MetadataRoute } from 'next'
 
-export default function robots(): MetadataRoute.Robots {
-  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://novatec.mx'
+const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://novatec.pe'
 
+export default function robots(): MetadataRoute.Robots {
   return {
     rules: [
       {
@@ -16,6 +16,7 @@ export default function robots(): MetadataRoute.Robots {
         disallow: ['/admin/', '/api/'],
       },
     ],
-    sitemap: `${baseUrl}/sitemap.xml`,
+    sitemap: `${BASE_URL}/sitemap.xml`,
+    host: BASE_URL,
   }
 }

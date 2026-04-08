@@ -28,6 +28,7 @@ yarn-error.log*
 .env.development.local
 .env.test.local
 .env.production.local
+# .env.production is a template — real values go in Vercel dashboard
 
 # Vercel
 .vercel
@@ -43,3 +44,5 @@ next-env.d.ts
 # Supabase
 supabase/.branches
 supabase/functions
+
+.vercel

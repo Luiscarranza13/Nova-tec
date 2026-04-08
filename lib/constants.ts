@@ -1,5 +1,10 @@
 export const APP_NAME = 'NovaTec'
 export const APP_DESCRIPTION = 'Transformamos Ideas en Software Excepcional'
+export const APP_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://novatec.pe'
+export const WHATSAPP_NUMBER = '51918146783'
+export const CONTACT_EMAIL = 'NovaTec.Empresarial@gmail.com'
+export const CONTACT_ADDRESS = 'Senati Cajamarca, Perú'
+export const CONTACT_PHONE = '+51 918 146 783'
 
 export const NAV_ITEMS = [
   { label: 'Inicio', href: '/' },

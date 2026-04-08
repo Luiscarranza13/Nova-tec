@@ -105,8 +105,8 @@ export function CTA() {
               </Button>
             </Link>
             <a href="https://calendly.com/novatec" target="_blank" rel="noopener noreferrer">
-              <Button size="xl" variant="outline" className="group min-w-[220px] border-border/60 hover:border-primary/40">
-                <Calendar className="mr-2 h-5 w-5 text-chart-2" />
+              <Button size="xl" variant="outline" className="group min-w-[220px] border-border/60 hover:border-primary/40 hover:bg-primary/5">
+                <Calendar className="mr-2 h-5 w-5 text-chart-2 group-hover:scale-110 transition-transform" />
                 Agendar Reunión
               </Button>
             </a>
@@ -123,9 +123,9 @@ export function CTA() {
               <div key={item} className="flex items-center gap-2">
                 <CheckCircle2 className="w-4 h-4 text-primary shrink-0" />
                 {item}
-              </div>
+              </motion.div>
             ))}
-          </div>
+          </motion.div>
         </motion.div>
       </div>
     </section>

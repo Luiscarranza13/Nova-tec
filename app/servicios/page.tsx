@@ -279,7 +279,7 @@ export default function ServiciosPage() {
     return () => { supabase.removeChannel(channel) }
   }, [])
 
-  const categories = ['Todos', ...Array.from(new Set(servicios.map((s) => s.categoria).filter(Boolean)))]
+  const categories: string[] = ['Todos', ...Array.from(new Set(servicios.map((s) => s.categoria).filter((c) => c !== null) as string[]))]
 
   const filtered = activeCategory === 'Todos'
     ? servicios

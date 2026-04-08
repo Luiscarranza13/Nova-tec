@@ -109,6 +109,9 @@ CREATE TABLE public.proyectos (
   id            UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
   nombre        TEXT NOT NULL,
   descripcion   TEXT,
+  imagen_url    TEXT,
+  tecnologias   TEXT[],
+  url_demo      TEXT,
   cliente_id    UUID REFERENCES public.clientes(id) ON DELETE SET NULL,
   estado        TEXT NOT NULL DEFAULT 'pendiente'
                   CHECK (estado IN ('pendiente', 'en_progreso', 'en_revision', 'completado', 'cancelado')),

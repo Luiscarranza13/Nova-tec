@@ -4,6 +4,7 @@ import Link from 'next/link'
 import { motion } from 'framer-motion'
 import { ArrowRight, Sparkles, Zap, CheckCircle2, ChevronDown, Code2, Star } from 'lucide-react'
 import { Button } from '@/components/ui/button'
+import { useRef } from 'react'
 
 const benefits = [
   'Equipo experto dedicado',
@@ -12,7 +13,24 @@ const benefits = [
   'Entregas a tiempo',
 ]
 
-const techStack = ['Next.js', 'React', 'Node.js', 'Flutter', 'AWS', 'TypeScript']
+const techStack = [
+  { name: 'Next.js', color: 'hover:border-white/40 hover:text-white' },
+  { name: 'React', color: 'hover:border-cyan-400/40 hover:text-cyan-400' },
+  { name: 'Node.js', color: 'hover:border-green-400/40 hover:text-green-400' },
+  { name: 'Flutter', color: 'hover:border-blue-400/40 hover:text-blue-400' },
+  { name: 'AWS', color: 'hover:border-amber-400/40 hover:text-amber-400' },
+  { name: 'TypeScript', color: 'hover:border-blue-500/40 hover:text-blue-400' },
+  { name: 'Supabase', color: 'hover:border-emerald-400/40 hover:text-emerald-400' },
+  { name: 'Docker', color: 'hover:border-sky-400/40 hover:text-sky-400' },
+]
+
+const avatarColors = [
+  'hsl(243 75% 59%)',
+  'hsl(190 80% 45%)',
+  'hsl(270 70% 60%)',
+  'hsl(340 75% 55%)',
+  'hsl(30 80% 55%)',
+]
 
 const floatingCards = [
   { icon: '✅', title: 'Proyecto Entregado', sub: 'E-commerce Platform', delay: 0, pos: 'top-[12%] right-[-8%]' },
@@ -21,6 +39,11 @@ const floatingCards = [
 ]
 
 export function Hero() {
+  const ref = useRef(null)
+  const { scrollYProgress } = useScroll({ target: ref, offset: ['start start', 'end start'] })
+  const orbY = useTransform(scrollYProgress, [0, 1], ['0%', '30%'])
+  const contentY = useTransform(scrollYProgress, [0, 1], ['0%', '15%'])
+
   return (
     <section className="relative min-h-screen flex items-center overflow-hidden">
       {/* Background */}
@@ -262,13 +285,13 @@ export function Hero() {
                   transition={{ delay: 1 + i * 0.06 }}
                   className="px-3 py-1.5 rounded-full text-xs font-medium border border-border/50 bg-card/50 text-muted-foreground backdrop-blur-sm hover:border-primary/30 hover:text-primary transition-colors cursor-default"
                 >
-                  {tech}
+                  {tech.name}
                 </motion.span>
               ))}
             </motion.div>
           </motion.div>
         </div>
-      </div>
+      </motion.div>
 
       {/* Scroll indicator */}
       <motion.div

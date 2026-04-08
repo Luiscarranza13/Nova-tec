@@ -1,0 +1,17 @@
+{
+  "name": "NovaTec — Desarrollo de Software",
+  "short_name": "NovaTec",
+  "description": "Transformamos ideas en software excepcional. Lima, Perú.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0d1117",
+  "theme_color": "#6366f1",
+  "icons": [
+    {
+      "src": "/logo.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

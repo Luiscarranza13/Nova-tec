@@ -91,15 +91,20 @@ export function Footer() {
             <ul className="space-y-4">
               <li className="flex items-start gap-3 text-muted-foreground text-sm">
                 <MapPin className="h-5 w-5 text-primary shrink-0 mt-0.5" />
-                <span>Av. Tecnológico 123<br />Ciudad de México, CP 06000</span>
+                <span>Senati Cajamarca, Perú</span>
               </li>
               <li className="flex items-center gap-3 text-muted-foreground text-sm">
                 <Phone className="h-5 w-5 text-primary shrink-0" />
-                <span>+52 (55) 1234 5678</span>
+                <a href="https://wa.me/51918146783" target="_blank" rel="noopener noreferrer"
+                  className="hover:text-primary transition-colors">
+                  +51 918 146 783
+                </a>
               </li>
               <li className="flex items-center gap-3 text-muted-foreground text-sm">
                 <Mail className="h-5 w-5 text-primary shrink-0" />
-                <span>hola@novatec.mx</span>
+                <a href="mailto:NovaTec.Empresarial@gmail.com" className="hover:text-primary transition-colors">
+                  NovaTec.Empresarial@gmail.com
+                </a>
               </li>
             </ul>
           </div>

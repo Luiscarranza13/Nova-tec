@@ -62,6 +62,8 @@ const testimonials = [
   },
 ]
 
+const AUTOPLAY = 5000
+
 export function Testimonials() {
   const [current, setCurrent] = useState(0)
   const [direction, setDirection] = useState(1)
@@ -96,24 +98,46 @@ export function Testimonials() {
       <div className="absolute inset-0 bg-gradient-to-b from-transparent via-primary/3 to-transparent" />
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[400px] bg-primary/5 rounded-full blur-[100px] pointer-events-none" />
 
-      <div className="container relative z-10 max-w-7xl mx-auto px-4">
+      {/* Floating orbs */}
+      <motion.div
+        animate={{ y: [0, -18, 0], x: [0, 10, 0] }}
+        transition={{ duration: 8, repeat: Infinity, ease: 'easeInOut' }}
+        className="absolute top-20 left-[10%] w-64 h-64 rounded-full blur-3xl opacity-[0.06]"
+        style={{ background: t.color }}
+      />
+      <motion.div
+        animate={{ y: [0, 14, 0], x: [0, -8, 0] }}
+        transition={{ duration: 10, repeat: Infinity, ease: 'easeInOut', delay: 1 }}
+        className="absolute bottom-20 right-[10%] w-48 h-48 rounded-full blur-3xl opacity-[0.06]"
+        style={{ background: t.color }}
+      />
+
+      <div className="container relative z-10 max-w-6xl mx-auto px-4">
+
+        {/* Header */}
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
+          transition={{ duration: 0.7 }}
           className="text-center max-w-2xl mx-auto mb-20"
         >
-          <span className="inline-flex items-center gap-2 text-xs font-semibold text-primary uppercase tracking-widest mb-4">
-            <span className="w-8 h-px bg-primary" />
+          <motion.span
+            initial={{ opacity: 0, scaleX: 0.5 }}
+            whileInView={{ opacity: 1, scaleX: 1 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, delay: 0.2 }}
+            className="inline-flex items-center gap-3 text-xs font-semibold text-primary uppercase tracking-[0.25em] mb-6"
+          >
+            <span className="w-12 h-px bg-gradient-to-r from-transparent to-primary" />
             Testimonios
-            <span className="w-8 h-px bg-primary" />
-          </span>
-          <h2 className="text-4xl md:text-5xl font-bold font-heading leading-tight mb-4">
-            Lo que dicen
-            <br />
+            <span className="w-12 h-px bg-gradient-to-l from-transparent to-primary" />
+          </motion.span>
+          <h2 className="text-4xl md:text-5xl font-bold font-heading leading-tight mb-5">
+            Lo que dicen{' '}
             <span className="text-gradient">nuestros clientes</span>
           </h2>
-          <p className="text-muted-foreground text-lg">
+          <p className="text-muted-foreground text-lg leading-relaxed">
             La satisfacción de nuestros clientes es nuestro mayor logro.
           </p>
         </motion.div>
@@ -224,6 +248,7 @@ export function Testimonials() {
             </button>
           ))}
         </div>
+
       </div>
     </section>
   )

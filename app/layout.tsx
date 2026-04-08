@@ -1,53 +1,100 @@
-import type { Metadata } from 'next'
-import { Outfit, Plus_Jakarta_Sans, JetBrains_Mono } from 'next/font/google'
+import type { Metadata, Viewport } from 'next'
+import { Inter, Sora, JetBrains_Mono } from 'next/font/google'
 import { Providers } from '@/components/providers'
 import './globals.css'
 
-const outfit = Outfit({
+// ─── Fonts ────────────────────────────────────────────────────────────────────
+// Inter: best-in-class body font — used by Vercel, Linear, Notion
+const inter = Inter({
   subsets: ['latin'],
-  variable: '--font-outfit',
+  variable: '--font-inter',
+  display: 'swap',
+  preload: true,
+  adjustFontFallback: true,
 })
 
-const jakarta = Plus_Jakarta_Sans({
+// Sora: premium geometric heading font — clean, modern, high legibility
+const sora = Sora({
   subsets: ['latin'],
-  variable: '--font-jakarta',
+  variable: '--font-sora',
+  display: 'swap',
+  preload: true,
+  weight: ['400', '500', '600', '700', '800'],
 })
 
 const jetbrains = JetBrains_Mono({
   subsets: ['latin'],
   variable: '--font-jetbrains',
+  display: 'swap',
+  preload: false,
 })
 
+// ─── Site config ──────────────────────────────────────────────────────────────
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://novatec.pe'
+const SITE_NAME = 'NovaTec'
+const SITE_DESCRIPTION =
+  'Transformamos ideas en software excepcional. Desarrollo web, móvil y soluciones tecnológicas de alto nivel para empresas en Cajamarca y todo el Perú.'
+
+// ─── Viewport ─────────────────────────────────────────────────────────────────
+export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  maximumScale: 5,
+  themeColor: [
+    { media: '(prefers-color-scheme: light)', color: '#ffffff' },
+    { media: '(prefers-color-scheme: dark)',  color: '#0d1117' },
+  ],
+}
+
+// ─── Root metadata ────────────────────────────────────────────────────────────
 export const metadata: Metadata = {
-  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'https://novatec.mx'),
+  metadataBase: new URL(SITE_URL),
   title: {
-    default: 'NovaTec | Desarrollo de Software Premium',
-    template: '%s | NovaTec',
+    default: `${SITE_NAME} | Desarrollo de Software en Cajamarca, Perú`,
+    template: `%s | ${SITE_NAME}`,
   },
-  description: 'Transformamos Ideas en Software Excepcional. Desarrollo web, móvil y soluciones tecnológicas de alto nivel para tu empresa.',
-  keywords: ['desarrollo de software', 'desarrollo web', 'desarrollo móvil', 'consultoría tecnológica', 'NovaTec'],
-  authors: [{ name: 'NovaTec' }],
-  creator: 'NovaTec',
+  description: SITE_DESCRIPTION,
+  keywords: [
+    'desarrollo de software Cajamarca',
+    'desarrollo web Perú',
+    'aplicaciones móviles Cajamarca',
+    'diseño UI UX',
+    'software a medida',
+    'consultoría tecnológica',
+    'NovaTec',
+    'Senati Cajamarca',
+    'empresa de tecnología Perú',
+    'desarrollo web profesional',
+  ],
+  authors: [{ name: SITE_NAME, url: SITE_URL }],
+  creator: SITE_NAME,
+  publisher: SITE_NAME,
+  category: 'technology',
+  alternates: {
+    canonical: SITE_URL,
+    languages: { 'es-PE': SITE_URL },
+  },
   openGraph: {
     type: 'website',
-    locale: 'es_MX',
-    url: 'https://novatec.mx',
-    siteName: 'NovaTec',
-    title: 'NovaTec | Desarrollo de Software Premium',
-    description: 'Transformamos Ideas en Software Excepcional.',
+    locale: 'es_PE',
+    url: SITE_URL,
+    siteName: SITE_NAME,
+    title: `${SITE_NAME} | Desarrollo de Software en Cajamarca, Perú`,
+    description: SITE_DESCRIPTION,
     images: [
       {
         url: '/og-image.png',
         width: 1200,
         height: 630,
-        alt: 'NovaTec',
+        alt: `${SITE_NAME} — Desarrollo de Software Premium en Cajamarca`,
+        type: 'image/png',
       },
     ],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'NovaTec | Desarrollo de Software Premium',
-    description: 'Transformamos Ideas en Software Excepcional.',
+    title: `${SITE_NAME} | Desarrollo de Software en Cajamarca`,
+    description: SITE_DESCRIPTION,
     images: ['/og-image.png'],
   },
   robots: {
@@ -61,17 +108,110 @@ export const metadata: Metadata = {
       'max-snippet': -1,
     },
   },
+  icons: {
+    icon: [
+      { url: '/favicon.ico', sizes: 'any' },
+      { url: '/icon.svg', type: 'image/svg+xml' },
+    ],
+    apple: '/apple-touch-icon.png',
+  },
+  manifest: '/site.webmanifest',
+  verification: {
+    google: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION,
+  },
 }
 
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode
-}) {
+// ─── JSON-LD structured data ──────────────────────────────────────────────────
+const jsonLd = [
+  // LocalBusiness — better for local SEO than generic Organization
+  {
+    '@context': 'https://schema.org',
+    '@type': ['LocalBusiness', 'SoftwareApplication'],
+    '@id': `${SITE_URL}/#business`,
+    name: SITE_NAME,
+    url: SITE_URL,
+    logo: {
+      '@type': 'ImageObject',
+      url: `${SITE_URL}/logo.svg`,
+    },
+    image: `${SITE_URL}/og-image.png`,
+    description: SITE_DESCRIPTION,
+    telephone: '+51-918-146-783',
+    email: 'NovaTec.Empresarial@gmail.com',
+    address: {
+      '@type': 'PostalAddress',
+      streetAddress: 'Senati Cajamarca',
+      addressLocality: 'Cajamarca',
+      addressRegion: 'Cajamarca',
+      addressCountry: 'PE',
+    },
+    geo: {
+      '@type': 'GeoCoordinates',
+      latitude: -7.1638,
+      longitude: -78.5001,
+    },
+    openingHoursSpecification: {
+      '@type': 'OpeningHoursSpecification',
+      dayOfWeek: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
+      opens: '09:00',
+      closes: '18:00',
+    },
+    priceRange: '$$',
+    currenciesAccepted: 'PEN',
+    paymentAccepted: 'Cash, Credit Card, Bank Transfer',
+    areaServed: {
+      '@type': 'Country',
+      name: 'Perú',
+    },
+    serviceType: [
+      'Desarrollo Web',
+      'Desarrollo Móvil',
+      'Software a Medida',
+      'Diseño UI/UX',
+      'Consultoría Tecnológica',
+    ],
+    sameAs: [],
+  },
+  // WebSite with SearchAction for sitelinks searchbox
+  {
+    '@context': 'https://schema.org',
+    '@type': 'WebSite',
+    '@id': `${SITE_URL}/#website`,
+    url: SITE_URL,
+    name: SITE_NAME,
+    description: SITE_DESCRIPTION,
+    inLanguage: 'es-PE',
+    publisher: { '@id': `${SITE_URL}/#business` },
+    potentialAction: {
+      '@type': 'SearchAction',
+      target: {
+        '@type': 'EntryPoint',
+        urlTemplate: `${SITE_URL}/portafolio?q={search_term_string}`,
+      },
+      'query-input': 'required name=search_term_string',
+    },
+  },
+]
+
+// ─── Layout ───────────────────────────────────────────────────────────────────
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="es" suppressHydrationWarning>
+      <head>
+        {/* Preconnect to Google Fonts CDN */}
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        {/* DNS prefetch for external services */}
+        <link rel="dns-prefetch" href="https://images.unsplash.com" />
+        <link rel="dns-prefetch" href="https://wa.me" />
+        {/* JSON-LD structured data */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        />
+      </head>
       <body
-        className={`${outfit.variable} ${jakarta.variable} ${jetbrains.variable} font-sans antialiased`}
+        className={`${inter.variable} ${sora.variable} ${jetbrains.variable} font-sans antialiased`}
       >
         <Providers
           attribute="class"
