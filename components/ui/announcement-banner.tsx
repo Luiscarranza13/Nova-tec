@@ -17,6 +17,7 @@ export function AnnouncementBanner() {
           exit={{ height: 0, opacity: 0 }}
           transition={{ duration: 0.3 }}
           className="overflow-hidden"
+          style={{ contain: 'layout' }}
         >
           <div className="bg-gradient-to-r from-primary via-violet-600 to-chart-2 text-white text-sm py-2.5 px-4 relative">
             <div className="container max-w-7xl mx-auto flex items-center justify-center gap-3">

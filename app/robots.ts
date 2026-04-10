@@ -10,16 +10,6 @@ export default function robots(): MetadataRoute.Robots {
         allow: '/',
         disallow: ['/admin/', '/api/', '/_next/', '/login', '/registro', '/recuperar-password', '/mantenimiento'],
       },
-      {
-        userAgent: 'Googlebot',
-        allow: ['/', '/blog/', '/servicios', '/portafolio', '/nosotros', '/contacto', '/planes', '/testimonios'],
-        disallow: ['/admin/', '/api/'],
-      },
-      { userAgent: 'GPTBot',       disallow: ['/'] },
-      { userAgent: 'ChatGPT-User', disallow: ['/'] },
-      { userAgent: 'CCBot',        disallow: ['/'] },
-      { userAgent: 'anthropic-ai', disallow: ['/'] },
-      { userAgent: 'Claude-Web',   disallow: ['/'] },
     ],
     sitemap: `${BASE}/sitemap.xml`,
   }

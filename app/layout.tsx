@@ -206,6 +206,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <link rel="dns-prefetch" href="https://wa.me" />
         <link rel="dns-prefetch" href="https://supabase.co" />
         <meta name="format-detection" content="telephone=no" />
+        {/* CSP + COOP for Best Practices */}
+        <meta httpEquiv="Cross-Origin-Opener-Policy" content="same-origin-allow-popups" />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}

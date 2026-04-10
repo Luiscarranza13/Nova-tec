@@ -66,9 +66,10 @@ export function Footer() {
             <div className="flex gap-2">
               {socials.map((s) => (
                 <a key={s.name} href={s.href}
-                  className="w-9 h-9 rounded-lg bg-muted/50 flex items-center justify-center text-muted-foreground hover:text-primary hover:bg-primary/10 transition-all duration-200 hover:scale-110"
-                  aria-label={s.name}>
-                  <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                  className="w-10 h-10 rounded-lg bg-muted/50 flex items-center justify-center text-muted-foreground hover:text-primary hover:bg-primary/10 transition-all duration-200 hover:scale-110"
+                  aria-label={`Síguenos en ${s.name}`}
+                  rel="noopener noreferrer">
+                  <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                     <path d={s.path} />
                   </svg>
                 </a>
@@ -84,13 +85,13 @@ export function Footer() {
 
           {/* Nav */}
           <div>
-            <h4 className="font-semibold text-sm mb-5">Navegación</h4>
+            <h3 className="font-semibold text-sm mb-5">Navegación</h3>
             <ul className="space-y-3">
               {NAV_ITEMS.map((item) => (
                 <li key={item.href}>
                   <Link href={item.href}
                     className="text-muted-foreground text-sm hover:text-primary transition-colors flex items-center gap-2 group">
-                    <ArrowRight className="h-3 w-3 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all" />
+                    <ArrowRight className="h-3 w-3 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all" aria-hidden="true" />
                     {item.label}
                   </Link>
                 </li>
@@ -100,13 +101,13 @@ export function Footer() {
 
           {/* Services */}
           <div>
-            <h4 className="font-semibold text-sm mb-5">Servicios</h4>
+            <h3 className="font-semibold text-sm mb-5">Servicios</h3>
             <ul className="space-y-3">
               {SERVICES.map((s) => (
                 <li key={s.id}>
                   <Link href={`/servicios#${s.id}`}
                     className="text-muted-foreground text-sm hover:text-primary transition-colors flex items-center gap-2 group">
-                    <ArrowRight className="h-3 w-3 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all" />
+                    <ArrowRight className="h-3 w-3 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all" aria-hidden="true" />
                     {s.name}
                   </Link>
                 </li>
@@ -116,7 +117,7 @@ export function Footer() {
 
           {/* Contact */}
           <div>
-            <h4 className="font-semibold text-sm mb-5">Contacto</h4>
+            <h3 className="font-semibold text-sm mb-5">Contacto</h3>
             <ul className="space-y-4">
               <li className="flex items-start gap-3 text-muted-foreground text-sm">
                 <MapPin className="h-4 w-4 text-primary shrink-0 mt-0.5" />

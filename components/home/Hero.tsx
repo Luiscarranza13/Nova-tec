@@ -21,11 +21,16 @@ function TypewriterWord() {
   const [displayed, setDisplayed] = useState('')
   const [deleting, setDeleting] = useState(false)
   const [mounted, setMounted] = useState(false)
+  const [started, setStarted] = useState(false)
 
-  useEffect(() => { setMounted(true) }, [])
+  useEffect(() => { 
+    setMounted(true)
+    const t = setTimeout(() => setStarted(true), 2500)
+    return () => clearTimeout(t)
+  }, [])
 
   useEffect(() => {
-    if (!mounted) return
+    if (!mounted || !started) return
     const word = words[index]
     let t: ReturnType<typeof setTimeout>
     if (!deleting && displayed.length < word.length) {
