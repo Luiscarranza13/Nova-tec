@@ -1,4 +1,4 @@
-﻿/** @type {import('next').NextConfig} */
+/** @type {import('next').NextConfig} */
 const withPWA = process.env.NODE_ENV === 'production'
   ? require('next-pwa')({
       dest: 'public',
@@ -62,6 +62,7 @@ const nextConfig = {
   },
 
   experimental: {
+    optimizeCss: true,
     optimizePackageImports: [
       'lucide-react', 'framer-motion', 'recharts',
       '@radix-ui/react-avatar', '@radix-ui/react-dialog',

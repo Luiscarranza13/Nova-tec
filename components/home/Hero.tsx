@@ -15,22 +15,20 @@ const benefits = [
 
 const words = ['Ideas', 'Proyectos', 'Visiones', 'Negocios']
 
-// Typewriter — no hydration issues because it starts empty
+// Typewriter — fixed to not cause LCP penalty
 function TypewriterWord() {
   const [index, setIndex] = useState(0)
-  const [displayed, setDisplayed] = useState('')
-  const [deleting, setDeleting] = useState(false)
-  const [mounted, setMounted] = useState(false)
+  const [displayed, setDisplayed] = useState('Ideas')
+  const [deleting, setDeleting] = useState(true)
   const [started, setStarted] = useState(false)
 
   useEffect(() => { 
-    setMounted(true)
     const t = setTimeout(() => setStarted(true), 2500)
     return () => clearTimeout(t)
   }, [])
 
   useEffect(() => {
-    if (!mounted || !started) return
+    if (!started) return
     const word = words[index]
     let t: ReturnType<typeof setTimeout>
     if (!deleting && displayed.length < word.length) {
@@ -44,11 +42,11 @@ function TypewriterWord() {
       setIndex(i => (i + 1) % words.length)
     }
     return () => clearTimeout(t)
-  }, [displayed, deleting, index, mounted])
+  }, [displayed, deleting, index, started])
 
   return (
     <span className="text-gradient inline-block min-w-[180px]" aria-label="Ideas en Software">
-      {mounted ? displayed : 'Ideas'}
+      {displayed}
       <span className="animate-pulse text-primary" aria-hidden="true">|</span>
     </span>
   )
