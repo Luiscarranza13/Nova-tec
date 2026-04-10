@@ -30,8 +30,7 @@ const jetbrains = JetBrains_Mono({
   display: 'swap',
   preload: false,
 })
-
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://novatec.vercel.app'
+const SITE_URL = (process.env.NEXT_PUBLIC_SITE_URL || 'https://novatec.vercel.app').trim()
 const SITE_NAME = 'NovaTec'
 const SITE_DESCRIPTION =
   'Transformamos ideas en software excepcional. Desarrollo web, móvil y soluciones tecnológicas de alto nivel para empresas en Cajamarca y todo el Perú.'

@@ -27,8 +27,7 @@ export function CookieConsent() {
               <div>
                 <p className="font-semibold text-sm mb-1">Usamos cookies 🍪</p>
                 <p className="text-xs text-muted-foreground leading-relaxed">
-                  Utilizamos cookies para mejorar tu experiencia, analizar el tráfico y personalizar contenido.
-                  {' '}<Link href="/politicas#cookies" className="text-primary hover:underline" aria-label="Más información sobre las cookies">Más información</Link>
+                  {' '}<Link href="/politicas#cookies" className="text-primary hover:underline">Más información <span className="sr-only">sobre nuestras cookies legales</span></Link>
                 </p>
               </div>
             </div>
