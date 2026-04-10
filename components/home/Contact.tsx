@@ -194,47 +194,33 @@ export function Contact() {
                 <form onSubmit={handleSubmit} className="space-y-5">
                   <div className="grid sm:grid-cols-2 gap-5">
                     <div className="space-y-1.5">
-                      <label className="text-sm font-medium text-muted-foreground">Nombre *</label>
-                      <Input
-                        placeholder="Tu nombre"
-                        value={form.nombre}
+                      <label htmlFor="c-nombre" className="text-sm font-medium text-muted-foreground">Nombre *</label>
+                      <Input id="c-nombre"
+                        placeholder="Tu nombre" value={form.nombre}
                         onChange={e => setForm(p => ({ ...p, nombre: e.target.value }))}
-                        className="h-11 rounded-xl bg-background/80"
-                        disabled={loading}
-                      />
+                        className="h-11 rounded-xl bg-background/80" disabled={loading} />
                     </div>
                     <div className="space-y-1.5">
-                      <label className="text-sm font-medium text-muted-foreground">Email *</label>
-                      <Input
-                        type="email"
-                        placeholder="tu@email.com"
-                        value={form.email}
+                      <label htmlFor="c-email" className="text-sm font-medium text-muted-foreground">Email *</label>
+                      <Input id="c-email" type="email"
+                        placeholder="tu@email.com" value={form.email}
                         onChange={e => setForm(p => ({ ...p, email: e.target.value }))}
-                        className="h-11 rounded-xl bg-background/80"
-                        disabled={loading}
-                      />
+                        className="h-11 rounded-xl bg-background/80" disabled={loading} />
                     </div>
                   </div>
                   <div className="space-y-1.5">
-                    <label className="text-sm font-medium text-muted-foreground">Asunto</label>
-                    <Input
-                      placeholder="¿En qué podemos ayudarte?"
-                      value={form.asunto}
+                    <label htmlFor="c-asunto" className="text-sm font-medium text-muted-foreground">Asunto</label>
+                    <Input id="c-asunto"
+                      placeholder="¿En qué podemos ayudarte?" value={form.asunto}
                       onChange={e => setForm(p => ({ ...p, asunto: e.target.value }))}
-                      className="h-11 rounded-xl bg-background/80"
-                      disabled={loading}
-                    />
+                      className="h-11 rounded-xl bg-background/80" disabled={loading} />
                   </div>
                   <div className="space-y-1.5">
-                    <label className="text-sm font-medium text-muted-foreground">Mensaje *</label>
-                    <Textarea
+                    <label htmlFor="c-mensaje" className="text-sm font-medium text-muted-foreground">Mensaje *</label>
+                    <Textarea id="c-mensaje"
                       placeholder="Cuéntanos sobre tu proyecto, idea o consulta..."
-                      value={form.mensaje}
-                      onChange={e => setForm(p => ({ ...p, mensaje: e.target.value }))}
-                      rows={5}
-                      className="rounded-xl bg-background/80 resize-none"
-                      disabled={loading}
-                    />
+                      value={form.mensaje} onChange={e => setForm(p => ({ ...p, mensaje: e.target.value }))}
+                      rows={5} className="rounded-xl bg-background/80 resize-none" disabled={loading} />
                   </div>
                   <div className="flex items-center justify-between gap-4">
                     <p className="text-xs text-muted-foreground">* Campos requeridos</p>

@@ -103,16 +103,19 @@ export function Newsletter() {
             </motion.div>
           ) : (
             <form onSubmit={handleSubscribe} className="flex flex-col sm:flex-row gap-3 max-w-md mx-auto">
+              <label htmlFor="newsletter-email" className="sr-only">Tu correo electrónico</label>
               <Input
+                id="newsletter-email"
                 type="email"
                 placeholder="tu@email.com"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 className="flex-1 h-12 rounded-xl bg-background/80"
                 disabled={loading}
+                aria-label="Correo electrónico para newsletter"
               />
               <Button type="submit" disabled={loading} className="h-12 px-6 rounded-xl gap-2 whitespace-nowrap shadow-lg shadow-primary/20">
-                {loading ? 'Suscribiendo...' : <><Send className="h-4 w-4" />Suscribirme</>}
+                {loading ? 'Suscribiendo...' : <><Send className="h-4 w-4" aria-hidden="true" />Suscribirme</>}
               </Button>
             </form>
           )}
