@@ -1,6 +1,6 @@
 export const APP_NAME = 'NovaTec'
-export const APP_DESCRIPTION = 'Transformamos Ideas en Software Excepcional'
-export const APP_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://novatec.pe'
+export const APP_DESCRIPTION = 'Agencia de Desarrollo de Software y Sistemas en Perú'
+export const APP_URL = (process.env.NEXT_PUBLIC_SITE_URL || 'https://novatec.vercel.app').trim()
 export const WHATSAPP_NUMBER = '51918146783'
 export const CONTACT_EMAIL = 'NovaTec.Empresarial@gmail.com'
 export const CONTACT_ADDRESS = 'Senati Cajamarca, Perú'
@@ -19,24 +19,24 @@ export const NAV_ITEMS = [
 export const SERVICES = [
   {
     id: 'desarrollo-web',
-    name: 'Desarrollo Web',
-    description: 'Creamos sitios web y aplicaciones web modernas, rápidas y escalables utilizando las últimas tecnologías.',
+    name: 'Desarrollo Web Corporativo',
+    description: 'Creamos páginas web de alto impacto, plataformas e-commerce y portales B2B diseñados para maximizar ventas en el mercado peruano.',
     icon: 'Globe',
-    features: ['Sitios web corporativos', 'E-commerce', 'Dashboards', 'PWA'],
+    features: ['Páginas web empresariales', 'Tiendas E-commerce', 'Landing Pages', 'Optimización SEO'],
   },
   {
     id: 'desarrollo-mobile',
-    name: 'Desarrollo Móvil',
-    description: 'Desarrollamos aplicaciones nativas e híbridas para iOS y Android con experiencia de usuario excepcional.',
+    name: 'Aplicaciones Móviles',
+    description: 'Desarrollo de apps ágiles para iOS y Android. Soluciones móviles corporativas para mantener a tu empresa en sintonía con la era digital.',
     icon: 'Smartphone',
-    features: ['iOS', 'Android', 'React Native', 'Flutter'],
+    features: ['Apps Nativas iOS / Android', 'React Native y Flutter', 'Pasarelas de Pago', 'Soporte Continuo'],
   },
   {
     id: 'desarrollo-software',
-    name: 'Desarrollo de Software',
-    description: 'Construimos soluciones de software personalizadas adaptadas a las necesidades específicas de tu negocio.',
+    name: 'Sistemas a Medida',
+    description: 'Ingeniería de software empresarial y sistemas ERP a la medida para automatizar operaciones, finanzas y logística.',
     icon: 'Code',
-    features: ['Software a medida', 'APIs RESTful', 'Microservicios', 'Integraciones'],
+    features: ['Sistemas de Gestión (ERP)', 'Automatización de Procesos', 'Desarrollo Backend', 'Facturación Electrónica'],
   },
   {
     id: 'ui-ux',

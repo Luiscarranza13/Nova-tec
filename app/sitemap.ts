@@ -1,7 +1,7 @@
 import { MetadataRoute } from 'next'
 import { SERVICES, BLOG_POSTS } from '@/lib/constants'
 
-const BASE = process.env.NEXT_PUBLIC_SITE_URL || 'https://novatec.pe'
+const BASE = (process.env.NEXT_PUBLIC_SITE_URL || 'https://novatec.vercel.app').trim()
 const NOW = new Date()
 
 export default function sitemap(): MetadataRoute.Sitemap {

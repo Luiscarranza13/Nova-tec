@@ -88,7 +88,7 @@ export function Hero() {
             <span className="relative inline-flex rounded-full h-2 w-2 bg-primary" />
           </span>
           <Sparkles className="h-3.5 w-3.5 text-primary" aria-hidden="true" />
-          <span className="text-sm font-medium text-primary">Transformando negocios con tecnología</span>
+          <span className="text-sm font-medium text-primary">Agencia de Desarrollo de Software en Perú</span>
         </motion.div>
 
         {/* H1 */}
@@ -108,8 +108,7 @@ export function Hero() {
           className="text-lg md:text-xl text-muted-foreground/90 max-w-2xl leading-relaxed mb-10 animate-in fade-in slide-in-from-bottom-4 duration-700 fill-mode-both"
           style={{ animationDelay: '200ms' }}
         >
-          Somos tu socio estratégico en tecnología. Creamos soluciones innovadoras,
-          escalables y de alta calidad que impulsan el crecimiento de tu negocio de forma medible.
+          Impulsamos empresas en todo el Perú con consultoría tecnológica, desarrollo de sistemas a medida y diseño de páginas web corporativas de alto impacto.
         </p>
 
         {/* CTAs */}

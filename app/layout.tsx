@@ -33,7 +33,7 @@ const jetbrains = JetBrains_Mono({
 const SITE_URL = (process.env.NEXT_PUBLIC_SITE_URL || 'https://novatec.vercel.app').trim()
 const SITE_NAME = 'NovaTec'
 const SITE_DESCRIPTION =
-  'Transformamos ideas en software excepcional. Desarrollo web, móvil y soluciones tecnológicas de alto nivel para empresas en Cajamarca y todo el Perú.'
+  'Agencia de Desarrollo de Software y Sistemas a medida en Perú. Creamos páginas web corporativas, e-commerce, aplicaciones móviles y soluciones tecnológicas escalables para el crecimiento de tu empresa.'
 
 // ─── Viewport ─────────────────────────────────────────────────────────────────
 export const viewport: Viewport = {
@@ -50,21 +50,20 @@ export const viewport: Viewport = {
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: {
-    default: `${SITE_NAME} | Desarrollo de Software en Cajamarca, Perú`,
+    default: `${SITE_NAME} | Desarrollo de Software, Sistemas y Diseño Web en Perú`,
     template: `%s | ${SITE_NAME}`,
   },
   description: SITE_DESCRIPTION,
   keywords: [
-    'desarrollo de software Cajamarca',
-    'desarrollo web Perú',
-    'aplicaciones móviles Cajamarca',
-    'diseño UI UX',
-    'software a medida',
-    'consultoría tecnológica',
+    'desarrollo de software Perú',
+    'sistemas a medida Perú',
+    'agencia de desarrollo web',
+    'creación de páginas web corporativas',
+    'aplicaciones móviles Perú',
+    'consultoría tecnológica empresarial',
+    'empresas de tecnología en Perú',
+    'desarrollo de sistemas ERP',
     'NovaTec',
-    'Senati Cajamarca',
-    'empresa de tecnología Perú',
-    'desarrollo web profesional',
   ],
   authors: [{ name: SITE_NAME, url: SITE_URL }],
   creator: SITE_NAME,
@@ -79,7 +78,7 @@ export const metadata: Metadata = {
     locale: 'es_PE',
     url: SITE_URL,
     siteName: SITE_NAME,
-    title: `${SITE_NAME} | Desarrollo de Software en Cajamarca, Perú`,
+    title: `${SITE_NAME} | Agencia de Desarrollo de Software y Web en Perú`,
     description: SITE_DESCRIPTION,
     images: [
       {
@@ -93,7 +92,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: `${SITE_NAME} | Desarrollo de Software en Cajamarca`,
+    title: `${SITE_NAME} | Desarrollo de Software y Sistemas Perú`,
     description: SITE_DESCRIPTION,
     images: [`/og?title=${encodeURIComponent(SITE_NAME + ' — Desarrollo de Software')}`],
   },
