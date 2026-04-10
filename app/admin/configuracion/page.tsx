@@ -145,6 +145,7 @@ function AvatarUploader({ currentUrl, initials, onUploaded }: {
       <div className="relative shrink-0">
         <div className={`h-24 w-24 rounded-2xl border-2 overflow-hidden flex items-center justify-center transition-all duration-300 ${preview ? 'border-violet-400 shadow-lg shadow-violet-100' : 'border-slate-200'} bg-gradient-to-br from-violet-50 to-indigo-50`}>
           {preview
+            // eslint-disable-next-line @next/next/no-img-element
             ? <img src={preview} alt="Avatar" className="h-full w-full object-cover" />
             : <span className="text-violet-400 text-2xl font-bold select-none">{initials || 'NT'}</span>
           }
