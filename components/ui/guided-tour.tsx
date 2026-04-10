@@ -44,7 +44,6 @@ export function useGuidedTour(tourId: string, steps: {
             popover: {
               title: s.popover.title,
               description: s.popover.description,
-              side: s.popover.side || 'bottom',
             },
           })),
         })
