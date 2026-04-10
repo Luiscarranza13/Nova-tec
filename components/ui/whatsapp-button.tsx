@@ -41,6 +41,7 @@ export function WhatsAppButton() {
               >
                 <button
                   onClick={() => setDismissed(true)}
+                  aria-label="Cerrar tooltip"
                   className="absolute -top-2 -right-2 w-5 h-5 rounded-full bg-muted border border-border flex items-center justify-center hover:bg-muted/80"
                 >
                   <X className="h-3 w-3 text-muted-foreground" />

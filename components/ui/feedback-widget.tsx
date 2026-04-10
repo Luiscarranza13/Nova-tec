@@ -45,7 +45,7 @@ export function FeedbackWidget() {
           >
             <div className="flex items-center justify-between px-4 py-3 border-b border-border/40">
               <p className="text-sm font-semibold">¿Cómo fue tu experiencia?</p>
-              <button onClick={reset} className="text-muted-foreground hover:text-foreground transition-colors">
+              <button aria-label="Cerrar feedback" onClick={reset} className="text-muted-foreground hover:text-foreground transition-colors">
                 <X className="h-4 w-4" />
               </button>
             </div>

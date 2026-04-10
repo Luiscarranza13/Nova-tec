@@ -64,7 +64,7 @@ export function ExitIntent() {
               <div className="h-1.5 bg-gradient-to-r from-primary via-chart-2 to-primary" />
 
               <div className="p-8 text-center">
-                <button onClick={close}
+                <button aria-label="Cerrar popup" onClick={close}
                   className="absolute top-4 right-4 w-8 h-8 rounded-full bg-muted/60 flex items-center justify-center hover:bg-muted transition-colors">
                   <X className="h-4 w-4 text-muted-foreground" />
                 </button>
