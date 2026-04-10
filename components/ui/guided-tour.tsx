@@ -18,7 +18,15 @@ export function useGuidedTour(tourId: string, steps: {
     const init = async () => {
       try {
         const { driver: driverFn } = await import('driver.js')
-        await import('driver.js/dist/driver.css')
+
+        // Inject driver.js CSS once
+        if (!document.getElementById('driver-js-css')) {
+          const link = document.createElement('link')
+          link.id = 'driver-js-css'
+          link.rel = 'stylesheet'
+          link.href = 'https://cdn.jsdelivr.net/npm/driver.js@1/dist/driver.css'
+          document.head.appendChild(link)
+        }
 
         driver = driverFn({
           showProgress: true,
