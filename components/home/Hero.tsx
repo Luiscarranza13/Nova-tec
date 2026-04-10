@@ -45,7 +45,7 @@ function TypewriterWord() {
   }, [displayed, deleting, index, started])
 
   return (
-    <span className="text-gradient inline-block min-w-[180px]" aria-label="Ideas en Software">
+    <span className="text-gradient inline-block min-w-[180px] sm:min-w-[240px] md:min-w-[320px] text-left" aria-label="Ideas en Software">
       {displayed}
       <span className="animate-pulse text-primary" aria-hidden="true">|</span>
     </span>
@@ -108,29 +108,25 @@ export function Hero() {
             </motion.div>
 
             {/* H1 */}
-            <motion.h1
-              initial={{ opacity: 0, y: 24 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.1 }}
-              className="text-5xl md:text-6xl xl:text-7xl font-bold font-heading leading-[1.05] tracking-tight mb-6"
+            <h1
+              className="text-5xl md:text-6xl xl:text-7xl font-bold font-heading leading-[1.05] tracking-tight mb-6 animate-in fade-in slide-in-from-bottom-4 duration-700 fill-mode-both"
+              style={{ animationDelay: '100ms' }}
             >
               Convertimos tus{' '}
               <br />
               <TypewriterWord />
               <br />
               <span className="text-foreground/70">en Software</span>
-            </motion.h1>
+            </h1>
 
             {/* Subtitle */}
-            <motion.p
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.2 }}
-              className="text-lg text-muted-foreground max-w-xl leading-relaxed mb-8"
+            <p
+              className="text-lg text-muted-foreground max-w-xl leading-relaxed mb-8 animate-in fade-in slide-in-from-bottom-4 duration-700 fill-mode-both"
+              style={{ animationDelay: '200ms' }}
             >
               Somos tu socio estratégico en tecnología. Creamos soluciones innovadoras,
               escalables y de alta calidad que impulsan el crecimiento de tu negocio.
-            </motion.p>
+            </p>
 
             {/* Benefits */}
             <motion.div
@@ -176,7 +172,7 @@ export function Hero() {
               transition={{ duration: 0.6, delay: 0.55 }}
               className="flex items-center gap-5 flex-wrap"
             >
-              <div className="flex -space-x-3" aria-label="Clientes satisfechos">
+              <div className="flex -space-x-3" role="group" aria-label="Clientes satisfechos">
                 {['A', 'B', 'C', 'D', 'E'].map((l, i) => (
                   <div
                     key={l}
@@ -189,7 +185,7 @@ export function Hero() {
                 ))}
               </div>
               <div>
-                <div className="flex gap-0.5 mb-0.5" aria-label="5 estrellas">
+                <div className="flex gap-0.5 mb-0.5" role="img" aria-label="5 estrellas">
                   {[...Array(5)].map((_, i) => (
                     <Star key={i} className="w-3.5 h-3.5 fill-yellow-400 text-yellow-400" aria-hidden="true" />
                   ))}

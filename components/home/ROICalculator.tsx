@@ -78,6 +78,7 @@ export function ROICalculator() {
             <input
               type="range" min={10000} max={500000} step={5000}
               value={revenue}
+              aria-label="Ingresos anuales actuales en Soles"
               onChange={e => setRevenue(Number(e.target.value))}
               className="w-full h-2 rounded-full appearance-none bg-muted cursor-pointer accent-primary"
             />

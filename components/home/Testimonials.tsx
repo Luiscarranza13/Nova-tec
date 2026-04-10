@@ -203,6 +203,7 @@ export function Testimonials() {
               {testimonials.map((_, i) => (
                 <button
                   key={i}
+                  aria-label={`Ver testimonio ${i + 1}`}
                   onClick={() => go(i)}
                   className={`transition-all duration-300 rounded-full ${
                     i === current

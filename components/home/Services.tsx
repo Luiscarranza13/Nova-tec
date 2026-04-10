@@ -115,6 +115,7 @@ export function Services() {
                     <Link
                       href={`/servicios#${service.id}`}
                       className={`inline-flex items-center gap-1 text-sm font-medium ${style.icon} opacity-60 group-hover:opacity-100 transition-all group-hover:gap-2`}
+                      aria-label={`Más información sobre ${service.name}`}
                     >
                       Más información
                       <ArrowRight className="h-3.5 w-3.5" />
