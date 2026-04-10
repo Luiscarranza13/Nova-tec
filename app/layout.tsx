@@ -4,6 +4,7 @@ import { Providers } from '@/components/providers'
 import { GoogleAnalytics } from '@/components/analytics/GoogleAnalytics'
 import { CookieConsent } from '@/components/ui/cookie-consent'
 import { DotNavigation } from '@/components/ui/dot-navigation'
+import './globals.css'
 
 // ─── Fonts ────────────────────────────────────────────────────────────────────
 // Inter: best-in-class body font — used by Vercel, Linear, Notion
