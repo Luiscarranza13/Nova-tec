@@ -22,8 +22,8 @@ export function Footer() {
   return (
     <footer className="bg-card border-t border-border relative overflow-hidden">
       <div className="absolute inset-0 bg-mesh opacity-20" />
-      <div className="absolute bottom-0 left-0 w-[500px] h-[300px] bg-primary/5 rounded-full blur-[100px]" />
-      <div className="absolute top-0 right-0 w-[400px] h-[400px] bg-chart-2/5 rounded-full blur-[100px]" />
+      <div className="hidden md:block absolute bottom-0 left-0 w-[500px] h-[300px] bg-primary/5 rounded-full blur-[100px]" />
+      <div className="hidden md:block absolute top-0 right-0 w-[400px] h-[400px] bg-chart-2/5 rounded-full blur-[100px]" />
 
       <div className="container max-w-7xl mx-auto px-4 relative z-10">
         {/* Top CTA strip */}

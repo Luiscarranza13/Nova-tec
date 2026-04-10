@@ -63,12 +63,12 @@ export function Hero() {
 
       {/* CSS-only blobs — use will-change:transform for GPU compositing */}
       <div
-        className="absolute top-[-10%] left-[-5%] w-[700px] h-[700px] rounded-full bg-primary/10 blur-[120px] pointer-events-none"
+        className="hidden md:block absolute top-[-10%] left-[-5%] w-[700px] h-[700px] rounded-full bg-primary/10 blur-[120px] pointer-events-none"
         style={{ willChange: 'transform', animation: 'blob1 18s ease-in-out infinite' }}
         aria-hidden="true"
       />
       <div
-        className="absolute bottom-[-10%] right-[-5%] w-[600px] h-[600px] rounded-full bg-chart-2/10 blur-[100px] pointer-events-none"
+        className="hidden md:block absolute bottom-[-10%] right-[-5%] w-[600px] h-[600px] rounded-full bg-chart-2/10 blur-[100px] pointer-events-none"
         style={{ willChange: 'transform', animation: 'blob2 22s ease-in-out infinite' }}
         aria-hidden="true"
       />
