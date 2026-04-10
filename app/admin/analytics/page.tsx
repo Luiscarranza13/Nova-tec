@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useCallback } from 'react'
 import { motion } from 'framer-motion'
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, AreaChart, Area } from 'recharts'
 import { TrendingUp, Eye, Globe, Calendar, RefreshCw, Download } from 'lucide-react'
@@ -20,7 +20,7 @@ export default function AnalyticsPage() {
   const [loading, setLoading] = useState(true)
   const [days, setDays] = useState(30)
 
-  const load = async () => {
+  const load = useCallback(async () => {
     setLoading(true)
     try {
       const res = await fetch(`/api/analytics?days=${days}`)
@@ -28,9 +28,9 @@ export default function AnalyticsPage() {
       setData(json)
     } catch { /* ignore */ }
     setLoading(false)
-  }
+  }, [days])
 
-  useEffect(() => { load() }, [days])
+  useEffect(() => { load() }, [load])
 
   const avgDaily = data && data.dailyViews.length
     ? Math.round(data.totalViews / data.dailyViews.length)

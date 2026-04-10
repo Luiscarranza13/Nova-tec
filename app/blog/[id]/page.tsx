@@ -21,8 +21,9 @@ export async function generateStaticParams() {
   return ALL_POSTS.map(p => ({ id: String(p.id) }))
 }
 
-export async function generateMetadata({ params }: { params: { id: string } }): Promise<Metadata> {
-  const post = ALL_POSTS.find(p => String(p.id) === params.id)
+export async function generateMetadata({ params }: { params: Promise<{ id: string }> }): Promise<Metadata> {
+  const { id } = await params
+  const post = ALL_POSTS.find(p => String(p.id) === id)
   if (!post) return { title: 'Post no encontrado' }
   return {
     title: post.title,
@@ -35,8 +36,9 @@ export async function generateMetadata({ params }: { params: { id: string } }): 
   }
 }
 
-export default function BlogPostPage({ params }: { params: { id: string } }) {
-  const post = ALL_POSTS.find(p => String(p.id) === params.id)
+export default async function BlogPostPage({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params
+  const post = ALL_POSTS.find(p => String(p.id) === id)
   if (!post) notFound()
 
   const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://novatec.pe'
