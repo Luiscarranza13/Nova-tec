@@ -79,6 +79,8 @@ export function FAQ() {
             >
               <button
                 onClick={() => setActive(active === item.id ? null : item.id)}
+                aria-expanded={active === item.id}
+                aria-controls={`faq-answer-${item.id}`}
                 className="w-full text-left p-6 rounded-xl border border-border/50 bg-card/60 backdrop-blur-sm hover:border-primary/30 transition-all duration-200 group"
               >
                 <div className="flex items-start justify-between gap-4">
@@ -88,6 +90,7 @@ export function FAQ() {
                   <motion.div
                     animate={{ rotate: active === item.id ? 180 : 0 }}
                     className="text-primary flex-shrink-0"
+                    aria-hidden="true"
                   >
                     <ChevronDown className="h-5 w-5" />
                   </motion.div>
@@ -96,6 +99,7 @@ export function FAQ() {
                 <AnimatePresence>
                   {active === item.id && (
                     <motion.div
+                      id={`faq-answer-${item.id}`}
                       initial={{ opacity: 0, height: 0 }}
                       animate={{ opacity: 1, height: 'auto' }}
                       exit={{ opacity: 0, height: 0 }}

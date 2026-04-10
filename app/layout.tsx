@@ -4,9 +4,12 @@ import { Providers } from '@/components/providers'
 import { GoogleAnalytics } from '@/components/analytics/GoogleAnalytics'
 import { CookieConsent } from '@/components/ui/cookie-consent'
 import dynamic from 'next/dynamic'
-
-const DotNavigation = dynamic(() => import('@/components/ui/dot-navigation').then(m => ({ default: m.DotNavigation })), { ssr: false })
 import './globals.css'
+
+const DotNavigation = dynamic(
+  () => import('@/components/ui/dot-navigation').then(m => ({ default: m.DotNavigation })),
+  { ssr: false }
+)
 
 // ─── Fonts ────────────────────────────────────────────────────────────────────
 // Inter: best-in-class body font — used by Vercel, Linear, Notion

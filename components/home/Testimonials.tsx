@@ -217,12 +217,14 @@ export function Testimonials() {
             <div className="flex gap-2">
               <button
                 onClick={prev}
+                aria-label="Testimonio anterior"
                 className="w-10 h-10 rounded-full border border-border/50 bg-card/60 flex items-center justify-center text-muted-foreground hover:text-foreground hover:border-primary/30 transition-all"
               >
                 <ChevronLeft className="h-4 w-4" />
               </button>
               <button
                 onClick={next}
+                aria-label="Siguiente testimonio"
                 className="w-10 h-10 rounded-full border border-border/50 bg-card/60 flex items-center justify-center text-muted-foreground hover:text-foreground hover:border-primary/30 transition-all"
               >
                 <ChevronRight className="h-4 w-4" />

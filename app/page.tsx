@@ -1,30 +1,35 @@
+import dynamic from 'next/dynamic'
 import { Header } from '@/components/layout/Header'
 import { Footer } from '@/components/layout/Footer'
 import { Hero } from '@/components/home/Hero'
+import { FAQSchema, ReviewSchema } from '@/components/seo/SchemaMarkup'
+import { FAQ_ITEMS } from '@/lib/constants'
+
+// Above-the-fold: load immediately
 import { ClientLogos } from '@/components/home/ClientLogos'
 import { Stats } from '@/components/home/Stats'
 import { TechBanner } from '@/components/home/TechBanner'
 import { Services } from '@/components/home/Services'
-import { WhyUs } from '@/components/home/WhyUs'
-import { Process } from '@/components/home/Process'
-import { CaseStudies } from '@/components/home/CaseStudies'
-import { Portfolio } from '@/components/home/Portfolio'
-import { Testimonials } from '@/components/home/Testimonials'
-import { Pricing } from '@/components/home/Pricing'
-import { PlanComparator } from '@/components/home/PlanComparator'
-import { ROICalculator } from '@/components/home/ROICalculator'
-import { BlogPreview } from '@/components/home/BlogPreview'
-import { FAQ } from '@/components/home/FAQ'
-import { Newsletter } from '@/components/home/Newsletter'
-import { Contact } from '@/components/home/Contact'
-import { MapLocation } from '@/components/home/MapLocation'
-import { CTA } from '@/components/home/CTA'
-import { WhatsAppButton } from '@/components/ui/whatsapp-button'
-import { ScrollToTop } from '@/components/ui/scroll-to-top'
-import { FAQSchema, ReviewSchema } from '@/components/seo/SchemaMarkup'
-import { ExitIntent } from '@/components/ui/exit-intent'
-import { FeedbackWidget } from '@/components/ui/feedback-widget'
-import { FAQ_ITEMS } from '@/lib/constants'
+
+// Below-the-fold: lazy load to reduce initial JS bundle
+const WhyUs        = dynamic(() => import('@/components/home/WhyUs').then(m => ({ default: m.WhyUs })))
+const Process      = dynamic(() => import('@/components/home/Process').then(m => ({ default: m.Process })))
+const CaseStudies  = dynamic(() => import('@/components/home/CaseStudies').then(m => ({ default: m.CaseStudies })))
+const Portfolio    = dynamic(() => import('@/components/home/Portfolio').then(m => ({ default: m.Portfolio })))
+const Testimonials = dynamic(() => import('@/components/home/Testimonials').then(m => ({ default: m.Testimonials })))
+const Pricing      = dynamic(() => import('@/components/home/Pricing').then(m => ({ default: m.Pricing })))
+const PlanComparator = dynamic(() => import('@/components/home/PlanComparator').then(m => ({ default: m.PlanComparator })))
+const ROICalculator  = dynamic(() => import('@/components/home/ROICalculator').then(m => ({ default: m.ROICalculator })))
+const BlogPreview  = dynamic(() => import('@/components/home/BlogPreview').then(m => ({ default: m.BlogPreview })))
+const FAQ          = dynamic(() => import('@/components/home/FAQ').then(m => ({ default: m.FAQ })))
+const Newsletter   = dynamic(() => import('@/components/home/Newsletter').then(m => ({ default: m.Newsletter })))
+const Contact      = dynamic(() => import('@/components/home/Contact').then(m => ({ default: m.Contact })))
+const MapLocation  = dynamic(() => import('@/components/home/MapLocation').then(m => ({ default: m.MapLocation })))
+const CTA          = dynamic(() => import('@/components/home/CTA').then(m => ({ default: m.CTA })))
+const WhatsAppButton = dynamic(() => import('@/components/ui/whatsapp-button').then(m => ({ default: m.WhatsAppButton })), { ssr: false })
+const ScrollToTop  = dynamic(() => import('@/components/ui/scroll-to-top').then(m => ({ default: m.ScrollToTop })), { ssr: false })
+const ExitIntent   = dynamic(() => import('@/components/ui/exit-intent').then(m => ({ default: m.ExitIntent })), { ssr: false })
+const FeedbackWidget = dynamic(() => import('@/components/ui/feedback-widget').then(m => ({ default: m.FeedbackWidget })), { ssr: false })
 
 export default function HomePage() {
   return (
