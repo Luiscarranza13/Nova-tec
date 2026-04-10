@@ -1,7 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
-import { useRouter } from 'next/navigation'
+import { useEffect } from 'react'
 import { Sidebar } from '@/components/layout/Sidebar'
 import { AdminHeader } from '@/components/layout/AdminHeader'
 import { RealtimeNotifications } from '@/components/admin/realtime-notifications'
@@ -13,42 +12,65 @@ import Swal from 'sweetalert2'
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
   const { sidebarCollapsed, setSidebarCollapsed } = useUIStore()
-  const router = useRouter()
 
   useEffect(() => {
-    // Empuja un estado extra al historial para poder detectar "atrás"
+    // 1. Forzar cierre de sesión al cargar el panel
+    //    Esto garantiza que cada acceso requiera login
+    const checkSession = async () => {
+      const { data: { session } } = await supabase.auth.getSession()
+      if (!session) {
+        window.location.replace('/login')
+        return
+      }
+    }
+    checkSession()
+
+    // 2. Interceptar botón "atrás" del navegador
     window.history.pushState({ adminGuard: true }, '')
 
-    const handlePopState = async (e: PopStateEvent) => {
-      // Vuelve a empujar el estado para que el botón atrás no navegue
+    const handlePopState = async () => {
+      // Re-empuja el estado para bloquear la navegación
       window.history.pushState({ adminGuard: true }, '')
 
       const result = await Swal.fire({
-        title: '¿Cerrar sesión?',
-        text: 'Si sales del panel, tu sesión se cerrará.',
+        title: '¿Deseas cerrar sesión?',
+        html: `
+          <p style="color:#64748b;font-size:14px;margin-top:4px">
+            Si sales del panel, tu sesión se cerrará por seguridad.<br/>
+            Tendrás que iniciar sesión nuevamente para acceder.
+          </p>
+        `,
         icon: 'warning',
         showCancelButton: true,
         confirmButtonText: 'Sí, cerrar sesión',
-        cancelButtonText: 'Cancelar',
+        cancelButtonText: 'Quedarme aquí',
         confirmButtonColor: '#7c3aed',
         cancelButtonColor: '#64748b',
         reverseButtons: true,
         customClass: {
           popup: 'rounded-2xl shadow-2xl',
-          title: 'text-slate-900 font-semibold',
-          htmlContainer: 'text-slate-500',
+          title: 'text-slate-900 font-bold text-lg',
         },
       })
 
       if (result.isConfirmed) {
         await supabase.auth.signOut()
-        // Limpia el historial y redirige
         window.location.replace('/login')
       }
     }
 
+    // 3. Cerrar sesión al cerrar/recargar la pestaña
+    const handleBeforeUnload = async () => {
+      await supabase.auth.signOut()
+    }
+
     window.addEventListener('popstate', handlePopState)
-    return () => window.removeEventListener('popstate', handlePopState)
+    window.addEventListener('beforeunload', handleBeforeUnload)
+
+    return () => {
+      window.removeEventListener('popstate', handlePopState)
+      window.removeEventListener('beforeunload', handleBeforeUnload)
+    }
   }, [])
 
   return (
