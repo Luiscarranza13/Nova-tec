@@ -112,6 +112,26 @@ export function Hero() {
           escalables y de alta calidad que impulsan el crecimiento de tu negocio de forma medible.
         </p>
 
+        {/* CTAs */}
+        <motion.div
+          initial={{ opacity: 0, y: 16 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.4 }}
+          className="flex flex-col sm:flex-row justify-center gap-4 mb-14"
+        >
+          <Link href="/contacto">
+            <Button size="xl" className="group shadow-lg shadow-primary/30 hover:shadow-xl hover:shadow-primary/40 min-w-[200px] relative overflow-hidden">
+              <span className="absolute inset-0 bg-gradient-to-r from-primary/0 via-white/10 to-primary/0 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700" aria-hidden="true" />
+              Iniciar Proyecto
+              <ArrowRight className="ml-2 h-5 w-5 transition-transform group-hover:translate-x-1" aria-hidden="true" />
+            </Button>
+          </Link>
+          <Link href="/portafolio">
+            <Button size="xl" variant="outline" className="group min-w-[200px] border-border/60 hover:border-primary/40 hover:bg-primary/5">
+              <Zap className="mr-2 h-5 w-5 text-chart-2 group-hover:scale-110 transition-transform" aria-hidden="true" />
+              Ver Portafolio
+            </Button>
+          </Link>
         </motion.div>
 
         {/* Social proof */}
