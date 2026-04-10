@@ -3,7 +3,9 @@ import { Inter, Sora, JetBrains_Mono } from 'next/font/google'
 import { Providers } from '@/components/providers'
 import { GoogleAnalytics } from '@/components/analytics/GoogleAnalytics'
 import { CookieConsent } from '@/components/ui/cookie-consent'
-import { DotNavigation } from '@/components/ui/dot-navigation'
+import dynamic from 'next/dynamic'
+
+const DotNavigation = dynamic(() => import('@/components/ui/dot-navigation').then(m => ({ default: m.DotNavigation })), { ssr: false })
 import './globals.css'
 
 // ─── Fonts ────────────────────────────────────────────────────────────────────
@@ -16,13 +18,12 @@ const inter = Inter({
   adjustFontFallback: true,
 })
 
-// Sora: premium geometric heading font — clean, modern, high legibility
 const sora = Sora({
   subsets: ['latin'],
   variable: '--font-sora',
   display: 'swap',
   preload: true,
-  weight: ['400', '500', '600', '700', '800'],
+  weight: ['600', '700', '800'],
 })
 
 const jetbrains = JetBrains_Mono({
