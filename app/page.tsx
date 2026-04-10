@@ -26,10 +26,11 @@ const Newsletter   = dynamic(() => import('@/components/home/Newsletter').then(m
 const Contact      = dynamic(() => import('@/components/home/Contact').then(m => ({ default: m.Contact })))
 const MapLocation  = dynamic(() => import('@/components/home/MapLocation').then(m => ({ default: m.MapLocation })))
 const CTA          = dynamic(() => import('@/components/home/CTA').then(m => ({ default: m.CTA })))
-const WhatsAppButton = dynamic(() => import('@/components/ui/whatsapp-button').then(m => ({ default: m.WhatsAppButton })), { ssr: false })
-const ScrollToTop  = dynamic(() => import('@/components/ui/scroll-to-top').then(m => ({ default: m.ScrollToTop })), { ssr: false })
-const ExitIntent   = dynamic(() => import('@/components/ui/exit-intent').then(m => ({ default: m.ExitIntent })), { ssr: false })
-const FeedbackWidget = dynamic(() => import('@/components/ui/feedback-widget').then(m => ({ default: m.FeedbackWidget })), { ssr: false })
+// Client-only components (no SSR needed)
+const WhatsAppButton = dynamic(() => import('@/components/ui/whatsapp-button').then(m => ({ default: m.WhatsAppButton })))
+const ScrollToTop  = dynamic(() => import('@/components/ui/scroll-to-top').then(m => ({ default: m.ScrollToTop })))
+const ExitIntent   = dynamic(() => import('@/components/ui/exit-intent').then(m => ({ default: m.ExitIntent })))
+const FeedbackWidget = dynamic(() => import('@/components/ui/feedback-widget').then(m => ({ default: m.FeedbackWidget })))
 
 export default function HomePage() {
   return (
