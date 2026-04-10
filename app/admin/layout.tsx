@@ -14,32 +14,23 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   const { sidebarCollapsed, setSidebarCollapsed } = useUIStore()
 
   useEffect(() => {
-    // 1. Forzar cierre de sesión al cargar el panel
-    //    Esto garantiza que cada acceso requiera login
-    const checkSession = async () => {
-      const { data: { session } } = await supabase.auth.getSession()
-      if (!session) {
-        window.location.replace('/login')
-        return
-      }
-    }
-    checkSession()
+    // ── 1. Verificar sesión activa ────────────────────────────────────────────
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      if (!session) window.location.replace('/login')
+    })
 
-    // 2. Interceptar botón "atrás" del navegador
+    // ── 2. Interceptar botón "atrás" ──────────────────────────────────────────
     window.history.pushState({ adminGuard: true }, '')
 
     const handlePopState = async () => {
-      // Re-empuja el estado para bloquear la navegación
       window.history.pushState({ adminGuard: true }, '')
 
       const result = await Swal.fire({
-        title: '¿Deseas cerrar sesión?',
-        html: `
-          <p style="color:#64748b;font-size:14px;margin-top:4px">
-            Si sales del panel, tu sesión se cerrará por seguridad.<br/>
-            Tendrás que iniciar sesión nuevamente para acceder.
-          </p>
-        `,
+        title: '¿Salir del panel?',
+        html: `<p style="color:#64748b;font-size:14px;line-height:1.6">
+          Si sales, tu sesión se cerrará por seguridad.<br/>
+          Necesitarás iniciar sesión nuevamente.
+        </p>`,
         icon: 'warning',
         showCancelButton: true,
         confirmButtonText: 'Sí, cerrar sesión',
@@ -47,10 +38,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         confirmButtonColor: '#7c3aed',
         cancelButtonColor: '#64748b',
         reverseButtons: true,
-        customClass: {
-          popup: 'rounded-2xl shadow-2xl',
-          title: 'text-slate-900 font-bold text-lg',
-        },
+        customClass: { popup: 'rounded-2xl shadow-2xl' },
       })
 
       if (result.isConfirmed) {
@@ -59,17 +47,27 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
       }
     }
 
-    // 3. Cerrar sesión al cerrar/recargar la pestaña
-    const handleBeforeUnload = async () => {
-      await supabase.auth.signOut()
+    window.addEventListener('popstate', handlePopState)
+
+    // ── 3. Cerrar sesión al cerrar/cambiar de pestaña ─────────────────────────
+    // sendBeacon es síncrono y funciona aunque el browser esté cerrando
+    const handleVisibilityChange = () => {
+      if (document.visibilityState === 'hidden') {
+        navigator.sendBeacon('/api/admin/signout')
+      }
     }
 
-    window.addEventListener('popstate', handlePopState)
-    window.addEventListener('beforeunload', handleBeforeUnload)
+    const handlePageHide = () => {
+      navigator.sendBeacon('/api/admin/signout')
+    }
+
+    document.addEventListener('visibilitychange', handleVisibilityChange)
+    window.addEventListener('pagehide', handlePageHide)
 
     return () => {
       window.removeEventListener('popstate', handlePopState)
-      window.removeEventListener('beforeunload', handleBeforeUnload)
+      document.removeEventListener('visibilitychange', handleVisibilityChange)
+      window.removeEventListener('pagehide', handlePageHide)
     }
   }, [])
 

@@ -14,6 +14,7 @@ import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet'
 import { motion, AnimatePresence } from 'framer-motion'
 import { supabase } from '@/lib/supabase/client'
 import { toast } from 'sonner'
+import Swal from 'sweetalert2'
 
 const sidebarItems = [
   { label: 'Dashboard',     href: '/admin',                icon: LayoutDashboard, tour: 'dashboard' },
@@ -27,8 +28,8 @@ const sidebarItems = [
   { label: 'Portafolio',    href: '/admin/portafolio',     icon: Image },
   { label: 'Newsletter',    href: '/admin/newsletter',     icon: Mail },
   { label: 'Pipeline',      href: '/admin/pipeline',       icon: Kanban },
-  { label: 'Analytics',     href: '/admin/analytics',      icon: BarChart2 },
-  { label: 'Configuración', href: '/admin/configuracion',  icon: Settings,        tour: 'configuracion' },
+  { label: 'Analíticas',    href: '/admin/analytics',      icon: BarChart2 },
+  { label: 'Configuración', href: '/admin/configuracion',  icon: Settings, tour: 'configuracion' },
 ]
 
 interface SidebarProps {
@@ -77,7 +78,30 @@ export function Sidebar({ collapsed, onToggle }: SidebarProps) {
   const handleLogout = async () => {
     await supabase.auth.signOut()
     toast.success('Sesión cerrada')
-    window.location.href = '/login'
+    window.location.replace('/login')
+  }
+
+  const handleVerSitio = async () => {
+    const result = await Swal.fire({
+      title: '¿Salir del panel?',
+      html: `<p style="color:#64748b;font-size:14px;line-height:1.6">
+        Al ir al sitio web tu sesión se cerrará por seguridad.<br/>
+        Necesitarás iniciar sesión nuevamente para volver al panel.
+      </p>`,
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Sí, ir al sitio',
+      cancelButtonText: 'Quedarme aquí',
+      confirmButtonColor: '#7c3aed',
+      cancelButtonColor: '#64748b',
+      reverseButtons: true,
+      customClass: { popup: 'rounded-2xl shadow-2xl' },
+    })
+
+    if (result.isConfirmed) {
+      await supabase.auth.signOut()
+      window.open('/', '_blank')
+    }
   }
 
   const SidebarContent = ({ mobile = false }: { mobile?: boolean }) => (
@@ -130,11 +154,10 @@ export function Sidebar({ collapsed, onToggle }: SidebarProps) {
 
       {/* Footer */}
       <div className="border-t border-slate-100 p-3 space-y-0.5">
-        <Link
-          href="/"
-          target="_blank"
+        <button
+          onClick={handleVerSitio}
           className={cn(
-            'flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium text-slate-500 hover:bg-slate-100 hover:text-slate-900 transition-colors group relative',
+            'w-full flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium text-slate-500 hover:bg-slate-100 hover:text-slate-900 transition-colors group relative',
             collapsed && !mobile && 'justify-center px-0'
           )}
         >
@@ -145,7 +168,7 @@ export function Sidebar({ collapsed, onToggle }: SidebarProps) {
               Ver Sitio Web
             </div>
           )}
-        </Link>
+        </button>
         <button
           onClick={handleLogout}
           className={cn(
