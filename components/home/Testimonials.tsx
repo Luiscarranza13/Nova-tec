@@ -14,6 +14,7 @@ const testimonials = [
     rating: 5,
     avatar: 'MG',
     gradient: 'from-blue-500 to-cyan-500',
+    color: '#3b82f6',
     result: '+180% ventas online',
   },
   {
@@ -25,6 +26,7 @@ const testimonials = [
     rating: 5,
     avatar: 'CR',
     gradient: 'from-violet-500 to-purple-500',
+    color: '#8b5cf6',
     result: '4.9★ en App Store',
   },
   {
@@ -36,6 +38,7 @@ const testimonials = [
     rating: 5,
     avatar: 'AM',
     gradient: 'from-pink-500 to-rose-500',
+    color: '#ec4899',
     result: 'Lanzamiento en 6 semanas',
   },
   {
@@ -47,6 +50,7 @@ const testimonials = [
     rating: 5,
     avatar: 'RS',
     gradient: 'from-amber-500 to-orange-500',
+    color: '#f59e0b',
     result: '-40% costos operativos',
   },
   {
@@ -58,6 +62,7 @@ const testimonials = [
     rating: 5,
     avatar: 'LV',
     gradient: 'from-emerald-500 to-teal-500',
+    color: '#10b981',
     result: '+60% productividad',
   },
 ]
