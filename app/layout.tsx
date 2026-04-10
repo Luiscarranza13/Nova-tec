@@ -3,13 +3,7 @@ import { Inter, Sora, JetBrains_Mono } from 'next/font/google'
 import { Providers } from '@/components/providers'
 import { GoogleAnalytics } from '@/components/analytics/GoogleAnalytics'
 import { CookieConsent } from '@/components/ui/cookie-consent'
-import dynamic from 'next/dynamic'
-import './globals.css'
-
-const DotNavigation = dynamic(
-  () => import('@/components/ui/dot-navigation').then(m => ({ default: m.DotNavigation })),
-  { ssr: false }
-)
+import { DotNavigation } from '@/components/ui/dot-navigation'
 
 // ─── Fonts ────────────────────────────────────────────────────────────────────
 // Inter: best-in-class body font — used by Vercel, Linear, Notion
