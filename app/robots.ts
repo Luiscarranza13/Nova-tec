@@ -1,6 +1,6 @@
 import { MetadataRoute } from 'next'
 
-const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://novatec.pe'
+const BASE = process.env.NEXT_PUBLIC_SITE_URL || 'https://novatec.pe'
 
 export default function robots(): MetadataRoute.Robots {
   return {
@@ -8,15 +8,21 @@ export default function robots(): MetadataRoute.Robots {
       {
         userAgent: '*',
         allow: '/',
-        disallow: ['/admin/', '/api/', '/_next/'],
+        disallow: ['/admin/', '/api/', '/_next/', '/login', '/registro', '/recuperar-password', '/mantenimiento'],
       },
       {
         userAgent: 'Googlebot',
-        allow: '/',
+        allow: ['/', '/blog/', '/servicios', '/portafolio', '/nosotros', '/contacto', '/planes', '/testimonios'],
         disallow: ['/admin/', '/api/'],
       },
+      // Block AI scrapers
+      { userAgent: 'GPTBot',        disallow: ['/'] },
+      { userAgent: 'ChatGPT-User',  disallow: ['/'] },
+      { userAgent: 'CCBot',         disallow: ['/'] },
+      { userAgent: 'anthropic-ai',  disallow: ['/'] },
+      { userAgent: 'Claude-Web',    disallow: ['/'] },
     ],
-    sitemap: `${BASE_URL}/sitemap.xml`,
-    host: BASE_URL,
+    sitemap: `${BASE}/sitemap.xml`,
+    host: BASE,
   }
 }

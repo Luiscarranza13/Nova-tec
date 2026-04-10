@@ -5,7 +5,7 @@ import { motion } from 'framer-motion'
 import {
   Plus, Search, Send, FileText, Loader2,
   CheckCircle, Clock, DollarSign, MoreHorizontal,
-  Trash2, TrendingUp, RefreshCw, XCircle,
+  Trash2, TrendingUp, RefreshCw, XCircle, Download,
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -107,6 +107,24 @@ export default function CotizacionesPage() {
     if (error) { toast.error('Error al eliminar'); return }
     setCotizaciones(prev => prev.filter(c => c.id !== id))
     toast.success('Cotizacion eliminada')
+  }
+
+  const descargarPDF = async (c: any) => {
+    try {
+      const { downloadQuotationPDF } = await import('@/lib/pdf-generator')
+      await downloadQuotationPDF({
+        numero: c.numero,
+        cliente: c.clientes?.nombre || 'Cliente',
+        email: c.clientes?.correo,
+        fecha: new Date(c.creado_en).toLocaleDateString('es-PE'),
+        validaHasta: c.valida_hasta,
+        subtotal: c.subtotal,
+        impuesto: c.impuesto,
+        total: c.total,
+        notas: c.notas,
+      })
+      toast.success('PDF descargado')
+    } catch { toast.error('Error al generar PDF') }
   }
 
   const filtradas = cotizaciones.filter(c =>
@@ -255,6 +273,10 @@ export default function CotizacionesPage() {
                         <XCircle className="mr-2 h-4 w-4" /> Marcar como rechazada
                       </DropdownMenuItem>
                     )}
+                    <Separator className="my-1 bg-slate-100" />
+                    <DropdownMenuItem onClick={() => descargarPDF(c)} className="hover:bg-violet-50 cursor-pointer">
+                      <Download className="mr-2 h-4 w-4 text-violet-500" /> Descargar PDF
+                    </DropdownMenuItem>
                     <Separator className="my-1 bg-slate-100" />
                     <DropdownMenuItem onClick={() => eliminar(c.id)} className="text-red-500 hover:text-red-600 hover:bg-red-50 cursor-pointer">
                       <Trash2 className="mr-2 h-4 w-4" /> Eliminar

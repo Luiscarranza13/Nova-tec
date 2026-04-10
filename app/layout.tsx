@@ -1,6 +1,9 @@
 import type { Metadata, Viewport } from 'next'
 import { Inter, Sora, JetBrains_Mono } from 'next/font/google'
 import { Providers } from '@/components/providers'
+import { GoogleAnalytics } from '@/components/analytics/GoogleAnalytics'
+import { CookieConsent } from '@/components/ui/cookie-consent'
+import { DotNavigation } from '@/components/ui/dot-navigation'
 import './globals.css'
 
 // ─── Fonts ────────────────────────────────────────────────────────────────────
@@ -83,7 +86,7 @@ export const metadata: Metadata = {
     description: SITE_DESCRIPTION,
     images: [
       {
-        url: '/og-image.png',
+        url: `/og?title=${encodeURIComponent(SITE_NAME + ' — Desarrollo de Software')}&description=${encodeURIComponent(SITE_DESCRIPTION)}`,
         width: 1200,
         height: 630,
         alt: `${SITE_NAME} — Desarrollo de Software Premium en Cajamarca`,
@@ -95,7 +98,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: `${SITE_NAME} | Desarrollo de Software en Cajamarca`,
     description: SITE_DESCRIPTION,
-    images: ['/og-image.png'],
+    images: [`/og?title=${encodeURIComponent(SITE_NAME + ' — Desarrollo de Software')}`],
   },
   robots: {
     index: true,
@@ -209,6 +212,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
+        <GoogleAnalytics />
       </head>
       <body
         className={`${inter.variable} ${sora.variable} ${jetbrains.variable} font-sans antialiased`}
@@ -220,6 +224,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           disableTransitionOnChange
         >
           {children}
+          <CookieConsent />
+          <DotNavigation />
         </Providers>
       </body>
     </html>

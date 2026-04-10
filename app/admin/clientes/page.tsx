@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
-import { Plus, Search, Edit, Trash2, MoreHorizontal, Mail, Phone, Building, Loader2, Users } from 'lucide-react'
+import { Plus, Search, Edit, Trash2, MoreHorizontal, Mail, Phone, Building, Loader2, Users, Download } from 'lucide-react'
 import { Card, CardContent } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -15,6 +15,7 @@ import { Textarea } from '@/components/ui/textarea'
 import { Separator } from '@/components/ui/separator'
 import { toast } from 'sonner'
 import { supabase } from '@/lib/supabase/client'
+import { exportToCSV } from '@/lib/export'
 import type { Cliente } from '@/lib/supabase/types'
 
 export default function ClientesPage() {
@@ -80,9 +81,14 @@ export default function ClientesPage() {
           <h2 className="text-2xl font-bold text-slate-900 font-heading tracking-tight">Clientes</h2>
           <p className="text-slate-500 mt-1 text-sm">Administra tu base de clientes</p>
         </div>
-        <Button onClick={abrirNuevo} className="gap-2 bg-indigo-600 hover:bg-indigo-700 text-white shadow-sm">
-          <Plus className="h-4 w-4" /> Nuevo Cliente
-        </Button>
+        <div className="flex gap-2">
+          <Button variant="outline" size="sm" onClick={() => exportToCSV(clientes, 'clientes')} className="gap-2 border-slate-200">
+            <Download className="h-4 w-4" /> Exportar CSV
+          </Button>
+          <Button onClick={abrirNuevo} className="gap-2 bg-indigo-600 hover:bg-indigo-700 text-white shadow-sm">
+            <Plus className="h-4 w-4" /> Nuevo Cliente
+          </Button>
+        </div>
       </div>
 
       {/* Stats */}

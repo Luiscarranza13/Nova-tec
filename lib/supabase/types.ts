@@ -1,5 +1,5 @@
 // =============================================
-// NovaTec - Tipos de Base de Datos
+// NovaTec - Tipos de Base de Datos (v2)
 // =============================================
 
 export type Usuario = {
@@ -116,4 +116,67 @@ export type Configuracion = {
   clave: string
   valor: string | null
   actualizado_en: string
+}
+
+export type Newsletter = {
+  id: string
+  email: string
+  activo: boolean
+  suscrito_en: string
+}
+
+export type ActivityLog = {
+  id: string
+  accion: 'INSERT' | 'UPDATE' | 'DELETE' | 'LOGIN' | 'CONFIG' | 'VIEW'
+  tabla: string
+  descripcion: string
+  usuario_id: string | null
+  usuario_email: string | null
+  metadata: Record<string, unknown> | null
+  creado_en: string
+}
+
+export type BlogPost = {
+  id: string
+  titulo: string
+  slug: string
+  extracto: string | null
+  contenido: string | null
+  imagen_url: string | null
+  categoria: string
+  tags: string[] | null
+  publicado: boolean
+  destacado: boolean
+  tiempo_lectura: number
+  autor_id: string | null
+  publicado_en: string | null
+  creado_en: string
+  actualizado_en: string
+}
+
+export type PortafolioItem = {
+  id: string
+  nombre: string
+  descripcion: string | null
+  imagen_url: string | null
+  tecnologias: string[] | null
+  url_demo: string | null
+  url_repo: string | null
+  categoria: string
+  cliente: string | null
+  resultado: string | null
+  destacado: boolean
+  orden: number
+  publicado: boolean
+  creado_en: string
+  actualizado_en: string
+}
+
+export type PageView = {
+  id: string
+  path: string
+  referrer: string | null
+  user_agent: string | null
+  country: string | null
+  creado_en: string
 }

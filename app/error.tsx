@@ -1,33 +1,44 @@
 'use client'
 
 import { useEffect } from 'react'
+import { motion } from 'framer-motion'
+import { AlertTriangle, RefreshCw, Home } from 'lucide-react'
 import { Button } from '@/components/ui/button'
+import Link from 'next/link'
 
-export default function Error({
-  error,
-  reset,
-}: {
-  error: Error & { digest?: string }
-  reset: () => void
-}) {
+export default function ErrorPage({ error, reset }: { error: Error & { digest?: string }; reset: () => void }) {
   useEffect(() => {
-    // Log to error reporting service in production
-    console.error(error)
+    console.error('App error:', error)
   }, [error])
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-background px-4 text-center">
-      <div className="absolute inset-0 bg-grid opacity-20 pointer-events-none" />
-      <div className="relative z-10 max-w-md">
-        <p className="text-6xl font-bold font-heading text-destructive mb-4">¡Oops!</p>
-        <h2 className="text-2xl font-bold font-heading mb-3">Algo salió mal</h2>
+    <div className="min-h-screen flex items-center justify-center bg-background p-6">
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        className="text-center max-w-md"
+      >
+        <div className="w-20 h-20 rounded-2xl bg-destructive/10 border border-destructive/20 flex items-center justify-center mx-auto mb-6">
+          <AlertTriangle className="h-10 w-10 text-destructive" />
+        </div>
+        <h1 className="text-2xl font-bold font-heading mb-2">Algo salió mal</h1>
         <p className="text-muted-foreground mb-8 leading-relaxed">
-          Ocurrió un error inesperado. Intenta recargar la página.
+          Ocurrió un error inesperado. Puedes intentar recargar la página o volver al inicio.
         </p>
-        <Button onClick={reset} className="shadow-lg shadow-primary/20">
-          Intentar de nuevo
-        </Button>
-      </div>
+        {error.digest && (
+          <p className="text-xs text-muted-foreground/50 font-mono mb-6">ID: {error.digest}</p>
+        )}
+        <div className="flex gap-3 justify-center">
+          <Button onClick={reset} variant="outline" className="gap-2">
+            <RefreshCw className="h-4 w-4" /> Reintentar
+          </Button>
+          <Link href="/">
+            <Button className="gap-2">
+              <Home className="h-4 w-4" /> Ir al inicio
+            </Button>
+          </Link>
+        </div>
+      </motion.div>
     </div>
   )
 }

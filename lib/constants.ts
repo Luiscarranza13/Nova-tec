@@ -185,3 +185,155 @@ export const QUOTATION_STATUSES = [
   { value: 'accepted', label: 'Aceptada', color: 'bg-green-500' },
   { value: 'rejected', label: 'Rechazada', color: 'bg-red-500' },
 ]
+
+export const FAQ_ITEMS = [
+  {
+    id: 'delivery-time',
+    question: '¿Cuánto tiempo tarda en completarse un proyecto?',
+    answer: 'Los tiempos varían según la complejidad. Un sitio web puede tardar 4-8 semanas, mientras que aplicaciones complejas pueden tardar 3-6 meses. Proporcionamos un timeline detallado en el discovery.',
+    category: 'proyecto',
+  },
+  {
+    id: 'cost-estimation',
+    question: '¿Cómo se determina el costo del proyecto?',
+    answer: 'El costo se basa en el alcance, complejidad, tecnologías requeridas y tiempo estimado. Proporcionamos un presupuesto detallado después del discovery sin compromisos financieros previos.',
+    category: 'precio',
+  },
+  {
+    id: 'technologies',
+    question: '¿Qué tecnologías utilizan?',
+    answer: 'Utilizamos tecnologías modernas como Next.js, React, Node.js, Flutter, TypeScript, AWS y Supabase. Recomendamos las tecnologías más adecuadas según tus necesidades específicas.',
+    category: 'tecnico',
+  },
+  {
+    id: 'support-after',
+    question: '¿Ofrecen soporte después del lanzamiento?',
+    answer: 'Sí, todos nuestros planes incluyen soporte post-lanzamiento. Desde mantenimiento básico hasta soporte prioritario 24/7, tenemos opciones adaptadas a tus necesidades.',
+    category: 'soporte',
+  },
+  {
+    id: 'agile-process',
+    question: '¿Cómo funciona el proceso de desarrollo?',
+    answer: 'Utilizamos metodología ágil con sprints de 2 semanas. Recibes actualizaciones regulares, feedback se integra rápidamente y ajustes son posibles durante el desarrollo.',
+    category: 'proyecto',
+  },
+  {
+    id: 'maintenance-cost',
+    question: '¿Cuál es el costo de mantenimiento?',
+    answer: 'El mantenimiento incluye actualizaciones de seguridad, parches, correcciones de bugs y optimización. Los costos varían entre 500-3000 PEN mensuales dependiendo de la complejidad.',
+    category: 'soporte',
+  },
+  {
+    id: 'remote-work',
+    question: '¿Trabajan de forma remota?',
+    answer: 'Trabajamos principalmente de forma remota, aunque estamos ubicados en Cajamarca. Usamos herramientas modernas de colaboración para una comunicación efectiva con nuestros clientes.',
+    category: 'empresa',
+  },
+  {
+    id: 'revision-process',
+    question: '¿Cuántas revisiones están incluidas?',
+    answer: 'La cantidad de revisiones varía por plan. Generalmente incluimos 2-3 rondas de revisiones. Revisiones adicionales se pueden solicitar según sea necesario.',
+    category: 'proyecto',
+  },
+]
+
+export const CASE_STUDIES = [
+  {
+    id: 1,
+    title: 'RetailMax: E-commerce que triplicó sus ventas',
+    client: 'RetailMax Perú',
+    industry: 'E-commerce',
+    challenge: 'Una tienda física necesitaba presencia digital pero no tenía experiencia en ventas online. Su sitio web anterior era lento y confuso.',
+    solution: 'Desarrollamos una plataforma e-commerce completamente nueva con Next.js, integración de pasarela de pagos, panel de inventario y CRM.',
+    results: [
+      { metric: '+180%', description: 'aumento en ventas online' },
+      { metric: '7s', description: 'tiempo de carga reducido a' },
+      { metric: '4.8/5', description: 'calificación en Google' },
+    ],
+    technologies: ['Next.js', 'TypeScript', 'Stripe', 'Supabase'],
+    image: 'retail-max',
+  },
+  {
+    id: 2,
+    title: 'FinCorp: App de banca móvil con +50k usuarios',
+    client: 'FinCorp Corporation',
+    industry: 'Fintech',
+    challenge: 'Necesitaban una aplicación móvil segura para gestión de inversiones con autenticación biométrica y actualizaciones en tiempo real.',
+    solution: 'Desarrollamos una app React Native con Firebase, autenticación biométrica, seguimiento de inversiones en tiempo real y push notifications.',
+    results: [
+      { metric: '50k+', description: 'descargas en App Store' },
+      { metric: '4.9/5', description: 'rating en tiendas' },
+      { metric: '95%', description: 'uptime garantizado' },
+    ],
+    technologies: ['React Native', 'Firebase', 'Node.js', 'AWS'],
+    image: 'fincorp',
+  },
+  {
+    id: 3,
+    title: 'TechStart: MVP lanzado en 6 semanas',
+    client: 'TechStart Ventures',
+    industry: 'SaaS',
+    challenge: 'Una startup necesitaba validar su idea rápidamente con presupuesto limitado. Requerían MVP funcional en menos de 2 meses.',
+    solution: 'Implementamos metodología ágil acelerada, prototipado rápido, y una arquitectura escalable que permitía pivotes rápidos.',
+    results: [
+      { metric: '6 semanas', description: 'lanzamiento MVP' },
+      { metric: '$250k', description: 'inversión seed levantada' },
+      { metric: '1k+', description: 'usuarios en primer mes' },
+    ],
+    technologies: ['Vue.js', 'Node.js', 'MongoDB', 'Vercel'],
+    image: 'techstart',
+  },
+]
+
+export const BLOG_POSTS = [
+  {
+    id: 1,
+    title: '10 Errores Comunes al Desarrollar tu Primera App Móvil',
+    excerpt: 'Evita estos errores comunes que cometen muchas empresas al desarrollar su primera aplicación móvil.',
+    category: 'desarrollo',
+    publishedAt: '2024-03-15',
+    readTime: 8,
+    featured: true,
+  },
+  {
+    id: 2,
+    title: 'Next.js 15: Novedades y Cómo Migrar tu App',
+    excerpt: 'Análisis completo de las nuevas características de Next.js 15 y guía paso a paso para migración.',
+    category: 'frontend',
+    publishedAt: '2024-03-08',
+    readTime: 12,
+    featured: true,
+  },
+  {
+    id: 3,
+    title: 'Guía Completa de SEO para SaaS',
+    excerpt: 'Estrategias específicas de SEO diseñadas para aplicaciones SaaS y cómo aumentar tu visibilidad.',
+    category: 'marketing',
+    publishedAt: '2024-02-28',
+    readTime: 15,
+    featured: false,
+  },
+]
+
+export const FEATURES_HIGHLIGHT = [
+  {
+    title: 'Desarrollo Ágil',
+    description: 'Sprints de 2 semanas con entregas continuas y feedback inmediato',
+    icon: 'Zap',
+  },
+  {
+    title: 'Garantía de Calidad',
+    description: 'Testing exhaustivo, code reviews y métricas de calidad',
+    icon: 'Shield',
+  },
+  {
+    title: 'Escalabilidad',
+    description: 'Arquitectura pensada para crecer con tu negocio',
+    icon: 'TrendingUp',
+  },
+  {
+    title: 'Seguridad Premium',
+    description: 'Cumplimos estándares OWASP y prácticas de seguridad moderna',
+    icon: 'Lock',
+  },
+]
