@@ -134,38 +134,50 @@ export function Header() {
                 initial={{ opacity: 0, height: 0 }}
                 animate={{ opacity: 1, height: 'auto' }}
                 exit={{ opacity: 0, height: 0 }}
-                transition={{ duration: 0.2 }}
-                className="md:hidden overflow-hidden"
+                transition={{ duration: 0.3, ease: 'easeInOut' }}
+                className="md:hidden overflow-hidden border-t border-border/40 bg-background/95 backdrop-blur-md"
               >
-                <div className="py-4 space-y-1 border-t border-border/50">
-                  {NAV_ITEMS.map((item, i) => (
-                    <motion.div
-                      key={item.href}
-                      initial={{ opacity: 0, x: -12 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      transition={{ delay: i * 0.04 }}
-                    >
-                      <Link
-                        href={item.href}
-                        className={cn(
-                          'flex items-center py-3 px-4 text-sm font-medium rounded-xl transition-colors',
-                          pathname === item.href
-                            ? 'bg-primary/10 text-primary'
-                            : 'text-muted-foreground hover:bg-muted hover:text-foreground'
-                        )}
+                <div className="py-6 space-y-4 px-4 h-[calc(100vh-4rem)] flex flex-col justify-between">
+                  <div className="space-y-1">
+                    {NAV_ITEMS.map((item, i) => (
+                      <motion.div
+                        key={item.href}
+                        initial={{ opacity: 0, x: -20 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{ delay: i * 0.05 }}
                       >
-                        {item.label}
-                      </Link>
-                    </motion.div>
-                  ))}
-                  <div className="pt-3 flex flex-col gap-2 px-1">
+                        <Link
+                          href={item.href}
+                          className={cn(
+                            'flex items-center justify-between py-4 px-5 text-lg font-semibold rounded-2xl transition-all active:scale-[0.98]',
+                            pathname === item.href
+                              ? 'bg-primary/10 text-primary'
+                              : 'text-foreground/80 hover:bg-muted'
+                          )}
+                        >
+                          {item.label}
+                          <motion.div
+                            animate={{ x: [0, 4, 0] }}
+                            transition={{ duration: 1.5, repeat: Infinity, ease: 'easeInOut' }}
+                          >
+                            <Menu className="h-4 w-4 opacity-30 rotate-[-90deg]" />
+                          </motion.div>
+                        </Link>
+                      </motion.div>
+                    ))}
+                  </div>
+
+                  <div className="space-y-3 pb-8">
+                    <p className="text-xs font-semibold text-muted-foreground uppercase tracking-widest px-5 mb-2">Contacto Directo</p>
                     <Link href="/contacto">
-                      <Button className="w-full shadow-md">Contactar</Button>
+                      <Button size="xl" className="w-full rounded-2xl shadow-lg shadow-primary/20 text-md font-bold h-14">
+                        Empezar Proyecto
+                      </Button>
                     </Link>
                     <a href="https://wa.me/51918146783" target="_blank" rel="noopener noreferrer">
-                      <Button variant="outline" className="w-full border-[#25D366]/30 text-[#25D366] hover:bg-[#25D366]/10">
-                        <Phone className="h-4 w-4 mr-2" />
-                        WhatsApp
+                      <Button size="xl" variant="outline" className="w-full rounded-2xl border-[#25D366]/30 text-[#25D366] hover:bg-[#25D366]/10 h-14 font-semibold">
+                        <Phone className="h-5 w-5 mr-3" />
+                        Hablar por WhatsApp
                       </Button>
                     </a>
                   </div>
@@ -173,6 +185,7 @@ export function Header() {
               </motion.div>
             )}
           </AnimatePresence>
+
         </div>
       </header>
     </>

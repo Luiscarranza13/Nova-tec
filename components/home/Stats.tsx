@@ -34,12 +34,13 @@ export function Stats() {
   const { ref, inView } = useInView({ triggerOnce: true, threshold: 0.2 })
 
   return (
-    <section ref={ref} className="py-24 relative overflow-hidden">
+    <section ref={ref} className="py-16 sm:py-24 relative overflow-hidden">
       <div className="absolute inset-0 bg-gradient-to-r from-primary/5 via-transparent to-chart-2/5" aria-hidden="true" />
       <div className="absolute inset-0 bg-grid opacity-15" aria-hidden="true" />
 
       <div className="container relative z-10 max-w-7xl mx-auto px-4">
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-5">
+        <div className="grid grid-cols-1 min-[400px]:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5">
+
           {STATS.map((stat, i) => {
             const Icon = icons[i]
             const color = colors[i]

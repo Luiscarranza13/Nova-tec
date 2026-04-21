@@ -6,14 +6,7 @@ import { ArrowRight, Sparkles, CheckCircle2, Zap, MessageCircle } from 'lucide-r
 import { Button } from '@/components/ui/button'
 import { CalendlyWidget } from '@/components/home/CalendlyWidget'
 
-const particles = Array.from({ length: 24 }, (_, i) => ({
-  id: i,
-  x: Math.random() * 100,
-  y: Math.random() * 100,
-  size: Math.random() * 3 + 1,
-  delay: Math.random() * 4,
-  duration: Math.random() * 4 + 3,
-}))
+import { useState, useEffect } from 'react'
 
 const trust = [
   'Sin compromiso inicial',
@@ -23,8 +16,22 @@ const trust = [
 ]
 
 export function CTA() {
+  const [particles, setParticles] = useState<{id: number, x: number, y: number, size: number, delay: number, duration: number}[]>([])
+
+  useEffect(() => {
+    setParticles(Array.from({ length: 24 }, (_, i) => ({
+      id: i,
+      x: Math.random() * 100,
+      y: Math.random() * 100,
+      size: Math.random() * 3 + 1,
+      delay: Math.random() * 4,
+      duration: Math.random() * 4 + 3,
+    })))
+  }, [])
+
   return (
-    <section className="py-32 relative overflow-hidden">
+
+    <section className="py-20 sm:py-32 relative overflow-hidden">
       <div className="absolute inset-0 bg-gradient-to-br from-primary/15 via-background to-chart-2/15" />
       <div className="absolute inset-0 bg-grid opacity-10" />
 
@@ -47,14 +54,14 @@ export function CTA() {
           initial={{ opacity: 0, y: -16 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-primary/30 bg-primary/8 backdrop-blur-sm mb-10"
+          className="inline-flex items-center gap-2 px-3 sm:px-4 py-1.5 sm:py-2 rounded-full border border-primary/30 bg-primary/8 backdrop-blur-sm mb-8 sm:mb-10"
         >
           <span className="relative flex h-2 w-2">
             <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75" />
             <span className="relative inline-flex rounded-full h-2 w-2 bg-primary" />
           </span>
-          <Sparkles className="h-3.5 w-3.5 text-primary" />
-          <span className="text-sm font-medium text-primary">Disponibles para nuevos proyectos</span>
+          <Sparkles className="h-3 sm:h-3.5 w-3 sm:w-3.5 text-primary" />
+          <span className="text-[10px] sm:text-sm font-medium text-primary uppercase sm:normal-case tracking-wider">Disponibles para nuevos proyectos</span>
         </motion.div>
 
         <motion.h2
@@ -62,7 +69,7 @@ export function CTA() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ delay: 0.1 }}
-          className="text-4xl md:text-5xl lg:text-6xl font-bold font-heading leading-tight mb-6"
+          className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold font-heading leading-tight mb-6"
         >
           ¿Listo para llevar tu
           <br />
@@ -75,7 +82,7 @@ export function CTA() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ delay: 0.2 }}
-          className="text-lg text-muted-foreground max-w-2xl mx-auto mb-12 leading-relaxed"
+          className="text-base sm:text-lg text-muted-foreground max-w-2xl mx-auto mb-10 sm:mb-12 leading-relaxed"
         >
           Únete a más de 120 empresas que ya confían en NovaTec para transformar
           sus ideas en productos digitales de alto impacto.
@@ -90,21 +97,22 @@ export function CTA() {
           className="flex flex-col sm:flex-row gap-4 justify-center mb-10"
         >
           <Link href="/contacto">
-            <Button size="xl" className="group shadow-xl shadow-primary/30 hover:shadow-2xl hover:shadow-primary/40 min-w-[220px] relative overflow-hidden">
+            <Button size="xl" className="w-full sm:w-auto group shadow-xl shadow-primary/30 hover:shadow-2xl hover:shadow-primary/40 sm:min-w-[220px] relative overflow-hidden">
               <span className="absolute inset-0 bg-gradient-to-r from-white/0 via-white/10 to-white/0 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700" />
               <Zap className="mr-2 h-5 w-5" />
-              Iniciar mi Proyecto
+              Iniciar Proyecto
               <ArrowRight className="ml-2 h-5 w-5 transition-transform group-hover:translate-x-1" />
             </Button>
           </Link>
           <CalendlyWidget />
-          <Link href={`https://wa.me/51918146783?text=${encodeURIComponent('¡Hola! Me gustaría agendar una reunión.')}`} target="_blank">
-            <Button size="xl" variant="outline" className="group min-w-[220px] border-border/60 hover:border-[#25D366]/40 hover:bg-[#25D366]/5">
+          <Link href={`https://wa.me/51918146783?text=${encodeURIComponent('¡Hola! Me gustaría agendar una reunión.')}`} target="_blank" className="w-full sm:w-auto">
+            <Button size="xl" variant="outline" className="w-full sm:w-auto group sm:min-w-[220px] border-border/60 hover:border-[#25D366]/40 hover:bg-[#25D366]/5">
               <MessageCircle className="mr-2 h-5 w-5 text-[#25D366] group-hover:scale-110 transition-transform" />
-              Hablar por WhatsApp
+              WhatsApp
             </Button>
           </Link>
         </motion.div>
+
 
         {/* Trust signals */}
         <motion.div

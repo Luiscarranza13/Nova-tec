@@ -131,19 +131,21 @@ export default function ProyectosPage() {
       </div>
 
       {/* Filters + List */}
-      <Card className="border-slate-200 bg-white shadow-sm">
+      <Card className="border-slate-200 bg-white shadow-sm overflow-hidden">
         <div className="p-4 border-b border-slate-100 flex flex-col sm:flex-row gap-3">
-          <div className="relative flex-1 max-w-sm">
+          <div className="relative flex-1">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
             <Input placeholder="Buscar proyectos..." value={searchTerm} onChange={e => setSearchTerm(e.target.value)} className="pl-10" />
           </div>
-          <Select value={estadoFiltro} onValueChange={setEstadoFiltro}>
-            <SelectTrigger className="w-[180px]"><SelectValue placeholder="Filtrar estado" /></SelectTrigger>
-            <SelectContent>
-              <SelectItem value="all">Todos los estados</SelectItem>
-              {Object.entries(estadoConfig).map(([v, c]) => <SelectItem key={v} value={v}>{c.label}</SelectItem>)}
-            </SelectContent>
-          </Select>
+          <div className="flex gap-2">
+            <Select value={estadoFiltro} onValueChange={setEstadoFiltro}>
+              <SelectTrigger className="w-full sm:w-[180px]"><SelectValue placeholder="Estado" /></SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">Todos los estados</SelectItem>
+                {Object.entries(estadoConfig).map(([v, c]) => <SelectItem key={v} value={v}>{c.label}</SelectItem>)}
+              </SelectContent>
+            </Select>
+          </div>
         </div>
         <CardContent className="p-0">
           {loading ? (
@@ -155,44 +157,49 @@ export default function ProyectosPage() {
               <p className="text-sm text-slate-400 mt-1">{searchTerm ? 'Intenta con otro término' : 'Crea tu primer proyecto'}</p>
             </div>
           ) : (
-            <div className="divide-y divide-slate-100">
+            <div className="divide-y divide-slate-100 overflow-x-auto">
               {filtrados.map((p, i) => {
                 const cfg = estadoConfig[p.estado]
                 return (
                   <motion.div key={p.id} initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: i * 0.03 }}
-                    className="flex items-center justify-between px-6 py-4 hover:bg-slate-50 transition-colors group">
-                    <div className="flex items-center gap-4 min-w-0 flex-1">
+                    className="flex items-center justify-between px-4 sm:px-6 py-4 hover:bg-slate-50 transition-colors group min-w-[320px]">
+                    <div className="flex items-center gap-3 sm:gap-4 min-w-0 flex-1">
                       <div className={`w-2 h-2 rounded-full shrink-0 ${cfg.dot}`} />
                       <div className="min-w-0 flex-1">
-                        <div className="flex items-center gap-2 flex-wrap">
-                          <p className="font-semibold text-slate-900">{p.nombre}</p>
-                          <Badge variant={cfg.variant as any} className="text-xs">{cfg.label}</Badge>
+                        <div className="flex items-center gap-2 flex-wrap sm:flex-nowrap">
+                          <p className="font-semibold text-slate-900 truncate">{p.nombre}</p>
+                          <Badge variant={cfg.variant as any} className="text-[10px] sm:text-xs font-medium py-0 h-5">{cfg.label}</Badge>
                         </div>
-                        <div className="flex items-center gap-4 mt-1 text-xs text-slate-400">
-                          {p.clientes && <span>{p.clientes.nombre}</span>}
-                          {p.fecha_inicio && <span className="flex items-center gap-1"><Calendar className="h-3 w-3" />{p.fecha_inicio}{p.fecha_fin ? ` → ${p.fecha_fin}` : ''}</span>}
+                        <div className="flex items-center gap-3 mt-1.5 text-[11px] sm:text-xs text-slate-400 flex-wrap">
+                          {p.clientes && <span className="font-medium text-slate-600">{p.clientes.nombre}</span>}
+                          {p.fecha_inicio && (
+                            <span className="flex items-center gap-1">
+                              <Calendar className="h-3 w-3" />
+                              {p.fecha_inicio}
+                            </span>
+                          )}
                         </div>
                       </div>
                     </div>
-                    <div className="flex items-center gap-6 shrink-0">
+                    <div className="flex items-center gap-4 sm:gap-6 shrink-0 ml-4">
                       {p.presupuesto != null && (
-                        <div className="hidden md:block text-right">
+                        <div className="hidden lg:block text-right">
                           <p className="text-sm font-semibold text-slate-900">{formatCurrency(p.presupuesto)}</p>
                           <p className="text-xs text-slate-400">Presupuesto</p>
                         </div>
                       )}
-                      <div className="w-28 hidden sm:block">
-                        <div className="flex justify-between text-xs mb-1.5">
+                      <div className="w-20 sm:w-28 hidden min-[500px]:block">
+                        <div className="flex justify-between text-[10px] sm:text-xs mb-1.5">
                           <span className="text-slate-400">Progreso</span>
                           <span className="font-medium text-slate-700">{p.progreso}%</span>
                         </div>
-                        <div className="h-1.5 bg-slate-100 rounded-full overflow-hidden">
+                        <div className="h-1 sm:h-1.5 bg-slate-100 rounded-full overflow-hidden">
                           <div className="h-full bg-indigo-500 rounded-full transition-all duration-500" style={{ width: `${p.progreso}%` }} />
                         </div>
                       </div>
                       <DropdownMenu>
                         <DropdownMenuTrigger asChild>
-                          <Button variant="ghost" size="icon" className="opacity-0 group-hover:opacity-100 transition-opacity h-8 w-8 text-slate-500 hover:text-slate-900 hover:bg-slate-100">
+                          <Button variant="ghost" size="icon" className="h-8 w-8 text-slate-500 hover:text-slate-900 hover:bg-slate-100 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity">
                             <MoreHorizontal className="h-4 w-4" />
                           </Button>
                         </DropdownMenuTrigger>
@@ -209,6 +216,7 @@ export default function ProyectosPage() {
           )}
         </CardContent>
       </Card>
+
 
       {/* Modal */}
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>

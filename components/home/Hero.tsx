@@ -75,25 +75,25 @@ export function Hero() {
 
       <div className="absolute inset-0 bg-gradient-to-b from-background/50 via-transparent to-background/80 pointer-events-none" aria-hidden="true" />
 
-      <div className="container relative z-10 max-w-5xl mx-auto px-4 pt-32 pb-24 text-center flex flex-col items-center">
+      <div className="container relative z-10 max-w-5xl mx-auto px-4 pt-24 sm:pt-32 pb-16 sm:pb-24 text-center flex flex-col items-center">
         {/* Badge */}
         <motion.div
           initial={{ opacity: 0, y: -16 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
-          className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-primary/25 bg-primary/8 backdrop-blur-sm mb-8"
+          className="inline-flex items-center gap-2 px-3 sm:px-4 py-1.5 sm:py-2 rounded-full border border-primary/25 bg-primary/8 backdrop-blur-sm mb-6 sm:mb-8"
         >
           <span className="relative flex h-2 w-2" aria-hidden="true">
             <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75" />
             <span className="relative inline-flex rounded-full h-2 w-2 bg-primary" />
           </span>
           <Sparkles className="h-3.5 w-3.5 text-primary" aria-hidden="true" />
-          <span className="text-sm font-medium text-primary">Agencia de Desarrollo de Software en Perú</span>
+          <span className="text-[10px] sm:text-sm font-medium text-primary uppercase sm:normal-case tracking-wider sm:tracking-normal">Agencia de Desarrollo de Software</span>
         </motion.div>
-
+ 
         {/* H1 */}
         <h1
-          className="text-5xl md:text-7xl xl:text-[80px] font-bold font-heading leading-[1.05] tracking-tight mb-8 animate-in fade-in slide-in-from-bottom-4 duration-700 fill-mode-both"
+          className="text-4xl sm:text-5xl md:text-7xl xl:text-[80px] font-bold font-heading leading-[1.1] sm:leading-[1.05] tracking-tight mb-6 sm:mb-8 animate-in fade-in slide-in-from-bottom-4 duration-700 fill-mode-both"
           style={{ animationDelay: '100ms' }}
         >
           Convertimos tus{' '}
@@ -102,6 +102,7 @@ export function Hero() {
               <br />
               <span className="text-foreground/70">en Software</span>
             </h1>
+
 
         {/* Subtitle */}
         <p

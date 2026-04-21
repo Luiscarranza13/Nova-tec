@@ -51,13 +51,14 @@ function SpotlightCard({ children, className }: { children: React.ReactNode; cla
 
 export function Services() {
   return (
-    <section id="servicios" className="py-32 relative overflow-hidden">
+    <section id="servicios" className="py-20 sm:py-32 relative overflow-hidden">
       <div className="absolute inset-0 bg-gradient-to-b from-transparent via-primary/3 to-transparent" />
 
       <div className="container relative z-10 max-w-7xl mx-auto px-4">
         {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
+
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           className="max-w-2xl mb-20"

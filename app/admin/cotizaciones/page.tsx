@@ -1,4 +1,4 @@
-﻿'use client'
+'use client'
 
 import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
@@ -140,10 +140,10 @@ export default function CotizacionesPage() {
   const totalEstimado = (parseFloat(form.subtotal) || 0) + (parseFloat(form.impuesto) || 0)
 
   const stats = [
-    { label: 'Total',      value: cotizaciones.length,                                                        icon: FileText,    bg: 'bg-violet-50 border-violet-100',   iconBg: 'bg-violet-100',  iconCls: 'text-violet-500'  },
-    { label: 'Aceptadas',  value: cotizaciones.filter(c => c.estado === 'aceptada').length,                   icon: CheckCircle, bg: 'bg-emerald-50 border-emerald-100', iconBg: 'bg-emerald-100', iconCls: 'text-emerald-500' },
-    { label: 'En proceso', value: cotizaciones.filter(c => ['enviada','borrador'].includes(c.estado)).length, icon: Clock,       bg: 'bg-blue-50 border-blue-100',       iconBg: 'bg-blue-100',    iconCls: 'text-blue-500'    },
-    { label: 'Ingresos',   value: fmt(totalIngresos),                                                         icon: DollarSign,  bg: 'bg-amber-50 border-amber-100',     iconBg: 'bg-amber-100',   iconCls: 'text-amber-500'   },
+    { label: 'Total Emitido', value: cotizaciones.length,                                                        icon: FileText,    bg: 'bg-indigo-50 border-indigo-100',  iconBg: 'bg-indigo-100', iconCls: 'text-indigo-500' },
+    { label: 'Aceptadas',     value: cotizaciones.filter(c => c.estado === 'aceptada').length,                   icon: CheckCircle, bg: 'bg-emerald-50 border-emerald-100', iconBg: 'bg-emerald-100', iconCls: 'text-emerald-500' },
+    { label: 'Pendientes',    value: cotizaciones.filter(c => ['enviada','borrador'].includes(c.estado)).length, icon: Clock,       bg: 'bg-amber-50 border-amber-100',    iconBg: 'bg-amber-100',  iconCls: 'text-amber-500'   },
+    { label: 'Recaudación',   value: fmt(totalIngresos),                                                         icon: DollarSign,  bg: 'bg-blue-50 border-blue-100',      iconBg: 'bg-blue-100',   iconCls: 'text-blue-500'    },
   ]
 
   return (
@@ -179,7 +179,7 @@ export default function CotizacionesPage() {
             </Button>
             <Button onClick={() => setIsDialogOpen(true)}
               className="rounded-xl bg-white text-violet-600 hover:bg-violet-50 border-0 shadow-md font-semibold px-5 transition-all hover:-translate-y-0.5">
-              <Plus className="mr-2 h-4 w-4" /> Nueva Cotizacion
+              <Plus className="mr-2 h-4 w-4" /> Nueva Cotización
             </Button>
           </div>
         </div>
@@ -205,9 +205,9 @@ export default function CotizacionesPage() {
       {/* Search */}
       <div className="relative max-w-sm">
         <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
-        <Input placeholder="Buscar por numero, cliente o descripcion..."
+        <Input placeholder="Buscar por número, cliente o descripción del proyecto..."
           value={searchTerm} onChange={e => setSearchTerm(e.target.value)}
-          className="pl-9 h-10 bg-white border-slate-200 text-slate-900 placeholder:text-slate-400 rounded-xl focus:border-violet-400" />
+          className="pl-9 h-10 bg-white border-slate-200 text-slate-900 placeholder:text-slate-400 rounded-xl focus:border-indigo-400" />
       </div>
 
       {/* Lista */}
@@ -243,7 +243,7 @@ export default function CotizacionesPage() {
                 </div>
                 <div className="hidden md:flex flex-col items-end gap-1 shrink-0 mr-2">
                   <p className="font-bold text-slate-900 text-lg leading-tight">{fmt(c.total)}</p>
-                  <p className="text-xs text-slate-400">{fmt(c.subtotal)} + {fmt(c.impuesto)} IVA</p>
+                  <p className="text-xs text-slate-500 font-medium">Sub: {fmt(c.subtotal)} + IGV (18%)</p>
                   {c.valida_hasta && (
                     <p className="text-xs text-slate-400 flex items-center gap-1 mt-0.5">
                       <Clock className="h-3 w-3" /> Vence {fmtDate(c.valida_hasta)}
@@ -298,7 +298,7 @@ export default function CotizacionesPage() {
                 <FileText className="h-5 w-5 text-violet-600" />
               </div>
               <div>
-                <DialogTitle className="text-xl font-bold text-slate-900">Nueva Cotizacion</DialogTitle>
+                <DialogTitle className="text-xl font-bold text-slate-900">Nueva Cotización</DialogTitle>
                 <p className="text-xs text-slate-500">Crea una nueva propuesta comercial</p>
               </div>
             </div>
@@ -323,9 +323,9 @@ export default function CotizacionesPage() {
                   placeholder="0.00" className="bg-slate-50 border-slate-200 h-11 rounded-xl focus:border-violet-400" />
               </div>
               <div className="space-y-2">
-                <Label className="text-sm font-semibold text-slate-700">IVA (PEN)</Label>
+                <Label className="text-sm font-semibold text-slate-700">IGV (18%)</Label>
                 <Input type="number" value={form.impuesto} onChange={e => setForm(p => ({ ...p, impuesto: e.target.value }))}
-                  placeholder="0.00" className="bg-slate-50 border-slate-200 h-11 rounded-xl focus:border-violet-400" />
+                  placeholder="0.00" className="bg-slate-50 border-slate-200 h-11 rounded-xl focus:border-indigo-400" />
               </div>
             </div>
             {totalEstimado > 0 && (
@@ -354,7 +354,7 @@ export default function CotizacionesPage() {
             </Button>
             <Button onClick={guardar} disabled={saving}
               className="bg-gradient-to-r from-violet-600 to-indigo-600 text-white border-0 rounded-xl hover:from-violet-500 hover:to-indigo-500 min-w-[140px] shadow-md shadow-violet-200">
-              {saving ? <Loader2 className="h-4 w-4 animate-spin" /> : 'Crear Cotizacion'}
+              {saving ? <Loader2 className="h-4 w-4 animate-spin" /> : 'Crear Cotización'}
             </Button>
           </DialogFooter>
         </DialogContent>

@@ -244,7 +244,16 @@
     mask-composite: exclude;
     opacity: 1;
   }
+
+  /* Responsive Section Padding */
+  .section-py {
+    @apply py-16 sm:py-24 lg:py-32;
+  }
+  .section-px {
+    @apply px-4 sm:px-6 lg:px-8;
+  }
 }
+
 
 /* ─── Text gradients ─────────────────────────────────────────────────────────── */
 @layer utilities {

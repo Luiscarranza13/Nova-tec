@@ -1,25 +1,28 @@
-'use client'
+"use client";
 
-import { useState, useEffect } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
-import { MessageCircle, X } from 'lucide-react'
-import { useAnalytics } from '@/lib/hooks/use-analytics'
+import { useState, useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { MessageCircle, X } from "lucide-react";
 
-const WHATSAPP = '51918146783'
-const MSG = encodeURIComponent('¡Hola! 👋 Me interesa conocer más sobre sus servicios. ¿Podrían ayudarme?')
+const WHATSAPP = "51918146783";
+const MSG = encodeURIComponent(
+  "¡Hola! 👋 Me interesa conocer más sobre sus servicios. ¿Podrían ayudarme?",
+);
 
 export function WhatsAppButton() {
-  const [visible, setVisible] = useState(false)
-  const [tooltip, setTooltip] = useState(false)
-  const [dismissed, setDismissed] = useState(false)
-  const { trackWhatsApp } = useAnalytics()
-
+  const [visible, setVisible] = useState(false);
+  const [tooltip, setTooltip] = useState(false);
+  const [dismissed, setDismissed] = useState(false);
   useEffect(() => {
-    const t = setTimeout(() => setVisible(true), 3000)
-    const t2 = setTimeout(() => setTooltip(true), 5000)
-    const t3 = setTimeout(() => setTooltip(false), 10000)
-    return () => { clearTimeout(t); clearTimeout(t2); clearTimeout(t3) }
-  }, [])
+    const t = setTimeout(() => setVisible(true), 3000);
+    const t2 = setTimeout(() => setTooltip(true), 5000);
+    const t3 = setTimeout(() => setTooltip(false), 10000);
+    return () => {
+      clearTimeout(t);
+      clearTimeout(t2);
+      clearTimeout(t3);
+    };
+  }, []);
 
   return (
     <AnimatePresence>
@@ -46,8 +49,12 @@ export function WhatsAppButton() {
                 >
                   <X className="h-3 w-3 text-muted-foreground" />
                 </button>
-                <p className="text-xs font-semibold mb-0.5">¿Tienes alguna duda?</p>
-                <p className="text-xs text-muted-foreground">Escríbenos por WhatsApp, respondemos en minutos.</p>
+                <p className="text-xs font-semibold mb-0.5">
+                  ¿Tienes alguna duda?
+                </p>
+                <p className="text-xs text-muted-foreground">
+                  Escríbenos por WhatsApp, respondemos en minutos.
+                </p>
                 {/* Arrow */}
                 <div className="absolute -bottom-2 right-6 w-4 h-4 bg-card border-r border-b border-border/60 rotate-45" />
               </motion.div>
@@ -59,7 +66,6 @@ export function WhatsAppButton() {
             href={`https://wa.me/${WHATSAPP}?text=${MSG}`}
             target="_blank"
             rel="noopener noreferrer"
-            onClick={() => trackWhatsApp('floating-button')}
             whileHover={{ scale: 1.08 }}
             whileTap={{ scale: 0.95 }}
             className="relative w-14 h-14 rounded-full bg-[#25D366] shadow-lg shadow-[#25D366]/40 flex items-center justify-center hover:shadow-xl hover:shadow-[#25D366]/50 transition-shadow"
@@ -72,5 +78,5 @@ export function WhatsAppButton() {
         </motion.div>
       )}
     </AnimatePresence>
-  )
+  );
 }

@@ -1,79 +1,83 @@
-'use client'
+"use client";
 
-import { motion, AnimatePresence } from 'framer-motion'
-import Link from 'next/link'
-import { useState } from 'react'
-import { ArrowRight, ExternalLink, ArrowUpRight } from 'lucide-react'
-import { Button } from '@/components/ui/button'
+import { motion, AnimatePresence } from "framer-motion";
+import Link from "next/link";
+import Image from "next/image";
+import { useEffect, useState } from "react";
+import {
+  ArrowRight,
+  ExternalLink,
+  ArrowUpRight,
+  Loader2,
+  FolderKanban,
+} from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { supabase } from "@/lib/supabase/client";
+import type { PortafolioItem } from "@/lib/supabase/types";
 
-const projects = [
-  {
-    id: 1,
-    name: 'E-commerce Platform',
-    client: 'RetailMax',
-    category: 'Web',
-    description: 'Plataforma de comercio electrónico con panel de administración, pasarela de pagos y gestión de inventario.',
-    tags: ['Next.js', 'TypeScript', 'Stripe'],
-    gradient: 'from-blue-600 to-cyan-500',
-  },
-  {
-    id: 2,
-    name: 'Mobile Banking App',
-    client: 'FinCorp',
-    category: 'Móvil',
-    description: 'App de banca con autenticación biométrica y gestión de inversiones en tiempo real.',
-    tags: ['React Native', 'Firebase'],
-    gradient: 'from-emerald-600 to-teal-500',
-  },
-  {
-    id: 3,
-    name: 'Healthcare Dashboard',
-    client: 'MediCare+',
-    category: 'Dashboard',
-    description: 'Panel de control para gestión de pacientes y reportes analíticos en tiempo real.',
-    tags: ['React', 'D3.js', 'Node.js'],
-    gradient: 'from-rose-600 to-pink-500',
-  },
-  {
-    id: 4,
-    name: 'SaaS Platform',
-    client: 'TechStart',
-    category: 'Web',
-    description: 'Plataforma SaaS multi-tenant para gestión de proyectos con colaboración en tiempo real.',
-    tags: ['Vue.js', 'GraphQL', 'AWS'],
-    gradient: 'from-violet-600 to-purple-500',
-  },
-  {
-    id: 5,
-    name: 'Logistics App',
-    client: 'FastShip',
-    category: 'Móvil',
-    description: 'Seguimiento de envíos en tiempo real con optimización de rutas inteligente.',
-    tags: ['Flutter', 'Google Maps'],
-    gradient: 'from-amber-600 to-orange-500',
-  },
-  {
-    id: 6,
-    name: 'CRM System',
-    client: 'SalesForce Pro',
-    category: 'Dashboard',
-    description: 'CRM personalizado con automatización de ventas y pipelines visuales.',
-    tags: ['Angular', 'NestJS'],
-    gradient: 'from-indigo-600 to-blue-500',
-  },
-]
+const categories = ["Todos", "En Progreso", "Completado", "En Revisión"];
 
-const categories = ['Todos', 'Web', 'Móvil', 'Dashboard']
+// Colores de gradiente para fallback si no hay datos
+const gradients = [
+  "from-indigo-600/20 to-blue-500/20",
+  "from-emerald-600/20 to-teal-500/20",
+  "from-rose-600/20 to-pink-500/20",
+  "from-violet-600/20 to-purple-500/20",
+  "from-amber-600/20 to-orange-500/20",
+];
+
+const estadoLabels: Record<string, string> = {
+  completado: "Completado",
+  en_progreso: "En Progreso",
+  en_revision: "En Revisión",
+  pendiente: "Pendiente",
+};
 
 export function Portfolio() {
-  const [active, setActive] = useState('Todos')
+  const [projects, setProjects] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [active, setActive] = useState("Todos");
 
-  const filtered = active === 'Todos' ? projects : projects.filter((p) => p.category === active)
+  useEffect(() => {
+    const fetchProjects = async () => {
+      setLoading(true);
+      const { data, error } = await supabase
+        .from("proyectos")
+        .select("*, clientes(nombre)")
+        .order("creado_en", { ascending: false });
+
+      if (!error && data) {
+        setProjects(data);
+      }
+      setLoading(false);
+    };
+
+    fetchProjects();
+
+    const channel = supabase
+      .channel("proyectos-home-sync")
+      .on(
+        "postgres_changes",
+        { event: "*", schema: "public", table: "proyectos" },
+        fetchProjects,
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, []);
+
+  const filtered =
+    active === "Todos"
+      ? projects
+      : projects.filter((p) => {
+          const cat = estadoLabels[p.estado] || "Otros";
+          return cat === active;
+        });
 
   return (
-    <section id="portafolio" className="py-32 relative overflow-hidden">
-      <div className="absolute inset-0 bg-gradient-to-b from-transparent via-card/30 to-transparent" />
-
+    <section id="portafolio" className="py-32 relative overflow-hidden bg-slate-50/30">
       <div className="container relative z-10 max-w-7xl mx-auto px-4">
         {/* Header */}
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
@@ -84,12 +88,12 @@ export function Portfolio() {
           >
             <span className="inline-flex items-center gap-2 text-xs font-semibold text-primary uppercase tracking-widest mb-4">
               <span className="w-8 h-px bg-primary" />
-              Portafolio
+              Nuestro Trabajo
             </span>
-            <h2 className="text-4xl md:text-5xl font-bold font-heading leading-tight">
-              Proyectos que
+            <h2 className="text-4xl md:text-5xl font-bold font-heading leading-tight text-slate-900">
+              Proyectos que que están
               <br />
-              <span className="text-gradient">hablan por sí solos</span>
+              <span className="text-gradient">transformando ideas</span>
             </h2>
           </motion.div>
           <motion.div
@@ -98,8 +102,11 @@ export function Portfolio() {
             viewport={{ once: true }}
           >
             <Link href="/portafolio">
-              <Button variant="outline" className="group border-border/60 hover:border-primary/40">
-                Ver todos
+              <Button
+                variant="outline"
+                className="group border-slate-200 hover:border-primary/40 text-slate-600"
+              >
+                Ver portafolio completo
                 <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
               </Button>
             </Link>
@@ -119,76 +126,159 @@ export function Portfolio() {
               onClick={() => setActive(cat)}
               className={`px-5 py-2 rounded-full text-sm font-medium transition-all duration-200 ${
                 active === cat
-                  ? 'bg-primary text-primary-foreground shadow-md shadow-primary/25'
-                  : 'bg-muted/50 text-muted-foreground hover:bg-muted hover:text-foreground border border-border/50'
+                  ? "bg-primary text-white shadow-lg shadow-primary/25"
+                  : "bg-white text-slate-500 hover:text-slate-900 border border-slate-200"
               }`}
             >
               {cat}
-              {cat !== 'Todos' && (
-                <span className={`ml-2 text-xs ${active === cat ? 'opacity-70' : 'opacity-50'}`}>
-                  {projects.filter((p) => p.category === cat).length}
-                </span>
-              )}
             </button>
           ))}
         </motion.div>
 
         {/* Grid */}
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
-          <AnimatePresence mode="popLayout">
-            {filtered.map((project, index) => (
-              <motion.div
-                key={project.id}
-                layout
-                initial={{ opacity: 0, scale: 0.9 }}
-                animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 0.9 }}
-                transition={{ duration: 0.25, delay: index * 0.05 }}
-                className="group relative rounded-2xl overflow-hidden border border-border/50 bg-card/60 backdrop-blur-sm hover:border-primary/30 hover:shadow-xl hover:-translate-y-1 transition-all duration-300"
-              >
-                {/* Gradient image area */}
-                <div className={`relative h-48 bg-gradient-to-br ${project.gradient} overflow-hidden`}>
-                  <div className="absolute inset-0 bg-black/10" />
-                  <div className="absolute inset-0 bg-grid opacity-20" />
-                  {/* Hover overlay */}
-                  <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                    <div className="w-10 h-10 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center border border-white/30">
-                      <ArrowUpRight className="h-5 w-5 text-white" />
+        <div className="min-h-[400px] relative">
+          {loading ? (
+            <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
+              {[...Array(3)].map((_, i) => (
+                <div
+                  key={i}
+                  className="rounded-2xl border bg-white overflow-hidden shadow-sm"
+                >
+                  <div className="h-48 bg-slate-100 animate-pulse" />
+                  <div className="p-6 space-y-4">
+                    <div className="h-5 w-3/4 bg-slate-100 animate-pulse rounded" />
+                    <div className="h-4 w-1/2 bg-slate-100 animate-pulse rounded" />
+                    <div className="space-y-2 pt-2">
+                       <div className="h-1.5 w-full bg-slate-100 animate-pulse rounded-full" />
                     </div>
                   </div>
-                  {/* Category badge */}
-                  <div className="absolute top-4 left-4">
-                    <span className="px-3 py-1 rounded-full text-xs font-medium bg-black/30 text-white backdrop-blur-sm border border-white/20">
-                      {project.category}
-                    </span>
-                  </div>
-                  {/* Client badge */}
-                  <div className="absolute bottom-4 right-4">
-                    <span className="px-3 py-1 rounded-full text-xs font-medium bg-white/10 text-white backdrop-blur-sm border border-white/20">
-                      {project.client}
-                    </span>
-                  </div>
                 </div>
+              ))}
+            </div>
+          ) : projects.length === 0 ? (
+            <div className="flex flex-col items-center justify-center py-24 text-center bg-white rounded-3xl border border-slate-100 shadow-sm">
+              <div className="p-5 rounded-full bg-slate-50 mb-5">
+                <FolderKanban className="h-10 w-10 text-slate-300" />
+              </div>
+              <h3 className="text-xl font-bold mb-2 text-slate-900">
+                No hay proyectos registrados aún
+              </h3>
+              <p className="text-slate-500 max-w-xs mx-auto">
+                Visita el panel de administración para añadir tus primeros proyectos.
+              </p>
+            </div>
+          ) : (
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+              <AnimatePresence mode="popLayout">
+                {filtered.map((project, index) => (
+                  <motion.div
+                    key={project.id}
+                    layout
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, scale: 0.95 }}
+                    transition={{ duration: 0.3, delay: index * 0.05 }}
+                    className="group relative rounded-2xl overflow-hidden border border-slate-200 bg-white hover:border-primary/30 hover:shadow-2xl transition-all duration-500"
+                  >
+                    {/* Imagen Area */}
+                    <div className="relative h-56 overflow-hidden bg-slate-50">
+                      {project.url_demo ? (
+                        <Image
+                          src={`https://s.microlink.io/${encodeURIComponent(project.url_demo)}`}
+                          alt={project.nombre}
+                          fill
+                          unoptimized
+                          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                          className="object-cover transition-transform duration-700 group-hover:scale-110"
+                        />
+                      ) : project.imagen_url ? (
 
-                <div className="p-6">
-                  <div className="flex items-start justify-between mb-2">
-                    <h3 className="font-semibold font-heading">{project.name}</h3>
-                    <ExternalLink className="h-4 w-4 text-muted-foreground/40 group-hover:text-primary transition-colors shrink-0 ml-2" />
-                  </div>
-                  <p className="text-sm text-muted-foreground mb-4 leading-relaxed">{project.description}</p>
-                  <div className="flex flex-wrap gap-1.5">
-                    {project.tags.map((tag) => (
-                      <span key={tag} className="px-2.5 py-1 text-xs rounded-lg bg-muted/60 text-muted-foreground border border-border/50">
-                        {tag}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-              </motion.div>
-            ))}
-          </AnimatePresence>
+                        <Image
+                          src={project.imagen_url}
+                          alt={project.nombre}
+                          fill
+                          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                          className="object-cover transition-transform duration-700 group-hover:scale-110"
+                        />
+                      ) : (
+                        <div className={`absolute inset-0 bg-gradient-to-br ${gradients[index % gradients.length]} flex items-center justify-center`}>
+                           <FolderKanban className="h-12 w-12 text-slate-200" />
+                        </div>
+                      )}
+
+
+                      {/* Estado badge */}
+                      <div className="absolute top-4 left-4">
+                        <span className="px-3 py-1 rounded-full text-[10px] font-bold bg-white/90 text-slate-900 backdrop-blur-md border border-slate-200 uppercase tracking-tight">
+                          {estadoLabels[project.estado]}
+                        </span>
+                      </div>
+                    </div>
+
+                    <div className="p-6">
+                      <div className="flex items-start justify-between mb-2">
+                        <div>
+                          {project.clientes?.nombre && (
+                            <p className="text-[10px] font-bold uppercase tracking-widest text-primary mb-1">
+                              {project.clientes.nombre}
+                            </p>
+                          )}
+                          <h3 className="font-bold text-lg font-heading text-slate-900 group-hover:text-primary transition-colors">
+                            {project.nombre}
+                          </h3>
+                        </div>
+                        {project.url_demo && (
+                          <a
+                            href={project.url_demo}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="p-2 rounded-full hover:bg-slate-50 text-slate-400 hover:text-primary transition-all"
+                          >
+                            <ExternalLink className="h-4 w-4" />
+                          </a>
+                        )}
+                      </div>
+                      
+                      {project.descripcion && (
+                        <p className="text-sm text-slate-500 mb-6 leading-relaxed line-clamp-2">
+                          {project.descripcion}
+                        </p>
+                      )}
+
+                      {/* Progreso */}
+                      <div className="mb-6 pt-4 border-t border-slate-50">
+                         <div className="flex justify-between text-[11px] mb-2">
+                           <span className="text-slate-400 font-medium uppercase tracking-wider">Desarrollo</span>
+                           <span className="text-slate-900 font-bold">{project.progreso}%</span>
+                         </div>
+                         <div className="h-1.5 bg-slate-100 rounded-full overflow-hidden">
+                           <motion.div
+                             initial={{ width: 0 }}
+                             animate={{ width: `${project.progreso}%` }}
+                             transition={{ duration: 1, delay: 0.5 }}
+                             className="h-full bg-primary rounded-full"
+                           />
+                         </div>
+                      </div>
+
+                      <div className="flex flex-wrap gap-1.5">
+                        {project.tecnologias?.slice(0, 3).map((tag: string) => (
+                          <span
+                            key={tag}
+                            className="px-2 py-0.5 text-[10px] font-semibold rounded bg-slate-50 text-slate-500 border border-slate-100"
+                          >
+                            {tag}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                  </motion.div>
+                ))}
+              </AnimatePresence>
+            </div>
+          )}
         </div>
       </div>
     </section>
-  )
+  );
 }

@@ -49,61 +49,29 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
 
     window.addEventListener('popstate', handlePopState)
 
-    // ── 3. Cerrar sesión al cerrar/cambiar de pestaña ─────────────────────────
-    // sendBeacon es síncrono y funciona aunque el browser esté cerrando
-    const handleVisibilityChange = () => {
-      if (document.visibilityState === 'hidden') {
-        navigator.sendBeacon('/api/admin/signout')
-      }
-    }
-
-    const handlePageHide = () => {
-      navigator.sendBeacon('/api/admin/signout')
-    }
-
-    document.addEventListener('visibilitychange', handleVisibilityChange)
-    window.addEventListener('pagehide', handlePageHide)
-
     return () => {
       window.removeEventListener('popstate', handlePopState)
-      document.removeEventListener('visibilitychange', handleVisibilityChange)
-      window.removeEventListener('pagehide', handlePageHide)
     }
   }, [])
 
   return (
-    <div className="min-h-screen bg-[#f5f6fa]" style={{
-      colorScheme: 'light',
-      '--background': '0 0% 100%',
-      '--foreground': '222.2 84% 4.9%',
-      '--card': '0 0% 100%',
-      '--card-foreground': '222.2 84% 4.9%',
-      '--popover': '0 0% 100%',
-      '--popover-foreground': '222.2 84% 4.9%',
-      '--primary': '243 75% 59%',
-      '--primary-foreground': '0 0% 100%',
-      '--secondary': '210 40% 96.1%',
-      '--secondary-foreground': '222.2 47.4% 11.2%',
-      '--muted': '210 40% 96.1%',
-      '--muted-foreground': '215.4 16.3% 46.9%',
-      '--accent': '243 75% 59%',
-      '--accent-foreground': '0 0% 100%',
-      '--destructive': '0 84.2% 60.2%',
-      '--destructive-foreground': '0 0% 100%',
-      '--border': '214.3 31.8% 91.4%',
-      '--input': '214.3 31.8% 91.4%',
-      '--ring': '243 75% 59%',
-    } as React.CSSProperties}>
+    <div className={cn(
+      "min-h-screen transition-colors duration-300",
+      "bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100"
+    )}>
       <Sidebar
         collapsed={sidebarCollapsed}
         onToggle={() => setSidebarCollapsed(!sidebarCollapsed)}
       />
       <div className={cn('transition-all duration-300', sidebarCollapsed ? 'md:pl-20' : 'md:pl-64')}>
         <AdminHeader />
-        <main className="p-6 min-h-[calc(100vh-4rem)]">{children}</main>
+        <main className="p-4 md:p-6 min-h-[calc(100vh-4rem)]">
+          {children}
+        </main>
       </div>
       <RealtimeNotifications />
       <AdminTour />
     </div>
   )
 }
+

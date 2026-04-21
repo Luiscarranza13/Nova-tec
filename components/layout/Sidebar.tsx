@@ -17,19 +17,19 @@ import { toast } from 'sonner'
 import Swal from 'sweetalert2'
 
 const sidebarItems = [
-  { label: 'Dashboard',     href: '/admin',                icon: LayoutDashboard, tour: 'dashboard' },
-  { label: 'Clientes',      href: '/admin/clientes',       icon: Users },
-  { label: 'Proyectos',     href: '/admin/proyectos',      icon: FolderKanban,    tour: 'proyectos' },
-  { label: 'Servicios',     href: '/admin/servicios',      icon: Wrench },
-  { label: 'Cotizaciones',  href: '/admin/cotizaciones',   icon: FileText,        tour: 'cotizaciones' },
-  { label: 'Testimonios',   href: '/admin/testimonios',    icon: Star },
-  { label: 'Mensajes',      href: '/admin/mensajes',       icon: MessageSquare,   tour: 'mensajes' },
-  { label: 'Blog',          href: '/admin/blog',           icon: BookOpen },
-  { label: 'Portafolio',    href: '/admin/portafolio',     icon: Image },
-  { label: 'Newsletter',    href: '/admin/newsletter',     icon: Mail },
-  { label: 'Pipeline',      href: '/admin/pipeline',       icon: Kanban },
-  { label: 'Analíticas',    href: '/admin/analytics',      icon: BarChart2 },
-  { label: 'Configuración', href: '/admin/configuracion',  icon: Settings, tour: 'configuracion' },
+  { label: 'Panel de Control', href: '/admin',                icon: LayoutDashboard, tour: 'dashboard' },
+  { label: 'Clientes',       href: '/admin/clientes',       icon: Users },
+  { label: 'Proyectos',      href: '/admin/proyectos',      icon: FolderKanban,    tour: 'proyectos' },
+  { label: 'Servicios',      href: '/admin/servicios',      icon: Wrench },
+  { label: 'Propuestas',     href: '/admin/cotizaciones',   icon: FileText,        tour: 'cotizaciones' },
+  { label: 'Testimonios',    href: '/admin/testimonios',    icon: Star },
+  { label: 'Mensajes',       href: '/admin/mensajes',       icon: MessageSquare,   tour: 'mensajes' },
+  { label: 'Blog',           href: '/admin/blog',           icon: BookOpen },
+  { label: 'Portafolio',     href: '/admin/portafolio',     icon: Image },
+  { label: 'Newsletter',     href: '/admin/newsletter',     icon: Mail },
+  { label: 'Pipeline',       href: '/admin/pipeline',       icon: Kanban },
+  { label: 'Métricas',       href: '/admin/analytics',      icon: BarChart2 },
+  { label: 'Configuración',  href: '/admin/configuracion',  icon: Settings, tour: 'configuracion' },
 ]
 
 interface SidebarProps {
@@ -71,8 +71,30 @@ function NavItem({ item, isActive, collapsed }: { item: typeof sidebarItems[0]; 
     </Link>
   )
 }
-
 export function Sidebar({ collapsed, onToggle }: SidebarProps) {
+  const pathname = usePathname()
+
+  return (
+    <>
+      <motion.aside
+        initial={false}
+        animate={{ width: collapsed ? 72 : 256 }}
+        transition={{ duration: 0.25, ease: 'easeInOut' }}
+        className="fixed left-0 top-0 z-40 h-screen hidden md:block overflow-hidden"
+      >
+        <SidebarContent collapsed={collapsed} onToggle={onToggle} />
+      </motion.aside>
+    </>
+  )
+}
+
+interface SidebarContentProps {
+  collapsed?: boolean
+  mobile?: boolean
+  onToggle?: () => void
+}
+
+export function SidebarContent({ collapsed = false, mobile = false, onToggle }: SidebarContentProps) {
   const pathname = usePathname()
 
   const handleLogout = async () => {
@@ -104,7 +126,7 @@ export function Sidebar({ collapsed, onToggle }: SidebarProps) {
     }
   }
 
-  const SidebarContent = ({ mobile = false }: { mobile?: boolean }) => (
+  return (
     <div className="flex h-full flex-col bg-white border-r border-slate-200">
       {/* Logo */}
       <div className={cn(
@@ -186,31 +208,5 @@ export function Sidebar({ collapsed, onToggle }: SidebarProps) {
         </button>
       </div>
     </div>
-  )
-
-  return (
-    <>
-      {/* Desktop */}
-      <motion.aside
-        initial={false}
-        animate={{ width: collapsed ? 72 : 256 }}
-        transition={{ duration: 0.25, ease: 'easeInOut' }}
-        className="fixed left-0 top-0 z-40 h-screen hidden md:block overflow-hidden"
-      >
-        <SidebarContent />
-      </motion.aside>
-
-      {/* Mobile */}
-      <Sheet>
-        <SheetTrigger asChild>
-          <Button variant="ghost" size="icon" className="fixed left-4 top-4 z-50 md:hidden bg-white shadow-sm border border-slate-200">
-            <Menu className="h-5 w-5" />
-          </Button>
-        </SheetTrigger>
-        <SheetContent side="left" className="w-72 p-0 border-0">
-          <SidebarContent mobile />
-        </SheetContent>
-      </Sheet>
-    </>
   )
 }

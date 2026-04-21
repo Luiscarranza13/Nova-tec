@@ -47,20 +47,29 @@ export default function PortafolioPage() {
 
   useEffect(() => {
     const cargar = async () => {
-      const { data } = await supabase
-        .from('proyectos')
-        .select('*')
-        .order('creado_en', { ascending: false })
-      const list = data || []
-      setProyectos(list)
-      // El proyecto destacado es el primero completado o el primero en general
-      setFeatured(list.find(p => p.estado === 'completado') || list[0] || null)
-      setLoading(false)
+      setLoading(true)
+      try {
+        const { data, error } = await supabase
+          .from('proyectos')
+          .select('*')
+          .order('creado_en', { ascending: false })
+        
+        if (error) throw error
+        
+        const list = data || []
+        setProyectos(list)
+        // El proyecto destacado es el primero completado o el primero en general
+        setFeatured(list.find(p => p.estado === 'completado') || list[0] || null)
+      } catch (err) {
+        console.error('Error cargando proyectos:', err)
+      } finally {
+        setLoading(false)
+      }
     }
     cargar()
 
     const channel = supabase
-      .channel('proyectos-public')
+      .channel('proyectos-public-sync')
       .on('postgres_changes', { event: '*', schema: 'public', table: 'proyectos' }, () => cargar())
       .subscribe()
 
@@ -69,7 +78,13 @@ export default function PortafolioPage() {
 
   const filtered = activeFilter === 'Todos'
     ? proyectos
-    : proyectos.filter(p => estadoConfig[p.estado]?.label === activeFilter)
+    : proyectos.filter(p => {
+        // Mapeo simple de estado a categoría para el filtro visual
+        const cat = p.estado === 'completado' ? 'Completado' : p.estado === 'en_progreso' ? 'En Progreso' : 'Otros'
+        return cat === activeFilter
+      })
+
+
 
   return (
     <>
@@ -126,17 +141,20 @@ export default function PortafolioPage() {
                     {/* Imagen */}
                     <div className="relative h-72 lg:h-auto min-h-[320px] overflow-hidden">
                       <Image
-                        src={featured.imagen_url || fallbackImages[0]}
+                        src={featured.url_demo ? `https://s.microlink.io/${encodeURIComponent(featured.url_demo)}` : (featured.imagen_url || fallbackImages[0])}
                         alt={featured.nombre}
                         fill
+                        unoptimized={!!featured.url_demo}
                         className="object-cover group-hover:scale-105 transition-transform duration-700"
                         sizes="(max-width: 1024px) 100vw, 50vw"
                       />
+
+
                       <div className="absolute inset-0 bg-gradient-to-r from-transparent to-background/20" />
                       {/* Estado badge */}
                       <div className="absolute top-5 left-5">
-                        <span className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold border backdrop-blur-sm ${estadoConfig[featured.estado]?.color}`}>
-                          <span className={`w-1.5 h-1.5 rounded-full ${estadoConfig[featured.estado]?.dot}`} />
+                        <span className={`inline-flex items-center gap-1.5 px-4 py-2 rounded-full text-xs font-bold border backdrop-blur-md shadow-lg uppercase tracking-widest ${estadoConfig[featured.estado]?.color}`}>
+                          <span className={`w-2 h-2 rounded-full ${estadoConfig[featured.estado]?.dot} animate-pulse`} />
                           {estadoConfig[featured.estado]?.label}
                         </span>
                       </div>
@@ -144,29 +162,18 @@ export default function PortafolioPage() {
 
                     {/* Contenido */}
                     <div className="p-10 flex flex-col justify-center">
-                      <h2 className="text-3xl md:text-4xl font-bold font-heading mb-4">{featured.nombre}</h2>
+                      <h2 className="text-3xl md:text-4xl font-bold font-heading mb-4 text-slate-900">{featured.nombre}</h2>
                       {featured.descripcion && (
-                        <p className="text-muted-foreground leading-relaxed mb-6">{featured.descripcion}</p>
-                      )}
-
-                      {/* Tecnologías */}
-                      {featured.tecnologias && featured.tecnologias.length > 0 && (
-                        <div className="flex flex-wrap gap-2 mb-6">
-                          {featured.tecnologias.map(t => (
-                            <span key={t} className="px-3 py-1 text-xs font-medium rounded-lg border border-border/60 bg-muted/50 text-muted-foreground">
-                              {t}
-                            </span>
-                          ))}
-                        </div>
+                        <p className="text-slate-600 leading-relaxed mb-6">{featured.descripcion}</p>
                       )}
 
                       {/* Progreso */}
                       <div className="mb-8">
                         <div className="flex justify-between text-sm mb-2">
-                          <span className="text-muted-foreground font-medium">Progreso del proyecto</span>
+                          <span className="text-slate-500 font-medium">Progreso del desarrollo</span>
                           <span className="font-bold text-primary">{featured.progreso}%</span>
                         </div>
-                        <div className="h-2 bg-muted rounded-full overflow-hidden">
+                        <div className="h-2 bg-slate-100 rounded-full overflow-hidden">
                           <motion.div
                             initial={{ width: 0 }}
                             animate={{ width: `${featured.progreso}%` }}
@@ -175,6 +182,17 @@ export default function PortafolioPage() {
                           />
                         </div>
                       </div>
+
+                      {/* Tecnologías */}
+                      {featured.tecnologias && featured.tecnologias.length > 0 && (
+                        <div className="flex flex-wrap gap-2 mb-8">
+                          {featured.tecnologias.map(t => (
+                            <span key={t} className="px-3 py-1 text-xs font-medium rounded-lg border border-slate-200 bg-slate-50 text-slate-600">
+                              {t}
+                            </span>
+                          ))}
+                        </div>
+                      )}
 
                       <div className="flex items-center gap-4">
                         {featured.url_demo && (
@@ -185,7 +203,7 @@ export default function PortafolioPage() {
                           </a>
                         )}
                         <Link href="/contacto">
-                          <Button variant="outline" className="gap-2 border-border/60">
+                          <Button variant="outline" className="gap-2 border-slate-200 text-slate-600">
                             Quiero algo así <ArrowRight className="h-4 w-4" />
                           </Button>
                         </Link>
@@ -199,12 +217,12 @@ export default function PortafolioPage() {
         )}
 
         {/* ── Filtros ── */}
-        <section className="sticky top-16 md:top-20 z-40 bg-background/80 backdrop-blur-lg border-b border-border/40">
+        <section className="sticky top-16 md:top-20 z-40 bg-white/80 backdrop-blur-lg border-b border-slate-200/60">
           <div className="container max-w-7xl mx-auto px-4">
             <div className="flex items-center gap-2 overflow-x-auto hide-scrollbar py-3">
-              {categories.map(cat => (
+              {['Todos', 'En Progreso', 'Completado', 'En Revisión'].map(cat => (
                 <button key={cat} onClick={() => setActiveFilter(cat)}
-                  className={`shrink-0 px-4 py-2 rounded-full text-sm font-medium transition-all duration-200 ${activeFilter === cat ? 'bg-primary text-primary-foreground shadow-md shadow-primary/20' : 'text-muted-foreground hover:text-foreground hover:bg-muted/50'}`}>
+                  className={`shrink-0 px-4 py-2 rounded-full text-sm font-medium transition-all duration-200 ${activeFilter === cat ? 'bg-primary text-white shadow-md shadow-primary/20' : 'text-slate-500 hover:text-slate-900 hover:bg-slate-100/50'}`}>
                   {cat}
                 </button>
               ))}
@@ -213,7 +231,7 @@ export default function PortafolioPage() {
         </section>
 
         {/* ── Grid de proyectos ── */}
-        <section className="py-16">
+        <section className="py-16 bg-slate-50/50">
           <div className="container max-w-7xl mx-auto px-4">
             {loading ? (
               <div className="flex justify-center py-24">
@@ -221,15 +239,15 @@ export default function PortafolioPage() {
               </div>
             ) : filtered.length === 0 ? (
               <div className="flex flex-col items-center justify-center py-24 text-center">
-                <div className="p-5 rounded-full bg-muted/50 mb-4">
-                  <FolderKanban className="h-10 w-10 text-muted-foreground" />
+                <div className="p-5 rounded-full bg-white shadow-sm mb-4">
+                  <FolderKanban className="h-10 w-10 text-slate-300" />
                 </div>
-                <p className="text-lg font-semibold">No hay proyectos disponibles aún</p>
-                <p className="text-muted-foreground mt-1 text-sm">Vuelve pronto para ver nuestros trabajos.</p>
+                <p className="text-lg font-semibold text-slate-900">No hay proyectos disponibles aún</p>
+                <p className="text-slate-500 mt-1 text-sm">Vuelve pronto para ver nuestros trabajos.</p>
               </div>
             ) : (
               <AnimatePresence mode="wait">
-                <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
                   {filtered.map((project, index) => {
                     const cfg = estadoConfig[project.estado]
                     const img = project.imagen_url || fallbackImages[index % fallbackImages.length]
@@ -240,22 +258,24 @@ export default function PortafolioPage() {
                         animate={{ opacity: 1, y: 0 }}
                         exit={{ opacity: 0, scale: 0.95 }}
                         transition={{ duration: 0.4, delay: index * 0.06 }}
-                        className="group rounded-2xl border border-border/50 bg-card/60 backdrop-blur-sm overflow-hidden hover:border-primary/30 hover:shadow-xl hover:shadow-primary/5 transition-all duration-300"
+                        className="group rounded-2xl border border-slate-200 bg-white overflow-hidden hover:border-primary/30 hover:shadow-2xl hover:shadow-primary/5 transition-all duration-500"
                       >
                         {/* Imagen */}
-                        <div className="relative h-52 overflow-hidden">
+                        <div className="relative h-56 overflow-hidden">
                           <Image
-                            src={img}
+                            src={project.url_demo ? `https://s.microlink.io/${encodeURIComponent(project.url_demo)}` : (project.imagen_url || fallbackImages[index % fallbackImages.length])}
                             alt={project.nombre}
                             fill
+                            unoptimized={!!project.url_demo}
                             className="object-cover group-hover:scale-110 transition-transform duration-700"
                             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                           />
-                          <div className="absolute inset-0 bg-gradient-to-t from-background/80 via-transparent to-transparent" />
 
-                          {/* Estado */}
-                          <div className="absolute top-3 left-3">
-                            <span className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold border backdrop-blur-sm ${cfg?.color}`}>
+                          <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+
+                          {/* Estado badge */}
+                          <div className="absolute top-4 left-4">
+                            <span className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-bold border backdrop-blur-md shadow-sm uppercase tracking-tight ${cfg?.color}`}>
                               <span className={`w-1.5 h-1.5 rounded-full ${cfg?.dot}`} />
                               {cfg?.label}
                             </span>
@@ -264,61 +284,51 @@ export default function PortafolioPage() {
                           {/* Demo link */}
                           {project.url_demo && (
                             <a href={project.url_demo} target="_blank" rel="noopener noreferrer"
-                              className="absolute top-3 right-3 w-8 h-8 rounded-full bg-black/40 backdrop-blur-sm border border-white/20 flex items-center justify-center text-white opacity-0 group-hover:opacity-100 transition-opacity hover:bg-black/60">
-                              <ExternalLink className="h-3.5 w-3.5" />
+                              className="absolute top-4 right-4 w-9 h-9 rounded-full bg-white/20 backdrop-blur-md border border-white/30 flex items-center justify-center text-white opacity-0 group-hover:opacity-100 transition-all hover:bg-primary hover:scale-110">
+                              <ExternalLink className="h-4 w-4" />
                             </a>
                           )}
                         </div>
 
                         {/* Contenido */}
                         <div className="p-6">
-                          <h3 className="text-lg font-bold font-heading mb-2 group-hover:text-primary transition-colors">{project.nombre}</h3>
+                          <h3 className="text-lg font-bold font-heading mb-2 text-slate-900 group-hover:text-primary transition-colors">{project.nombre}</h3>
 
                           {project.descripcion && (
-                            <p className="text-sm text-muted-foreground mb-4 line-clamp-2 leading-relaxed">{project.descripcion}</p>
+                            <p className="text-sm text-slate-500 mb-6 line-clamp-2 leading-relaxed">{project.descripcion}</p>
                           )}
+
+                          {/* Progreso card */}
+                          <div className="mb-6 pt-4 border-t border-slate-100">
+                             <div className="flex justify-between text-[11px] mb-2 font-medium">
+                               <span className="text-slate-400 uppercase tracking-wider">Desarrollo</span>
+                               <span className="text-slate-900 font-bold">{project.progreso}%</span>
+                             </div>
+                             <div className="h-1.5 bg-slate-100 rounded-full overflow-hidden">
+                               <motion.div
+                                 initial={{ width: 0 }}
+                                 animate={{ width: `${project.progreso}%` }}
+                                 transition={{ duration: 1, ease: 'easeOut', delay: 0.2 + index * 0.05 }}
+                                 className="h-full bg-primary rounded-full shadow-[0_0_8px_rgba(var(--primary),0.4)]"
+                               />
+                             </div>
+                          </div>
 
                           {/* Tecnologías */}
                           {project.tecnologias && project.tecnologias.length > 0 && (
-                            <div className="flex flex-wrap gap-1.5 mb-4">
-                              {project.tecnologias.slice(0, 4).map(t => (
-                                <span key={t} className="px-2 py-0.5 text-xs rounded-md border border-border/60 bg-muted/40 text-muted-foreground">
+                            <div className="flex flex-wrap gap-1.5">
+                              {project.tecnologias.slice(0, 3).map(t => (
+                                <span key={t} className="px-2 py-0.5 text-[10px] font-semibold rounded bg-slate-100 text-slate-500">
                                   {t}
                                 </span>
                               ))}
-                              {project.tecnologias.length > 4 && (
-                                <span className="px-2 py-0.5 text-xs rounded-md border border-border/60 bg-muted/40 text-muted-foreground">
-                                  +{project.tecnologias.length - 4}
+                              {project.tecnologias.length > 3 && (
+                                <span className="px-2 py-0.5 text-[10px] font-semibold rounded bg-slate-50 text-slate-400">
+                                  +{project.tecnologias.length - 3}
                                 </span>
                               )}
                             </div>
                           )}
-
-                          {/* Fechas */}
-                          {(project.fecha_inicio || project.fecha_fin) && (
-                            <div className="flex items-center gap-1.5 text-xs text-muted-foreground mb-4">
-                              <Calendar className="h-3 w-3" />
-                              {project.fecha_inicio && <span>{project.fecha_inicio}</span>}
-                              {project.fecha_inicio && project.fecha_fin && <span>→</span>}
-                              {project.fecha_fin && <span>{project.fecha_fin}</span>}
-                            </div>
-                          )}
-
-                          {/* Progreso */}
-                          <div className="pt-4 border-t border-border/40">
-                            <div className="flex justify-between text-xs mb-1.5">
-                              <span className="text-muted-foreground">Progreso</span>
-                              <span className="font-semibold text-foreground">{project.progreso}%</span>
-                            </div>
-                            <div className="h-1.5 bg-muted rounded-full overflow-hidden">
-                              <motion.div
-                                initial={{ width: 0 }}
-                                animate={{ width: `${project.progreso}%` }}
-                                transition={{ duration: 1, ease: 'easeOut', delay: 0.2 + index * 0.05 }}
-                                className="h-full bg-gradient-to-r from-primary to-chart-2 rounded-full"
-                              />
-                            </div>
-                          </div>
                         </div>
                       </motion.div>
                     )
@@ -328,6 +338,8 @@ export default function PortafolioPage() {
             )}
           </div>
         </section>
+
+
 
         {/* ── CTA ── */}
         <CTA />
