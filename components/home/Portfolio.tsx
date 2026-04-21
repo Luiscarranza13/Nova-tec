@@ -71,7 +71,7 @@ export function Portfolio() {
   const filtered = active === 'Todos' ? projects : projects.filter((p) => p.category === active)
 
   return (
-    <section id="portafolio" className="py-32 relative overflow-hidden">
+    <section id="portafolio" className="py-16 md:py-24 lg:py-32 relative overflow-hidden">
       <div className="absolute inset-0 bg-gradient-to-b from-transparent via-card/30 to-transparent" />
 
       <div className="container relative z-10 max-w-7xl mx-auto px-4">
@@ -86,7 +86,7 @@ export function Portfolio() {
               <span className="w-8 h-px bg-primary" />
               Portafolio
             </span>
-            <h2 className="text-4xl md:text-5xl font-bold font-heading leading-tight">
+            <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold font-heading leading-tight">
               Proyectos que
               <br />
               <span className="text-gradient">hablan por sí solos</span>
@@ -111,7 +111,7 @@ export function Portfolio() {
           initial={{ opacity: 0, y: 16 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="flex gap-2 mb-10 flex-wrap"
+          className="flex gap-2 mb-6 md:mb-10 flex-wrap"
         >
           {categories.map((cat) => (
             <button
@@ -134,7 +134,7 @@ export function Portfolio() {
         </motion.div>
 
         {/* Grid */}
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-3 md:gap-5">
           <AnimatePresence mode="popLayout">
             {filtered.map((project, index) => (
               <motion.div
@@ -147,7 +147,7 @@ export function Portfolio() {
                 className="group relative rounded-2xl overflow-hidden border border-border/50 bg-card/60 backdrop-blur-sm hover:border-primary/30 hover:shadow-xl hover:-translate-y-1 transition-all duration-300"
               >
                 {/* Gradient image area */}
-                <div className={`relative h-48 bg-gradient-to-br ${project.gradient} overflow-hidden`}>
+                <div className={`relative h-36 md:h-44 bg-gradient-to-br ${project.gradient} overflow-hidden`}>
                   <div className="absolute inset-0 bg-black/10" />
                   <div className="absolute inset-0 bg-grid opacity-20" />
                   {/* Hover overlay */}
@@ -170,7 +170,7 @@ export function Portfolio() {
                   </div>
                 </div>
 
-                <div className="p-6">
+                <div className="p-4 md:p-6">
                   <div className="flex items-start justify-between mb-2">
                     <h3 className="font-semibold font-heading">{project.name}</h3>
                     <ExternalLink className="h-4 w-4 text-muted-foreground/40 group-hover:text-primary transition-colors shrink-0 ml-2" />

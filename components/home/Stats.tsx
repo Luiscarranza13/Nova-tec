@@ -53,7 +53,7 @@ export function Stats() {
       />
 
       <div className="container relative z-10 max-w-7xl mx-auto px-4">
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-5">
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-5">
           {STATS.map((stat, index) => {
             const Icon = icons[index]
             const color = colors[index]
@@ -68,20 +68,20 @@ export function Stats() {
                 className="group relative cursor-default"
               >
                 {/* Card */}
-                <div className={`relative rounded-2xl border border-border/50 bg-card/60 backdrop-blur-sm p-6 text-center hover:border-primary/30 hover:shadow-xl ${color.glow} transition-all duration-300 overflow-hidden`}>
+                <div className={`relative rounded-2xl border border-border/50 bg-card/60 backdrop-blur-sm p-4 md:p-6 text-center hover:border-primary/30 hover:shadow-xl ${color.glow} transition-all duration-300 overflow-hidden`}>
                   {/* Background gradient on hover */}
                   <div className={`absolute inset-0 bg-gradient-to-br ${color.gradient} opacity-0 group-hover:opacity-100 transition-opacity duration-300`} />
 
                   <div className="relative z-10">
-                    <div className={`w-11 h-11 rounded-xl ${color.bg} flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300`}>
-                      <Icon className={`h-5 w-5 ${color.text}`} />
+                    <div className={`w-9 h-9 md:w-11 md:h-11 rounded-xl ${color.bg} flex items-center justify-center mx-auto mb-3 md:mb-4 group-hover:scale-110 transition-transform duration-300`}>
+                      <Icon className={`h-4 w-4 md:h-5 md:w-5 ${color.text}`} />
                     </div>
 
-                    <div className={`text-4xl md:text-5xl font-bold font-heading ${color.text} mb-1`}>
+                    <div className={`text-3xl md:text-4xl lg:text-5xl font-bold font-heading ${color.text} mb-1`}>
                       <Counter value={stat.value} suffix={stat.suffix} active={inView} />
                     </div>
 
-                    <p className="text-sm text-muted-foreground">{stat.label}</p>
+                    <p className="text-xs md:text-sm text-muted-foreground">{stat.label}</p>
                   </div>
                 </div>
               </motion.div>

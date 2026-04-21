@@ -94,8 +94,8 @@ export function Hero() {
 
       <div className="absolute inset-0 bg-gradient-to-b from-background/50 via-transparent to-background/80 pointer-events-none" />
 
-      <div className="container relative z-10 max-w-7xl mx-auto px-4 pt-24 pb-20">
-        <div className="grid lg:grid-cols-2 gap-12 xl:gap-20 items-center">
+      <div className="container relative z-10 max-w-7xl mx-auto px-4 pt-16 pb-12 md:pt-24 md:pb-20">
+        <div className="grid lg:grid-cols-2 gap-8 xl:gap-20 items-center">
 
           {/* ── Left column ── */}
           <div className="flex flex-col items-start">
@@ -119,7 +119,7 @@ export function Hero() {
               initial={{ opacity: 0, y: 24 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.1 }}
-              className="text-5xl md:text-6xl xl:text-7xl font-bold font-heading leading-[1.05] tracking-tight mb-6"
+              className="text-4xl md:text-6xl xl:text-7xl font-bold font-heading leading-[1.05] tracking-tight mb-6"
             >
               Convertimos tus{' '}
               <br />
@@ -165,17 +165,17 @@ export function Hero() {
               initial={{ opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.4 }}
-              className="flex flex-col sm:flex-row gap-4 mb-12"
+              className="flex flex-col sm:flex-row gap-4 mb-10"
             >
               <Link href="/contacto">
-                <Button size="xl" className="group shadow-lg shadow-primary/30 hover:shadow-xl hover:shadow-primary/40 min-w-[200px] relative overflow-hidden">
+                <Button size="xl" className="group shadow-lg shadow-primary/30 hover:shadow-xl hover:shadow-primary/40 w-full sm:min-w-[200px] relative overflow-hidden">
                   <span className="absolute inset-0 bg-gradient-to-r from-primary/0 via-white/10 to-primary/0 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700" />
                   Iniciar Proyecto
                   <ArrowRight className="ml-2 h-5 w-5 transition-transform group-hover:translate-x-1" />
                 </Button>
               </Link>
               <Link href="/portafolio">
-                <Button size="xl" variant="outline" className="group min-w-[200px] border-border/60 hover:border-primary/40 hover:bg-primary/5">
+                <Button size="xl" variant="outline" className="group w-full sm:min-w-[200px] border-border/60 hover:border-primary/40 hover:bg-primary/5">
                   <Zap className="mr-2 h-5 w-5 text-chart-2 group-hover:scale-110 transition-transform" />
                   Ver Portafolio
                 </Button>

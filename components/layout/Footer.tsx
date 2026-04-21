@@ -13,7 +13,7 @@ export function Footer() {
       <div className="absolute top-0 right-0 w-[400px] h-[400px] bg-chart-2/5 rounded-full blur-[100px]" />
       
       <div className="container max-w-7xl mx-auto px-4 py-16 relative z-10">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-12">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8 md:gap-10 lg:gap-12">
           <div className="lg:col-span-2 space-y-6">
             <Link href="/" className="flex items-center gap-2 group">
               <Image

@@ -22,7 +22,7 @@ const stats = [
 
 export function CTA() {
   return (
-    <section className="py-32 relative overflow-hidden">
+    <section className="py-16 md:py-24 lg:py-32 relative overflow-hidden">
       {/* Background layers */}
       <div className="absolute inset-0 bg-gradient-to-br from-primary/15 via-background to-chart-2/15" />
       <div className="absolute inset-0 bg-grid opacity-15" />
@@ -48,7 +48,7 @@ export function CTA() {
           initial={{ opacity: 0, y: -20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="flex justify-center gap-8 md:gap-16 mb-16"
+          className="flex justify-center gap-4 md:gap-8 lg:gap-16 mb-12 md:mb-16"
         >
           {stats.map((s, i) => (
             <motion.div
@@ -59,7 +59,7 @@ export function CTA() {
               transition={{ delay: i * 0.1 }}
               className="text-center"
             >
-              <p className="text-3xl md:text-4xl font-bold font-heading text-gradient">{s.value}</p>
+              <p className="text-2xl md:text-3xl lg:text-4xl font-bold font-heading text-gradient">{s.value}</p>
               <p className="text-xs text-muted-foreground mt-1">{s.label}</p>
             </motion.div>
           ))}
@@ -83,7 +83,7 @@ export function CTA() {
             <span className="text-sm font-medium text-primary">Disponibles para nuevos proyectos</span>
           </div>
 
-          <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold font-heading leading-tight mb-6">
+          <h2 className="text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold font-heading leading-tight mb-6">
             ¿Listo para llevar tu
             <br />
             negocio al{' '}
@@ -98,14 +98,14 @@ export function CTA() {
           {/* CTAs */}
           <div className="flex flex-col sm:flex-row gap-4 justify-center mb-12">
             <Link href="/contacto">
-              <Button size="xl" className="group shadow-xl shadow-primary/30 hover:shadow-2xl hover:shadow-primary/40 min-w-[220px]">
+              <Button size="xl" className="group shadow-xl shadow-primary/30 hover:shadow-2xl hover:shadow-primary/40 w-full sm:min-w-[220px]">
                 <Zap className="mr-2 h-5 w-5" />
                 Iniciar mi Proyecto
                 <ArrowRight className="ml-2 h-5 w-5 transition-transform group-hover:translate-x-1" />
               </Button>
             </Link>
             <a href="https://calendly.com/novatec" target="_blank" rel="noopener noreferrer">
-              <Button size="xl" variant="outline" className="group min-w-[220px] border-border/60 hover:border-primary/40 hover:bg-primary/5">
+              <Button size="xl" variant="outline" className="group w-full sm:min-w-[220px] border-border/60 hover:border-primary/40 hover:bg-primary/5">
                 <Calendar className="mr-2 h-5 w-5 text-chart-2 group-hover:scale-110 transition-transform" />
                 Agendar Reunión
               </Button>
