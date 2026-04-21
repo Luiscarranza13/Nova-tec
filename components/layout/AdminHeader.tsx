@@ -1,10 +1,10 @@
 'use client'
 
 import Link from 'next/link'
-import { usePathname, useRouter } from 'next/navigation'
-import { Code2, Bell, LogOut, User, Settings, ChevronDown } from 'lucide-react'
+import { usePathname } from 'next/navigation'
+import { Bell, LogOut, User, Settings, ChevronDown } from 'lucide-react'
 import { Button } from '@/components/ui/button'
-import { Avatar, AvatarFallback } from '@/components/ui/avatar'
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
 import { toast } from 'sonner'
 import { supabase } from '@/lib/supabase/client'
@@ -12,13 +12,42 @@ import { useEffect, useState } from 'react'
 
 export function AdminHeader() {
   const pathname = usePathname()
-  const router = useRouter()
   const [userEmail, setUserEmail] = useState('')
+  const [userName, setUserName] = useState('')
+  const [userInitials, setUserInitials] = useState('AD')
+  const [userAvatar, setUserAvatar] = useState('')
 
   useEffect(() => {
-    supabase.auth.getUser().then(({ data }) => {
-      setUserEmail(data.user?.email || '')
-    })
+    const loadUser = async () => {
+      const { data: { user } } = await supabase.auth.getUser()
+      if (!user) return
+      setUserEmail(user.email || '')
+
+      const { data } = await supabase
+        .from('usuarios')
+        .select('nombre_completo, foto_url')
+        .eq('id', user.id)
+        .single()
+
+      const nombre = data?.nombre_completo || ''
+      const foto = data?.foto_url || ''
+
+      if (foto) setUserAvatar(`${foto}?t=${Date.now()}`)
+
+      if (nombre) {
+        const parts = nombre.trim().split(' ')
+        const initials = parts.length >= 2
+          ? (parts[0][0] + parts[1][0]).toUpperCase()
+          : parts[0].slice(0, 2).toUpperCase()
+        setUserName(nombre)
+        setUserInitials(initials)
+      } else if (user.email) {
+        const local = user.email.split('@')[0]
+        setUserName(local)
+        setUserInitials(local.slice(0, 2).toUpperCase())
+      }
+    }
+    loadUser()
   }, [])
 
   const getPageTitle = () => {
@@ -36,7 +65,8 @@ export function AdminHeader() {
   const handleLogout = async () => {
     await supabase.auth.signOut()
     toast.success('Sesión cerrada')
-    window.location.href = '/login'
+    // replace() elimina el historial del admin, no se puede volver con "atrás"
+    window.location.replace('/login')
   }
 
   return (
@@ -57,17 +87,24 @@ export function AdminHeader() {
           <DropdownMenuTrigger asChild>
             <Button variant="ghost" className="flex items-center gap-2 hover:bg-slate-100 px-2">
               <Avatar className="h-8 w-8">
-                <AvatarFallback className="bg-indigo-100 text-indigo-700 text-sm font-semibold">AD</AvatarFallback>
+                <AvatarImage src={userAvatar} alt={userName} className="object-cover" />
+                <AvatarFallback className="bg-indigo-100 text-indigo-700 text-sm font-semibold">{userInitials}</AvatarFallback>
               </Avatar>
-              <span className="hidden md:inline-block text-sm font-medium text-slate-700">Admin</span>
+              <span className="hidden md:inline-block text-sm font-medium text-slate-700">{userName || 'Admin'}</span>
               <ChevronDown className="h-4 w-4 text-slate-400" />
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end" className="w-56 bg-white border-slate-200 shadow-lg">
             <DropdownMenuLabel>
-              <div className="flex flex-col space-y-0.5">
-                <p className="text-sm font-semibold text-slate-900">Administrador</p>
-                <p className="text-xs text-slate-500">{userEmail}</p>
+              <div className="flex items-center gap-3">
+                <Avatar className="h-9 w-9">
+                  <AvatarImage src={userAvatar} alt={userName} className="object-cover" />
+                  <AvatarFallback className="bg-indigo-100 text-indigo-700 text-sm font-semibold">{userInitials}</AvatarFallback>
+                </Avatar>
+                <div className="flex flex-col space-y-0.5">
+                  <p className="text-sm font-semibold text-slate-900">{userName || 'Administrador'}</p>
+                  <p className="text-xs text-slate-500">{userEmail}</p>
+                </div>
               </div>
             </DropdownMenuLabel>
             <DropdownMenuSeparator className="bg-slate-100" />

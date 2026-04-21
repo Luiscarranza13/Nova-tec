@@ -14,6 +14,7 @@ const testimonials = [
     rating: 5,
     avatar: 'MG',
     gradient: 'from-blue-500 to-cyan-500',
+    color: '#3b82f6',
     result: '+180% ventas online',
   },
   {
@@ -25,6 +26,7 @@ const testimonials = [
     rating: 5,
     avatar: 'CR',
     gradient: 'from-violet-500 to-purple-500',
+    color: '#8b5cf6',
     result: '4.9★ en App Store',
   },
   {
@@ -36,6 +38,7 @@ const testimonials = [
     rating: 5,
     avatar: 'AM',
     gradient: 'from-pink-500 to-rose-500',
+    color: '#ec4899',
     result: 'Lanzamiento en 6 semanas',
   },
   {
@@ -47,6 +50,7 @@ const testimonials = [
     rating: 5,
     avatar: 'RS',
     gradient: 'from-amber-500 to-orange-500',
+    color: '#f59e0b',
     result: '-40% costos operativos',
   },
   {
@@ -58,6 +62,7 @@ const testimonials = [
     rating: 5,
     avatar: 'LV',
     gradient: 'from-emerald-500 to-teal-500',
+    color: '#10b981',
     result: '+60% productividad',
   },
 ]
@@ -96,7 +101,7 @@ export function Testimonials() {
   return (
     <section id="testimonios" className="py-16 md:py-24 lg:py-32 relative overflow-hidden">
       <div className="absolute inset-0 bg-gradient-to-b from-transparent via-primary/3 to-transparent" />
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[400px] bg-primary/5 rounded-full blur-[100px] pointer-events-none" />
+      <div className="hidden md:block absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[400px] bg-primary/5 rounded-full blur-[100px] pointer-events-none" />
 
       {/* Floating orbs */}
       <motion.div
@@ -198,6 +203,7 @@ export function Testimonials() {
               {testimonials.map((_, i) => (
                 <button
                   key={i}
+                  aria-label={`Ver testimonio ${i + 1}`}
                   onClick={() => go(i)}
                   className={`transition-all duration-300 rounded-full ${
                     i === current
@@ -212,12 +218,14 @@ export function Testimonials() {
             <div className="flex gap-2">
               <button
                 onClick={prev}
+                aria-label="Testimonio anterior"
                 className="w-10 h-10 rounded-full border border-border/50 bg-card/60 flex items-center justify-center text-muted-foreground hover:text-foreground hover:border-primary/30 transition-all"
               >
                 <ChevronLeft className="h-4 w-4" />
               </button>
               <button
                 onClick={next}
+                aria-label="Siguiente testimonio"
                 className="w-10 h-10 rounded-full border border-border/50 bg-card/60 flex items-center justify-center text-muted-foreground hover:text-foreground hover:border-primary/30 transition-all"
               >
                 <ChevronRight className="h-4 w-4" />

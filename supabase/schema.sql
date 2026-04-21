@@ -347,6 +347,29 @@ CREATE TRIGGER trg_configuracion_actualizado
   FOR EACH ROW EXECUTE FUNCTION actualizar_timestamp();
 
 -- =============================================
+-- STORAGE: bucket avatars
+-- =============================================
+INSERT INTO storage.buckets (id, name, public)
+VALUES ('avatars', 'avatars', true)
+ON CONFLICT (id) DO NOTHING;
+
+CREATE POLICY "Avatars son públicos"
+  ON storage.objects FOR SELECT
+  USING (bucket_id = 'avatars');
+
+CREATE POLICY "Usuarios autenticados pueden subir su avatar"
+  ON storage.objects FOR INSERT TO authenticated
+  WITH CHECK (bucket_id = 'avatars' AND (storage.foldername(name))[1] = 'avatars');
+
+CREATE POLICY "Usuarios pueden actualizar su propio avatar"
+  ON storage.objects FOR UPDATE TO authenticated
+  USING (bucket_id = 'avatars' AND auth.uid()::text = (storage.filename(name)));
+
+CREATE POLICY "Usuarios pueden eliminar su propio avatar"
+  ON storage.objects FOR DELETE TO authenticated
+  USING (bucket_id = 'avatars');
+
+-- =============================================
 -- FUNCIÓN: crear perfil al registrarse
 -- Se ejecuta automáticamente cuando un usuario
 -- se registra en Supabase Auth

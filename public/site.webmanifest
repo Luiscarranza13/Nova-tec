@@ -1,17 +1,51 @@
 {
   "name": "NovaTec — Desarrollo de Software",
   "short_name": "NovaTec",
-  "description": "Transformamos ideas en software excepcional. Lima, Perú.",
+  "description": "Transformamos ideas en software excepcional. Cajamarca, Perú.",
   "start_url": "/",
+  "scope": "/",
   "display": "standalone",
+  "orientation": "portrait-primary",
   "background_color": "#0d1117",
   "theme_color": "#6366f1",
-  "icons": [
+  "lang": "es-PE",
+  "categories": ["business", "productivity", "utilities"],
+  "screenshots": [
     {
-      "src": "/logo.svg",
-      "sizes": "any",
-      "type": "image/svg+xml",
-      "purpose": "any maskable"
+      "src": "/screenshots/home.png",
+      "sizes": "1280x720",
+      "type": "image/png",
+      "form_factor": "wide",
+      "label": "Página principal de NovaTec"
     }
-  ]
+  ],
+  "shortcuts": [
+    {
+      "name": "Contactar",
+      "short_name": "Contacto",
+      "description": "Escríbenos directamente",
+      "url": "/contacto",
+      "icons": [{ "src": "/logo.svg", "sizes": "96x96" }]
+    },
+    {
+      "name": "Ver Portafolio",
+      "short_name": "Portafolio",
+      "description": "Nuestros proyectos",
+      "url": "/portafolio",
+      "icons": [{ "src": "/logo.svg", "sizes": "96x96" }]
+    },
+    {
+      "name": "Planes y Precios",
+      "short_name": "Planes",
+      "description": "Nuestros planes",
+      "url": "/planes",
+      "icons": [{ "src": "/logo.svg", "sizes": "96x96" }]
+    }
+  ],
+  "icons": [
+    { "src": "/logo.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" },
+    { "src": "/logo.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "maskable" }
+  ],
+  "related_applications": [],
+  "prefer_related_applications": false
 }

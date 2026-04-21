@@ -17,7 +17,7 @@
     --secondary: 210 40% 96.1%;
     --secondary-foreground: 222.2 47.4% 11.2%;
     --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
+    --muted-foreground: 215.4 16.3% 40%;
     --accent: 243 75% 59%;
     --accent-foreground: 0 0% 100%;
     --destructive: 0 84.2% 60.2%;
@@ -74,7 +74,7 @@
     --secondary: 217.2 32.6% 12%;
     --secondary-foreground: 210 40% 98%;
     --muted: 217.2 32.6% 12%;
-    --muted-foreground: 215 20.2% 65.1%;
+    --muted-foreground: 215 20.2% 72%;
     --accent: 243 75% 65%;
     --accent-foreground: 0 0% 100%;
     --destructive: 0 62.8% 50.6%;
@@ -370,11 +370,35 @@
   to   { opacity: 1; }
 }
 
+/* Marquee — pure CSS, zero JS */
+@keyframes marquee-left {
+  0%   { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+@keyframes marquee-right {
+  0%   { transform: translateX(-50%); }
+  100% { transform: translateX(0); }
+}
+.animate-marquee-left  { animation: marquee-left  30s linear infinite; }
+.animate-marquee-right { animation: marquee-right 35s linear infinite; }
+
 /* Float */
 .float { animation: float 6s ease-in-out infinite; }
 @keyframes float {
   0%, 100% { transform: translateY(0px); }
   50%       { transform: translateY(-10px); }
+}
+
+/* Blob animations — GPU composited via translate3d */
+@keyframes blob1 {
+  0%, 100% { transform: translate3d(0,0,0) scale(1); }
+  33%       { transform: translate3d(60px,-80px,0) scale(1.2); }
+  66%       { transform: translate3d(-40px,40px,0) scale(0.9); }
+}
+@keyframes blob2 {
+  0%, 100% { transform: translate3d(0,0,0) scale(1); }
+  33%       { transform: translate3d(-50px,60px,0) scale(0.85); }
+  66%       { transform: translate3d(70px,-50px,0) scale(1.15); }
 }
 
 /* ─── Utilities ──────────────────────────────────────────────────────────────── */

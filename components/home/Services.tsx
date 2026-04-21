@@ -116,7 +116,7 @@ export function Services() {
                       href={`/servicios#${service.id}`}
                       className={`inline-flex items-center gap-1 text-sm font-medium ${style.icon} opacity-60 group-hover:opacity-100 transition-all group-hover:gap-2`}
                     >
-                      Más información
+                      Más información <span className="sr-only">sobre {service.name}</span>
                       <ArrowRight className="h-3.5 w-3.5" />
                     </Link>
                   </div>

@@ -105,7 +105,8 @@ export function Equipo() {
                     {[Github, Linkedin, Twitter].map((Icon, i) => (
                       <a
                         key={i}
-                        href="#"
+                        href="/"
+                        aria-label="Perfil social"
                         className="w-8 h-8 rounded-lg bg-muted/50 flex items-center justify-center text-muted-foreground hover:text-primary hover:bg-primary/10 transition-all duration-200"
                       >
                         <Icon className="h-3.5 w-3.5" />

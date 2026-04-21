@@ -1,22 +1,14 @@
 import { MetadataRoute } from 'next'
-
-const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://novatec.pe'
-
+const BASE = (process.env.NEXT_PUBLIC_SITE_URL || 'https://novatec.vercel.app').trim()
 export default function robots(): MetadataRoute.Robots {
   return {
     rules: [
       {
         userAgent: '*',
         allow: '/',
-        disallow: ['/admin/', '/api/', '/_next/'],
-      },
-      {
-        userAgent: 'Googlebot',
-        allow: '/',
-        disallow: ['/admin/', '/api/'],
+        disallow: ['/admin/', '/api/', '/_next/', '/login', '/registro', '/recuperar-password', '/mantenimiento'],
       },
     ],
-    sitemap: `${BASE_URL}/sitemap.xml`,
-    host: BASE_URL,
+    sitemap: `${BASE}/sitemap.xml`,
   }
 }

@@ -1,6 +1,9 @@
 import type { Metadata, Viewport } from 'next'
 import { Inter, Sora, JetBrains_Mono } from 'next/font/google'
 import { Providers } from '@/components/providers'
+import { GoogleAnalytics } from '@/components/analytics/GoogleAnalytics'
+import { CookieConsent } from '@/components/ui/cookie-consent'
+import { DotNavigation } from '@/components/ui/dot-navigation'
 import './globals.css'
 
 // ─── Fonts ────────────────────────────────────────────────────────────────────
@@ -13,13 +16,12 @@ const inter = Inter({
   adjustFontFallback: true,
 })
 
-// Sora: premium geometric heading font — clean, modern, high legibility
 const sora = Sora({
   subsets: ['latin'],
   variable: '--font-sora',
   display: 'swap',
   preload: true,
-  weight: ['400', '500', '600', '700', '800'],
+  weight: ['600', '700', '800'],
 })
 
 const jetbrains = JetBrains_Mono({
@@ -28,12 +30,10 @@ const jetbrains = JetBrains_Mono({
   display: 'swap',
   preload: false,
 })
-
-// ─── Site config ──────────────────────────────────────────────────────────────
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://novatec.pe'
+const SITE_URL = (process.env.NEXT_PUBLIC_SITE_URL || 'https://novatec.vercel.app').trim()
 const SITE_NAME = 'NovaTec'
 const SITE_DESCRIPTION =
-  'Transformamos ideas en software excepcional. Desarrollo web, móvil y soluciones tecnológicas de alto nivel para empresas en Cajamarca y todo el Perú.'
+  'Agencia de Desarrollo de Software y Sistemas a medida en Perú. Creamos páginas web corporativas, e-commerce, aplicaciones móviles y soluciones tecnológicas escalables para el crecimiento de tu empresa.'
 
 // ─── Viewport ─────────────────────────────────────────────────────────────────
 export const viewport: Viewport = {
@@ -50,21 +50,20 @@ export const viewport: Viewport = {
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: {
-    default: `${SITE_NAME} | Desarrollo de Software en Cajamarca, Perú`,
+    default: `${SITE_NAME} | Desarrollo de Software, Sistemas y Diseño Web en Perú`,
     template: `%s | ${SITE_NAME}`,
   },
   description: SITE_DESCRIPTION,
   keywords: [
-    'desarrollo de software Cajamarca',
-    'desarrollo web Perú',
-    'aplicaciones móviles Cajamarca',
-    'diseño UI UX',
-    'software a medida',
-    'consultoría tecnológica',
+    'desarrollo de software Perú',
+    'sistemas a medida Perú',
+    'agencia de desarrollo web',
+    'creación de páginas web corporativas',
+    'aplicaciones móviles Perú',
+    'consultoría tecnológica empresarial',
+    'empresas de tecnología en Perú',
+    'desarrollo de sistemas ERP',
     'NovaTec',
-    'Senati Cajamarca',
-    'empresa de tecnología Perú',
-    'desarrollo web profesional',
   ],
   authors: [{ name: SITE_NAME, url: SITE_URL }],
   creator: SITE_NAME,
@@ -79,11 +78,11 @@ export const metadata: Metadata = {
     locale: 'es_PE',
     url: SITE_URL,
     siteName: SITE_NAME,
-    title: `${SITE_NAME} | Desarrollo de Software en Cajamarca, Perú`,
+    title: `${SITE_NAME} | Agencia de Desarrollo de Software y Web en Perú`,
     description: SITE_DESCRIPTION,
     images: [
       {
-        url: '/og-image.png',
+        url: `/og?title=${encodeURIComponent(SITE_NAME + ' — Desarrollo de Software')}&description=${encodeURIComponent(SITE_DESCRIPTION)}`,
         width: 1200,
         height: 630,
         alt: `${SITE_NAME} — Desarrollo de Software Premium en Cajamarca`,
@@ -93,9 +92,9 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: `${SITE_NAME} | Desarrollo de Software en Cajamarca`,
+    title: `${SITE_NAME} | Desarrollo de Software y Sistemas Perú`,
     description: SITE_DESCRIPTION,
-    images: ['/og-image.png'],
+    images: [`/og?title=${encodeURIComponent(SITE_NAME + ' — Desarrollo de Software')}`],
   },
   robots: {
     index: true,
@@ -198,17 +197,17 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="es" suppressHydrationWarning>
       <head>
-        {/* Preconnect to Google Fonts CDN */}
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        {/* DNS prefetch for external services */}
         <link rel="dns-prefetch" href="https://images.unsplash.com" />
         <link rel="dns-prefetch" href="https://wa.me" />
-        {/* JSON-LD structured data */}
+        <link rel="dns-prefetch" href="https://supabase.co" />
+        <meta name="format-detection" content="telephone=no" />
+        {/* CSP + COOP for Best Practices */}
+        <meta httpEquiv="Cross-Origin-Opener-Policy" content="same-origin-allow-popups" />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
+        <GoogleAnalytics />
       </head>
       <body
         className={`${inter.variable} ${sora.variable} ${jetbrains.variable} font-sans antialiased`}
@@ -220,6 +219,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           disableTransitionOnChange
         >
           {children}
+          <CookieConsent />
+          <DotNavigation />
         </Providers>
       </body>
     </html>

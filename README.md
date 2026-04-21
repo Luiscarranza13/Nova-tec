@@ -13,9 +13,13 @@ Una plataforma web completa y moderna para tu empresa de desarrollo de software.
 - ✅ Servicios destacados
 - ✅ ¿Por qué elegir NovaTec?
 - ✅ Proceso de trabajo
+- ✅ **[NUEVO]** Casos de Éxito
 - ✅ Portafolio
 - ✅ Testimonios
 - ✅ Planes y precios
+- ✅ **[NUEVO]** Blog Preview
+- ✅ **[NUEVO]** Preguntas Frecuentes
+- ✅ **[NUEVO]** Newsletter
 - ✅ Sección de contacto
 - ✅ Footer completo
 
