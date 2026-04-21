@@ -29,6 +29,7 @@ const CTA          = dynamic(() => import('@/components/home/CTA').then(m => ({ 
 // Client-only components (no SSR needed)
 const WhatsAppButton = dynamic(() => import('@/components/ui/whatsapp-button').then(m => ({ default: m.WhatsAppButton })))
 const ScrollToTop  = dynamic(() => import('@/components/ui/scroll-to-top').then(m => ({ default: m.ScrollToTop })))
+const InstallPWAButton = dynamic(() => import('@/components/ui/install-pwa-button').then(m => ({ default: m.InstallPWAButton })))
 const ExitIntent   = dynamic(() => import('@/components/ui/exit-intent').then(m => ({ default: m.ExitIntent })))
 const FeedbackWidget = dynamic(() => import('@/components/ui/feedback-widget').then(m => ({ default: m.FeedbackWidget })))
 
@@ -69,6 +70,7 @@ export default function HomePage() {
       <Footer />
       <WhatsAppButton />
       <ScrollToTop />
+      <InstallPWAButton />
       <ExitIntent />
       <FeedbackWidget />
     </>

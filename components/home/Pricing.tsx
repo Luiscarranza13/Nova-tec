@@ -9,7 +9,7 @@ import Link from 'next/link'
 
 export function Pricing() {
   return (
-    <section id="planes" className="py-16 md:py-24 lg:py-32 relative overflow-hidden">
+    <section id="planes" className="py-16 lg:py-32 relative overflow-hidden">
       <div className="absolute inset-0 bg-gradient-to-b from-transparent via-card/40 to-transparent" />
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-primary/5 rounded-full blur-[100px] pointer-events-none" />
 
@@ -25,7 +25,7 @@ export function Pricing() {
             Planes y Precios
             <span className="w-8 h-px bg-primary" />
           </span>
-          <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold font-heading leading-tight mb-4">
+          <h2 className="text-3xl lg:text-5xl font-bold font-heading leading-tight mb-4">
             Inversión que
             <br />
             <span className="text-gradient">genera retorno</span>
@@ -35,7 +35,7 @@ export function Pricing() {
           </p>
         </motion.div>
 
-        <div className="grid md:grid-cols-3 gap-4 md:gap-6 max-w-5xl mx-auto">
+        <div className="grid md:grid-cols-3 gap-4 lg:gap-6 max-w-5xl mx-auto">
           {PRICING_PLANS.map((plan, index) => (
             <motion.div
               key={plan.name}
@@ -43,7 +43,7 @@ export function Pricing() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: index * 0.1 }}
-              className={`relative rounded-2xl p-5 md:p-8 transition-all duration-300 ${
+              className={`relative rounded-2xl p-5 lg:p-8 transition-all duration-300 ${
                 plan.popular
                   ? 'bg-gradient-to-b from-primary/10 to-primary/5 border-2 border-primary/40 shadow-xl shadow-primary/10 scale-[1.02]'
                   : 'border border-border/50 bg-card/60 backdrop-blur-sm hover:border-primary/20 hover:shadow-lg'
@@ -65,7 +65,7 @@ export function Pricing() {
 
               <div className="mb-8">
                 <div className="flex items-baseline gap-1">
-                  <span className="text-3xl md:text-4xl font-bold font-heading">
+                  <span className="text-3xl lg:text-4xl font-bold font-heading">
                     {formatCurrency(plan.price)}
                   </span>
                   <span className="text-sm text-muted-foreground">PEN</span>

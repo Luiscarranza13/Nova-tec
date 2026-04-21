@@ -46,7 +46,7 @@ export function Stats() {
       {/* Background */}
       <div className="absolute inset-0 bg-slate-50/50" />
       <div className="absolute inset-0 bg-grid opacity-10" />
-      
+
       <div className="container relative z-10 max-w-7xl mx-auto px-4">
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-8">
           {STATS.map((stat, index) => {
