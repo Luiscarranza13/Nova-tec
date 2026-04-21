@@ -2,9 +2,10 @@
 
 import Link from 'next/link'
 import { motion, useMotionValue, useSpring } from 'framer-motion'
-import { ArrowRight, Sparkles, Zap, CheckCircle2, ChevronDown, Code2, Star } from 'lucide-react'
+import { ArrowRight, Sparkles, Zap, CheckCircle2, ChevronDown, Code2, Star, Download } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { useEffect, useState } from 'react'
+import Swal from 'sweetalert2'
 
 const benefits = [
   'Equipo experto dedicado',
@@ -59,6 +60,102 @@ export function Hero() {
   const mouseY = useMotionValue(0)
   const springX = useSpring(mouseX, { stiffness: 30, damping: 20 })
   const springY = useSpring(mouseY, { stiffness: 30, damping: 20 })
+
+  const [deferredPrompt, setDeferredPrompt] = useState<any>(null)
+
+  useEffect(() => {
+    const handleBeforeInstall = (e: any) => {
+      e.preventDefault();
+      setDeferredPrompt(e);
+    };
+    window.addEventListener('beforeinstallprompt', handleBeforeInstall);
+    return () => window.removeEventListener('beforeinstallprompt', handleBeforeInstall);
+  }, []);
+
+  const handleInstallClick = () => {
+    // Si el navegador soporta el evento nativo directamente, disparamos la instalación sin interrumpir con modals extra
+    if (deferredPrompt) {
+      deferredPrompt.prompt();
+      deferredPrompt.userChoice.then(() => setDeferredPrompt(null));
+      return;
+    }
+
+    // Modal moderno súper estético de Fallback para iOS o navegadores de escritorio que requieren pasos manuales
+    const installHtml = `
+      <div class="text-left font-sans pb-1 pt-2">
+        <div class="flex items-center gap-4 mb-7 relative px-1">
+          <div class="relative w-16 h-16 rounded-2xl border border-slate-100 flex items-center justify-center bg-white shadow-sm shrink-0">
+            <img src="/logo.svg" alt="NovaTec" class="w-10 h-10 object-contain" />
+            <div class="absolute -bottom-2 -right-2 bg-indigo-600 text-white w-7 h-7 rounded-full flex items-center justify-center shadow-md border-2 border-white">
+              <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" x2="12" y1="15" y2="3"/></svg>
+            </div>
+          </div>
+          <div class="flex-1">
+            <h3 class="text-[20px] font-bold text-slate-800 leading-none mb-1.5" style="font-family: inherit;">Instalar NovaTec</h3>
+            <p class="text-[13px] text-slate-500 m-0 leading-snug">Acceso rápido desde tu pantalla</p>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-3 gap-2.5 mb-7">
+          <div class="bg-slate-50 border border-slate-100 rounded-[18px] py-3.5 px-1 flex flex-col items-center justify-center text-center">
+            <div class="w-9 h-9 rounded-full bg-amber-100 flex items-center justify-center mb-2 shadow-sm">
+              <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#d97706" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+            </div>
+            <span class="text-[11px] font-semibold text-slate-600">Más rápido</span>
+          </div>
+          <div class="bg-slate-50 border border-slate-100 rounded-[18px] py-3.5 px-1 flex flex-col items-center justify-center text-center">
+            <div class="w-9 h-9 rounded-full bg-blue-100 flex items-center justify-center mb-2 shadow-sm">
+               <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.55a11 11 0 0 1 14.08 0"/><path d="M1.42 9a16 16 0 0 1 21.16 0"/><path d="M8.53 16.11a6 6 0 0 1 6.95 0"/><line x1="12" y1="20" x2="12.01" y2="20"/></svg>
+            </div>
+            <span class="text-[11px] font-semibold text-slate-600">Sin internet</span>
+          </div>
+          <div class="bg-slate-50 border border-slate-100 rounded-[18px] py-3.5 px-1 flex flex-col items-center justify-center text-center">
+            <div class="w-9 h-9 rounded-full bg-purple-100 flex items-center justify-center mb-2 shadow-sm">
+               <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#9333ea" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+            </div>
+            <span class="text-[11px] font-semibold text-slate-600">Sin ads</span>
+          </div>
+        </div>
+
+        <button id="swal-custom-install" class="w-full py-3.5 px-4 rounded-xl text-white font-semibold text-[15px] flex items-center justify-center gap-2 transition-transform hover:scale-[1.02] active:scale-95" style="background: linear-gradient(to right, #4f46e5, #06b6d4); box-shadow: 0 8px 20px -4px rgba(79, 70, 229, 0.4);">
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="20" x="5" y="2" rx="2" ry="2"/><path d="M12 18h.01"/></svg>
+          Ver guía de instalación manual
+        </button>
+        <p class="text-center text-[11px] font-medium text-slate-400 mt-5 leading-none tracking-wide">Gratis · Sin descargas · Funciona offline</p>
+      </div>
+    `;
+
+    Swal.fire({
+      html: installHtml,
+      showConfirmButton: false,
+      showCloseButton: true,
+      background: '#ffffff',
+      backdrop: 'rgba(0,0,0,0.5)',
+      heightAuto: false,
+      padding: '1.5rem',
+      customClass: {
+        container: 'z-[99999]',
+        popup: 'rounded-[28px] overflow-hidden shadow-2xl border border-slate-100',
+        closeButton: 'text-slate-400 hover:text-slate-800 focus:outline-none'
+      },
+      didOpen: () => {
+        const btn = document.getElementById('swal-custom-install');
+        if (btn) {
+          btn.addEventListener('click', () => {
+            Swal.close();
+            Swal.fire({
+              title: 'Pasos para instalar',
+              html: 'En iOS: Abre <b>Safari</b>, toca el botón de <i>Compartir</i> (cuadrado con flecha hacia arriba) y selecciona <b>"Agregar a inicio"</b>.<br/><br/>En Android: En Chrome, toca el menú superior derecho y selecciona <b>"Agregar a la pantalla principal"</b>.',
+              icon: 'info',
+              confirmButtonColor: '#4f46e5',
+              heightAuto: false,
+              customClass: { container: 'z-[99999]' }
+            });
+          });
+        }
+      }
+    });
+  };
 
   const handleMouseMove = (e: React.MouseEvent) => {
     const rect = e.currentTarget.getBoundingClientRect()
@@ -147,7 +244,7 @@ export function Hero() {
             </div>
 
             {/* CTAs */}
-            <div className="flex flex-col sm:flex-row gap-4 mb-10 w-full lg:w-auto">
+            <div className="flex flex-col sm:flex-row flex-wrap gap-4 mb-10 w-full lg:w-auto">
               <Link href="/contacto" className="w-full sm:w-auto">
                 <Button size="xl" className="group shadow-lg shadow-primary/30 w-full sm:min-w-[200px]">
                   Iniciar Proyecto
@@ -160,6 +257,10 @@ export function Hero() {
                   Ver Portafolio
                 </Button>
               </Link>
+              <Button size="xl" variant="outline" onClick={handleInstallClick} className="group w-full sm:w-auto sm:min-w-[200px] border-slate-200 bg-white hover:bg-slate-50 transition-colors">
+                <Download className="mr-2 h-5 w-5 text-blue-500" />
+                Descargar App
+              </Button>
             </div>
 
             {/* Social proof */}

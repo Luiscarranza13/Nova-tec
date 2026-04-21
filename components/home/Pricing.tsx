@@ -83,7 +83,12 @@ export function Pricing() {
                 ))}
               </ul>
 
-              <Link href="/contacto">
+              <a
+                href={`https://wa.me/51918146783?text=${encodeURIComponent(`¡Hola! 👋 Me interesa el *Plan ${plan.name}* (S/ ${plan.price}).\n\n¿Podrían brindarme más información sobre cómo empezar?`)}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-full block"
+              >
                 <Button
                   className="w-full group"
                   variant={plan.popular ? 'default' : 'outline'}
@@ -92,7 +97,7 @@ export function Pricing() {
                   {plan.cta}
                   <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
                 </Button>
-              </Link>
+              </a>
             </motion.div>
           ))}
         </div>

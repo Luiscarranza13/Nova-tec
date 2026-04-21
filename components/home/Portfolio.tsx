@@ -178,7 +178,7 @@ export function Portfolio() {
                     <div className="relative h-56 overflow-hidden bg-slate-50">
                       {project.url_demo ? (
                         <Image
-                          src={`https://s.microlink.io/${encodeURIComponent(project.url_demo)}`}
+                          src={`https://s0.wordpress.com/mshots/v1/${encodeURIComponent(project.url_demo)}?w=800`}
                           alt={project.nombre}
                           fill
                           unoptimized

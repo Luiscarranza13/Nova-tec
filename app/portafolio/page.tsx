@@ -141,7 +141,7 @@ export default function PortafolioPage() {
                     {/* Imagen */}
                     <div className="relative h-72 lg:h-auto min-h-[320px] overflow-hidden">
                       <Image
-                        src={featured.url_demo ? `https://s.microlink.io/${encodeURIComponent(featured.url_demo)}` : (featured.imagen_url || fallbackImages[0])}
+                        src={featured.url_demo ? `https://s0.wordpress.com/mshots/v1/${encodeURIComponent(featured.url_demo)}?w=1200` : (featured.imagen_url || fallbackImages[0])}
                         alt={featured.nombre}
                         fill
                         unoptimized={!!featured.url_demo}
@@ -263,7 +263,7 @@ export default function PortafolioPage() {
                         {/* Imagen */}
                         <div className="relative h-56 overflow-hidden">
                           <Image
-                            src={project.url_demo ? `https://s.microlink.io/${encodeURIComponent(project.url_demo)}` : (project.imagen_url || fallbackImages[index % fallbackImages.length])}
+                            src={project.url_demo ? `https://s0.wordpress.com/mshots/v1/${encodeURIComponent(project.url_demo)}?w=800` : (project.imagen_url || fallbackImages[index % fallbackImages.length])}
                             alt={project.nombre}
                             fill
                             unoptimized={!!project.url_demo}

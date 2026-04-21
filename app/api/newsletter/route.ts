@@ -28,5 +28,27 @@ export async function POST(req: NextRequest) {
     .upsert({ email: parsed.data.email, suscrito_en: new Date().toISOString() }, { onConflict: 'email' })
 
   if (error) return NextResponse.json({ error: 'Error al suscribirse' }, { status: 500 })
+
+  // Notificación por correo al administrador
+  try {
+    await fetch('https://formsubmit.co/ajax/carranzacortesluisarmando73@gmail.com', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json'
+      },
+      body: JSON.stringify({
+        _subject: '🎉 ¡Nuevo Suscriptor en el Newsletter de NovaTec!',
+        _template: 'box',
+        Mensaje: 'Se acaba de suscribir una nueva persona. Aquí tienes los detalles:',
+        Correo_del_Cliente: parsed.data.email,
+        Fecha_de_Suscripción: new Date().toLocaleString('es-PE', { timeZone: 'America/Lima' }),
+        _autoresponse: '¡Gracias por suscribirte al newsletter de NovaTec! Muy pronto recibirás nuestras novedades.'
+      })
+    })
+  } catch (e) {
+    console.error('Email notification failed', e)
+  }
+
   return NextResponse.json({ success: true })
 }

@@ -120,7 +120,12 @@ export function PlanComparator() {
             <div className="p-5" />
             {plans.map(plan => (
               <div key={plan.key} className="p-4 flex justify-center">
-                <Link href="/contacto">
+                <a
+                  href={`https://wa.me/51918146783?text=${encodeURIComponent(`¡Hola! 👋 Me interesa el *Plan ${plan.name}* (${plan.price}).\n\n¿Podrían brindarme más información sobre cómo empezar?`)}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-full block"
+                >
                   <Button
                     size="sm"
                     variant={plan.popular ? 'default' : 'outline'}
@@ -128,7 +133,7 @@ export function PlanComparator() {
                   >
                     Elegir {plan.name}
                   </Button>
-                </Link>
+                </a>
               </div>
             ))}
           </div>

@@ -64,25 +64,35 @@ export async function middleware(request: NextRequest) {
     },
   });
 
-  // Verifica sesión de forma segura (no confía en el JWT del cliente)
-  const {
-    data: { user },
-    error: authError,
-  } = await supabase.auth.getUser();
+  // Verifica sesión de forma segura
+  let user = null;
+  let authError = null;
+  try {
+    const { data, error } = await supabase.auth.getUser();
+    user = data.user;
+    authError = error;
+  } catch (e: any) {
+    console.error("Supabase connection error in middleware:", e);
+    authError = e;
+  }
 
-  // ── Modo Mantenimiento ──────────────────────────────────────────────────────
+  // Versión segura de la caché de mantenimiento para evitar fetch excesivos
   const isBypassRoute = MAINTENANCE_BYPASS.some((r) => pathname.startsWith(r));
   if (!isBypassRoute) {
-    const { data: maint } = await supabase
-      .from("configuracion")
-      .select("valor")
-      .eq("clave", "modo_mantenimiento")
-      .single();
+    try {
+      const { data: maint } = await supabase
+        .from("configuracion")
+        .select("valor")
+        .eq("clave", "modo_mantenimiento")
+        .single();
 
-    if (maint?.valor === "true") {
-      return applySecurityHeaders(
-        NextResponse.redirect(new URL("/mantenimiento", request.url)),
-      );
+      if (maint?.valor === "true") {
+        return applySecurityHeaders(
+          NextResponse.redirect(new URL("/mantenimiento", request.url)),
+        );
+      }
+    } catch (e) {
+      console.error("Error al verificar modo mantenimiento:", e);
     }
   }
   // ───────────────────────────────────────────────────────────────────────────

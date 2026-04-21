@@ -82,18 +82,6 @@ export function Header() {
             <div className="hidden md:flex items-center gap-2 shrink-0">
               <CommandPalette />
 
-              {/* Theme toggle */}
-              <button
-                onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
-                className="w-9 h-9 rounded-lg border border-border/50 bg-muted/40 flex items-center justify-center text-muted-foreground hover:text-foreground hover:border-primary/30 hover:bg-primary/5 transition-all duration-200"
-                aria-label="Cambiar tema"
-              >
-                {mounted && theme === 'dark'
-                  ? <Sun className="h-4 w-4" />
-                  : <Moon className="h-4 w-4" />
-                }
-              </button>
-
               {/* WhatsApp quick */}
               <a
                 href="https://wa.me/51918146783"

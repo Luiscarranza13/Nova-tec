@@ -108,19 +108,19 @@ const defaultEnrich: EnrichData = {
 
 const calcOptions = {
   type: [
-    { label: 'Landing page', value: 15000 },
-    { label: 'Sitio web corporativo', value: 35000 },
-    { label: 'App móvil', value: 55000 },
-    { label: 'Plataforma web / SaaS', value: 90000 },
-    { label: 'Software a medida', value: 120000 },
+    { label: 'Landing page', value: 1500 },
+    { label: 'Sitio web corporativo', value: 3500 },
+    { label: 'App móvil', value: 5500 },
+    { label: 'Plataforma web / SaaS', value: 8000 },
+    { label: 'Software a medida', value: 12000 },
   ],
   features: [
-    { label: 'Panel de administración', value: 15000 },
-    { label: 'Pasarela de pagos', value: 10000 },
-    { label: 'Autenticación / usuarios', value: 8000 },
-    { label: 'Notificaciones push', value: 6000 },
-    { label: 'Integración con terceros', value: 12000 },
-    { label: 'Reportes y analytics', value: 10000 },
+    { label: 'Panel de administración', value: 1500 },
+    { label: 'Pasarela de pagos', value: 1000 },
+    { label: 'Autenticación / usuarios', value: 800 },
+    { label: 'Notificaciones push', value: 600 },
+    { label: 'Integración con terceros', value: 1200 },
+    { label: 'Reportes y analytics', value: 1000 },
   ],
   timeline: [
     { label: 'Estándar (sin prisa)', multiplier: 1 },
@@ -133,6 +133,10 @@ function Calculator() {
   const [type, setType] = useState(calcOptions.type[0])
   const [features, setFeatures] = useState<typeof calcOptions.features>([])
   const [timeline, setTimeline] = useState(calcOptions.timeline[0])
+  
+  const [clientEmail, setClientEmail] = useState('')
+  const [sending, setSending] = useState(false)
+  const [sent, setSent] = useState(false)
 
   const fmt = (n: number) => n.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')
   const base = type.value + features.reduce((s, f) => s + f.value, 0)
@@ -143,6 +147,36 @@ function Calculator() {
     setFeatures((prev) =>
       prev.find((x) => x.label === f.label) ? prev.filter((x) => x.label !== f.label) : [...prev, f]
     )
+
+  const handleQuoteRequest = async () => {
+    if (!clientEmail) {
+      alert('Por favor, ingresa tu correo para poder contactarte.');
+      return;
+    }
+    setSending(true)
+    try {
+      await fetch('https://formsubmit.co/ajax/carranzacortesluisarmando73@gmail.com', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+        body: JSON.stringify({
+          _subject: `💰 Nueva Estimación de Proyecto: ${type.label}`,
+          _template: 'box',
+          Correo_del_Cliente: clientEmail,
+          Tipo_de_Proyecto: type.label,
+          Funcionalidades_Adicionales: features.map(f => f.label).join(', ') || 'Ninguna',
+          Nivel_de_Urgencia: timeline.label,
+          Estimacion_Calculada: `S/ ${fmt(total)} - S/ ${fmt(totalMax)}`,
+          _replyto: clientEmail,
+          _autoresponse: '¡Hola! Hemos recibido tu estimación de proyecto en NovaTec. Muy pronto te enviaremos una cotización formal.'
+        })
+      })
+      setSent(true)
+    } catch (e) {
+      console.error(e)
+    } finally {
+      setSending(false)
+    }
+  }
 
   return (
     <section className="py-24 relative overflow-hidden">
@@ -197,7 +231,7 @@ function Calculator() {
                       <button key={f.label} onClick={() => toggleFeature(f)}
                         className={`w-full flex items-center justify-between px-4 py-3 rounded-xl text-sm border transition-all duration-200 ${active ? 'border-primary/50 bg-primary/10 text-primary font-medium' : 'border-border/50 hover:border-primary/30 text-muted-foreground'}`}>
                         <span>{f.label}</span>
-                        <span className="text-xs opacity-70">+${fmt(f.value)}</span>
+                        <span className="text-xs opacity-70">+S/ {fmt(f.value)}</span>
                       </button>
                     )
                   })}
@@ -206,15 +240,29 @@ function Calculator() {
               <div className="rounded-2xl border border-primary/30 bg-gradient-to-br from-primary/10 to-chart-2/5 p-6">
                 <p className="text-xs text-muted-foreground uppercase tracking-widest mb-2">Estimado orientativo</p>
                 <div className="text-3xl font-bold font-heading text-gradient mb-1">
-                  ${fmt(total)} – ${fmt(totalMax)}
+                  S/ {fmt(total)} – S/ {fmt(totalMax)}
                 </div>
                 <p className="text-xs text-muted-foreground mb-5">PEN · El precio final depende del alcance detallado</p>
-                <Link href="/contacto">
-                  <Button className="w-full group shadow-lg shadow-primary/20">
-                    Solicitar cotización exacta
-                    <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
-                  </Button>
-                </Link>
+                
+                {sent ? (
+                  <div className="p-3 bg-emerald-500/10 border border-emerald-500/20 rounded-xl">
+                    <p className="text-emerald-500 text-sm font-medium text-center">¡Solicitud enviada!<br/>Te contactaremos pronto.</p>
+                  </div>
+                ) : (
+                  <div className="space-y-2">
+                    <input 
+                      type="email" 
+                      placeholder="tucorreo@ejemplo.com"
+                      value={clientEmail}
+                      onChange={e => setClientEmail(e.target.value)}
+                      className="w-full px-4 py-2 border border-border/50 bg-background rounded-xl text-sm focus:outline-none focus:border-primary/50 transition-colors"
+                    />
+                    <Button onClick={handleQuoteRequest} disabled={sending} className="w-full group shadow-lg shadow-primary/20">
+                      {sending ? 'Enviando...' : 'Solicitar cotización exacta'}
+                      {!sending && <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />}
+                    </Button>
+                  </div>
+                )}
               </div>
             </div>
           </div>

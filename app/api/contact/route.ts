@@ -53,6 +53,29 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: 'Error al guardar el mensaje' }, { status: 500 })
   }
 
+  // Notificación por correo al administrador sobre nuevo mensaje de contacto
+  try {
+    await fetch('https://formsubmit.co/ajax/carranzacortesluisarmando73@gmail.com', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json'
+      },
+      body: JSON.stringify({
+        _subject: `📩 Nuevo Mensaje: ${asunto || 'Sin Asunto'}`,
+        _template: 'box',
+        Nombre_del_Cliente: nombre,
+        Correo_del_Cliente: email,
+        Asunto: asunto || 'Sin asunto expresado',
+        Mensaje_Recibido: mensaje,
+        _replyto: email, // Para poder responderle al cliente presionando simplemente "Responder" en Gmail
+        _autoresponse: '¡Hola! Hemos recibido tu mensaje en NovaTec. Estaremos leyéndolo y nos contactaremos a la brevedad posible.'
+      })
+    })
+  } catch (e) {
+    console.error('Email notification failed', e)
+  }
+
   return NextResponse.json(
     { success: true, message: 'Mensaje enviado correctamente' },
     { headers: { 'X-RateLimit-Remaining': String(remaining) } }
