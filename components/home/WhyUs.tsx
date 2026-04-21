@@ -25,12 +25,12 @@ const metrics = [
 
 export function WhyUs() {
   return (
-    <section className="py-16 md:py-24 lg:py-32 relative overflow-hidden">
+    <section className="py-16 lg:py-32 relative overflow-hidden">
       <div className="absolute inset-0 bg-gradient-to-b from-transparent via-card/50 to-transparent" />
       <div className="absolute right-0 top-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-primary/5 rounded-full blur-[100px] pointer-events-none" />
 
       <div className="container relative z-10 max-w-7xl mx-auto px-4">
-        <div className="grid lg:grid-cols-2 gap-10 md:gap-12 lg:gap-16 items-center">
+        <div className="grid lg:grid-cols-2 gap-10 lg:gap-16 items-center">
 
           {/* Left */}
           <motion.div
@@ -42,7 +42,7 @@ export function WhyUs() {
               <span className="w-8 h-px bg-primary" />
               ¿Por qué elegirnos?
             </span>
-            <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold font-heading leading-tight mb-6">
+            <h2 className="text-3xl lg:text-5xl font-bold font-heading leading-tight mb-6">
               Tu socio de confianza
               <br />
               en{' '}
@@ -54,7 +54,7 @@ export function WhyUs() {
             </p>
 
             {/* Metrics row */}
-            <div className="flex gap-2 md:gap-4 mb-8 md:mb-10">
+            <div className="flex gap-2 lg:gap-4 mb-8 lg:mb-10">
               {metrics.map(({ icon: Icon, value, label, color, bg }, i) => (
                 <motion.div
                   key={label}
@@ -108,7 +108,7 @@ export function WhyUs() {
                   viewport={{ once: true }}
                   transition={{ delay: index * 0.1 }}
                   whileHover={{ y: -4, transition: { duration: 0.2 } }}
-                  className={`group rounded-2xl border border-border/50 bg-card/60 backdrop-blur-sm p-4 md:p-6 hover:border-primary/30 hover:shadow-xl hover:shadow-primary/5 transition-all duration-300 cursor-default ${index === 1 ? 'md:mt-8' : ''} ${index === 3 ? 'md:-mt-8' : ''}`}
+                  className={`group rounded-2xl border border-border/50 bg-card/60 backdrop-blur-sm p-4 lg:p-6 hover:border-primary/30 hover:shadow-xl hover:shadow-primary/5 transition-all duration-300 cursor-default ${index === 1 ? 'md:mt-8' : ''} ${index === 3 ? 'md:-mt-8' : ''}`}
                 >
                   <div className="w-11 h-11 rounded-xl bg-primary/10 flex items-center justify-center mb-4 group-hover:scale-110 group-hover:bg-primary/20 transition-all duration-300">
                     <Icon className="h-5 w-5 text-primary" />
