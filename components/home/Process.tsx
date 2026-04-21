@@ -22,7 +22,7 @@ export function Process() {
   const lineInView = useInView(lineRef, { once: true })
 
   return (
-    <section className="py-32 relative overflow-hidden">
+    <section className="py-16 md:py-24 lg:py-32 relative overflow-hidden">
       <div className="absolute inset-0 bg-gradient-to-b from-transparent via-primary/3 to-transparent" />
       <div className="absolute inset-0 bg-dots opacity-20" />
 
@@ -31,14 +31,14 @@ export function Process() {
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="text-center max-w-2xl mx-auto mb-24"
+          className="text-center max-w-2xl mx-auto mb-12 md:mb-20 lg:mb-24"
         >
           <span className="inline-flex items-center gap-2 text-xs font-semibold text-primary uppercase tracking-widest mb-4">
             <span className="w-8 h-px bg-primary" />
             Nuestro Proceso
             <span className="w-8 h-px bg-primary" />
           </span>
-          <h2 className="text-4xl md:text-5xl font-bold font-heading leading-tight mb-4">
+          <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold font-heading leading-tight mb-4">
             Metodología que garantiza
             <br />
             <span className="text-gradient">resultados excepcionales</span>
@@ -71,7 +71,7 @@ export function Process() {
             )}
           </div>
 
-          <div className="grid md:grid-cols-5 gap-8">
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 md:gap-6 lg:gap-8">
             {PROCESS_STEPS.map((step, index) => {
               const Icon = iconMap[step.icon] || Search
               const color = stepColors[index]
@@ -92,9 +92,9 @@ export function Process() {
                       transition={{ duration: 3, repeat: Infinity, delay: index * 0.4 }}
                       className={`absolute inset-0 bg-gradient-to-br ${color.gradient} rounded-full blur-xl`}
                     />
-                    <div className={`relative w-24 h-24 rounded-full bg-gradient-to-br ${color.gradient} p-0.5 shadow-lg ${color.glow} group-hover:scale-110 transition-transform duration-300`}>
+                    <div className={`relative w-16 h-16 md:w-20 md:h-20 lg:w-24 lg:h-24 rounded-full bg-gradient-to-br ${color.gradient} p-0.5 shadow-lg ${color.glow} group-hover:scale-110 transition-transform duration-300`}>
                       <div className="w-full h-full rounded-full bg-background flex items-center justify-center">
-                        <Icon className="h-8 w-8 text-foreground" />
+                        <Icon className="h-6 w-6 md:h-7 md:w-7 lg:h-8 lg:w-8 text-foreground" />
                       </div>
                     </div>
                     {/* Step number badge */}

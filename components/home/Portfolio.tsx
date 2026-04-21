@@ -7,17 +7,13 @@ import { useEffect, useState } from "react";
 import {
   ArrowRight,
   ExternalLink,
-  ArrowUpRight,
-  Loader2,
   FolderKanban,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { supabase } from "@/lib/supabase/client";
-import type { PortafolioItem } from "@/lib/supabase/types";
 
 const categories = ["Todos", "En Progreso", "Completado", "En Revisión"];
 
-// Colores de gradiente para fallback si no hay datos
 const gradients = [
   "from-indigo-600/20 to-blue-500/20",
   "from-emerald-600/20 to-teal-500/20",
@@ -77,7 +73,7 @@ export function Portfolio() {
         });
 
   return (
-    <section id="portafolio" className="py-32 relative overflow-hidden bg-slate-50/30">
+    <section id="portafolio" className="py-24 md:py-32 relative overflow-hidden bg-slate-50/30">
       <div className="container relative z-10 max-w-7xl mx-auto px-4">
         {/* Header */}
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
@@ -90,8 +86,8 @@ export function Portfolio() {
               <span className="w-8 h-px bg-primary" />
               Nuestro Trabajo
             </span>
-            <h2 className="text-4xl md:text-5xl font-bold font-heading leading-tight text-slate-900">
-              Proyectos que que están
+            <h2 className="text-3xl md:text-5xl font-bold font-heading leading-tight text-slate-900">
+              Proyectos que están
               <br />
               <span className="text-gradient">transformando ideas</span>
             </h2>
@@ -148,9 +144,7 @@ export function Portfolio() {
                   <div className="p-6 space-y-4">
                     <div className="h-5 w-3/4 bg-slate-100 animate-pulse rounded" />
                     <div className="h-4 w-1/2 bg-slate-100 animate-pulse rounded" />
-                    <div className="space-y-2 pt-2">
-                       <div className="h-1.5 w-full bg-slate-100 animate-pulse rounded-full" />
-                    </div>
+                    <div className="h-1.5 w-full bg-slate-100 animate-pulse rounded-full" />
                   </div>
                 </div>
               ))}
@@ -180,7 +174,7 @@ export function Portfolio() {
                     transition={{ duration: 0.3, delay: index * 0.05 }}
                     className="group relative rounded-2xl overflow-hidden border border-slate-200 bg-white hover:border-primary/30 hover:shadow-2xl transition-all duration-500"
                   >
-                    {/* Imagen Area */}
+                    {/* Image Area */}
                     <div className="relative h-56 overflow-hidden bg-slate-50">
                       {project.url_demo ? (
                         <Image
@@ -192,7 +186,6 @@ export function Portfolio() {
                           className="object-cover transition-transform duration-700 group-hover:scale-110"
                         />
                       ) : project.imagen_url ? (
-
                         <Image
                           src={project.imagen_url}
                           alt={project.nombre}
@@ -205,7 +198,6 @@ export function Portfolio() {
                            <FolderKanban className="h-12 w-12 text-slate-200" />
                         </div>
                       )}
-
 
                       {/* Estado badge */}
                       <div className="absolute top-4 left-4">

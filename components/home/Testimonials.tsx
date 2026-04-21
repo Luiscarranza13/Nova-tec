@@ -99,7 +99,7 @@ export function Testimonials() {
   const t = testimonials[current]
 
   return (
-    <section id="testimonios" className="py-32 relative overflow-hidden">
+    <section id="testimonios" className="py-16 md:py-24 lg:py-32 relative overflow-hidden">
       <div className="absolute inset-0 bg-gradient-to-b from-transparent via-primary/3 to-transparent" />
       <div className="hidden md:block absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[400px] bg-primary/5 rounded-full blur-[100px] pointer-events-none" />
 
@@ -138,7 +138,7 @@ export function Testimonials() {
             Testimonios
             <span className="w-12 h-px bg-gradient-to-l from-transparent to-primary" />
           </motion.span>
-          <h2 className="text-4xl md:text-5xl font-bold font-heading leading-tight mb-5">
+          <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold font-heading leading-tight mb-5">
             Lo que dicen{' '}
             <span className="text-gradient">nuestros clientes</span>
           </h2>
@@ -158,7 +158,7 @@ export function Testimonials() {
                 animate={{ opacity: 1, x: 0 }}
                 exit={{ opacity: 0, x: direction * -60 }}
                 transition={{ duration: 0.35, ease: 'easeInOut' }}
-                className="p-10 md:p-14"
+                className="p-6 md:p-10 lg:p-14"
               >
                 {/* Quote icon */}
                 <div className={`w-12 h-12 rounded-2xl bg-gradient-to-br ${t.gradient} opacity-20 flex items-center justify-center mb-8`}>
@@ -173,7 +173,7 @@ export function Testimonials() {
                 </div>
 
                 {/* Quote */}
-                <blockquote className="text-xl md:text-2xl font-medium text-foreground/85 leading-relaxed mb-10">
+                <blockquote className="text-base md:text-xl lg:text-2xl font-medium text-foreground/85 leading-relaxed mb-8">
                   "{t.quote}"
                 </blockquote>
 

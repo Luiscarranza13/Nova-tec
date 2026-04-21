@@ -1,39 +1,48 @@
 'use client'
 
 import { useEffect, useRef, useState } from 'react'
-import { useInView } from 'react-intersection-observer'
+import { motion, useInView } from 'framer-motion'
 import { STATS } from '@/lib/constants'
 import { TrendingUp, Users, Briefcase, Award } from 'lucide-react'
 
 const icons = [Briefcase, Users, Award, TrendingUp]
 const colors = [
-  { text: 'text-blue-500',   bg: 'bg-blue-500/10',   gradient: 'from-blue-500/20 to-cyan-500/20' },
-  { text: 'text-violet-500', bg: 'bg-violet-500/10', gradient: 'from-violet-500/20 to-purple-500/20' },
-  { text: 'text-primary',    bg: 'bg-primary/10',    gradient: 'from-primary/20 to-indigo-500/20' },
-  { text: 'text-amber-500',  bg: 'bg-amber-500/10',  gradient: 'from-amber-500/20 to-orange-500/20' },
+  { text: 'text-blue-500', bg: 'bg-blue-500/10', glow: 'shadow-blue-500/20', gradient: 'from-blue-500/20 to-cyan-500/20' },
+  { text: 'text-violet-500', bg: 'bg-violet-500/10', glow: 'shadow-violet-500/20', gradient: 'from-violet-500/20 to-purple-500/20' },
+  { text: 'text-primary', bg: 'bg-primary/10', glow: 'shadow-primary/20', gradient: 'from-primary/20 to-indigo-500/20' },
+  { text: 'text-amber-500', bg: 'bg-amber-500/10', glow: 'shadow-amber-500/20', gradient: 'from-amber-500/20 to-orange-500/20' },
 ]
 
 function Counter({ value, suffix, active }: { value: number; suffix: string; active: boolean }) {
   const [count, setCount] = useState(0)
+
   useEffect(() => {
     if (!active) return
-    const steps = 40
-    const inc = value / steps
-    let cur = 0
-    const t = setInterval(() => {
-      cur += inc
-      if (cur >= value) { setCount(value); clearInterval(t) }
-      else setCount(Math.floor(cur))
-    }, 50)
-    return () => clearInterval(t)
+    const duration = 2000
+    const steps = 60
+    const increment = value / steps
+    let current = 0
+    const timer = setInterval(() => {
+      current += increment
+      if (current >= value) {
+        setCount(value)
+        clearInterval(timer)
+      } else {
+        setCount(Math.floor(current))
+      }
+    }, duration / steps)
+    return () => clearInterval(timer)
   }, [value, active])
+
   return <>{count}{suffix}</>
 }
 
 export function Stats() {
-  const { ref, inView } = useInView({ triggerOnce: true, threshold: 0.2 })
+  const ref = useRef(null)
+  const inView = useInView(ref, { once: true })
 
   return (
+<<<<<<< HEAD
     <section ref={ref} className="py-16 sm:py-24 relative overflow-hidden">
       <div className="absolute inset-0 bg-gradient-to-r from-primary/5 via-transparent to-chart-2/5" aria-hidden="true" />
       <div className="absolute inset-0 bg-grid opacity-15" aria-hidden="true" />
@@ -44,29 +53,51 @@ export function Stats() {
           {STATS.map((stat, i) => {
             const Icon = icons[i]
             const color = colors[i]
+=======
+    <section ref={ref} className="py-24 relative overflow-hidden">
+      {/* Background */}
+      <div className="absolute inset-0 bg-gradient-to-r from-primary/5 via-transparent to-chart-2/5" />
+      <div className="absolute inset-0 bg-grid opacity-15" />
+      <motion.div
+        animate={{ x: [0, 40, 0], y: [0, -20, 0] }}
+        transition={{ duration: 15, repeat: Infinity, ease: 'easeInOut' }}
+        className="absolute top-0 left-1/4 w-[400px] h-[200px] bg-primary/8 rounded-full blur-[80px] pointer-events-none"
+      />
+
+      <div className="container relative z-10 max-w-7xl mx-auto px-4">
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-5">
+          {STATS.map((stat, index) => {
+            const Icon = icons[index]
+            const color = colors[index]
+>>>>>>> 9c2e4531f8850fc3b63c50e442f4d1d8e2949dfe
             return (
-              <div
+              <motion.div
                 key={stat.label}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: index * 0.1 }}
+                whileHover={{ y: -4, transition: { duration: 0.2 } }}
                 className="group relative cursor-default"
-                style={{
-                  opacity: inView ? 1 : 0,
-                  transform: inView ? 'translateY(0)' : 'translateY(20px)',
-                  transition: `opacity 0.5s ease ${i * 0.1}s, transform 0.5s ease ${i * 0.1}s`,
-                }}
               >
-                <div className="relative rounded-2xl border border-border/50 bg-card/60 backdrop-blur-sm p-6 text-center hover:border-primary/30 hover:shadow-xl transition-all duration-300 overflow-hidden">
-                  <div className={`absolute inset-0 bg-gradient-to-br ${color.gradient} opacity-0 group-hover:opacity-100 transition-opacity duration-300`} aria-hidden="true" />
+                {/* Card */}
+                <div className={`relative rounded-2xl border border-border/50 bg-card/60 backdrop-blur-sm p-4 md:p-6 text-center hover:border-primary/30 hover:shadow-xl ${color.glow} transition-all duration-300 overflow-hidden`}>
+                  {/* Background gradient on hover */}
+                  <div className={`absolute inset-0 bg-gradient-to-br ${color.gradient} opacity-0 group-hover:opacity-100 transition-opacity duration-300`} />
+
                   <div className="relative z-10">
-                    <div className={`w-11 h-11 rounded-xl ${color.bg} flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300`}>
-                      <Icon className={`h-5 w-5 ${color.text}`} aria-hidden="true" />
+                    <div className={`w-9 h-9 md:w-11 md:h-11 rounded-xl ${color.bg} flex items-center justify-center mx-auto mb-3 md:mb-4 group-hover:scale-110 transition-transform duration-300`}>
+                      <Icon className={`h-4 w-4 md:h-5 md:w-5 ${color.text}`} />
                     </div>
-                    <div className={`text-4xl md:text-5xl font-bold font-heading ${color.text} mb-1`} aria-label={`${stat.value}${stat.suffix} ${stat.label}`}>
+
+                    <div className={`text-3xl md:text-4xl lg:text-5xl font-bold font-heading ${color.text} mb-1`}>
                       <Counter value={stat.value} suffix={stat.suffix} active={inView} />
                     </div>
-                    <p className="text-sm text-muted-foreground">{stat.label}</p>
+
+                    <p className="text-xs md:text-sm text-muted-foreground">{stat.label}</p>
                   </div>
                 </div>
-              </div>
+              </motion.div>
             )
           })}
         </div>

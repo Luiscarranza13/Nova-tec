@@ -51,7 +51,11 @@ function SpotlightCard({ children, className }: { children: React.ReactNode; cla
 
 export function Services() {
   return (
+<<<<<<< HEAD
     <section id="servicios" className="py-20 sm:py-32 relative overflow-hidden">
+=======
+    <section id="servicios" className="py-16 md:py-24 lg:py-32 relative overflow-hidden">
+>>>>>>> 9c2e4531f8850fc3b63c50e442f4d1d8e2949dfe
       <div className="absolute inset-0 bg-gradient-to-b from-transparent via-primary/3 to-transparent" />
 
       <div className="container relative z-10 max-w-7xl mx-auto px-4">
@@ -67,7 +71,7 @@ export function Services() {
             <span className="w-8 h-px bg-primary" />
             Nuestros Servicios
           </span>
-          <h2 className="text-4xl md:text-5xl font-bold font-heading leading-tight mb-4">
+          <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold font-heading leading-tight mb-4">
             Soluciones tecnológicas
             <br />
             <span className="text-gradient">para cada desafío</span>
@@ -79,7 +83,7 @@ export function Services() {
         </motion.div>
 
         {/* Grid */}
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-3 md:gap-5">
           {SERVICES.map((service, index) => {
             const Icon = iconMap[service.icon] || Code
             const style = cardStyles[index % cardStyles.length]
@@ -92,7 +96,7 @@ export function Services() {
                 transition={{ delay: index * 0.08 }}
               >
                 <SpotlightCard className="group h-full">
-                  <div className={`h-full rounded-2xl border border-border/50 bg-gradient-to-br ${style.gradient} bg-card/50 backdrop-blur-sm p-7 transition-all duration-300 hover:shadow-xl hover:-translate-y-1.5 ${style.border} ${style.glow}`}>
+                  <div className={`h-full rounded-2xl border border-border/50 bg-gradient-to-br ${style.gradient} bg-card/50 backdrop-blur-sm p-5 md:p-7 transition-all duration-300 hover:shadow-xl hover:-translate-y-1.5 ${style.border} ${style.glow}`}>
                     {/* Icon */}
                     <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${style.gradient} border border-border/50 flex items-center justify-center mb-5 group-hover:scale-110 transition-transform duration-300`}>
                       <Icon className={`h-6 w-6 ${style.icon}`} />
