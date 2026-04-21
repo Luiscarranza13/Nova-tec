@@ -54,12 +54,21 @@ export default function PortafolioPage() {
           .select('*')
           .order('creado_en', { ascending: false })
         
-        if (error) throw error
+        if (error) {
+          console.error("Supabase Error Details:", error);
+          throw error;
+        }
         
-        const list = data || []
+        const list = (data || []).map((p: any) => ({
+          ...p,
+          // Normalizar campos con tildes para el frontend
+          descripcion: p.descripción || p.descripcion,
+          tecnologias: p.tecnologías || p.tecnologias,
+          estado: p.estado || p.Estado
+        }))
         setProyectos(list)
         // El proyecto destacado es el primero completado o el primero en general
-        setFeatured(list.find(p => p.estado === 'completado') || list[0] || null)
+        setFeatured(list.find((p: any) => p.estado === 'completado') || list[0] || null)
       } catch (err) {
         console.error('Error cargando proyectos:', err)
       } finally {
@@ -78,9 +87,10 @@ export default function PortafolioPage() {
 
   const filtered = activeFilter === 'Todos'
     ? proyectos
-    : proyectos.filter(p => {
+    : proyectos.filter((p: any) => {
         // Mapeo simple de estado a categoría para el filtro visual
-        const cat = p.estado === 'completado' ? 'Completado' : p.estado === 'en_progreso' ? 'En Progreso' : 'Otros'
+        const estado = (p.estado || '').toLowerCase()
+        const cat = estado === 'completado' ? 'Completado' : estado === 'en_progreso' ? 'En Progreso' : estado === 'en_revision' ? 'En Revisión' : 'Otros'
         return cat === activeFilter
       })
 
