@@ -51,39 +51,33 @@ function SpotlightCard({ children, className }: { children: React.ReactNode; cla
 
 export function Services() {
   return (
-<<<<<<< HEAD
-    <section id="servicios" className="py-20 sm:py-32 relative overflow-hidden">
-=======
-    <section id="servicios" className="py-16 md:py-24 lg:py-32 relative overflow-hidden">
->>>>>>> 9c2e4531f8850fc3b63c50e442f4d1d8e2949dfe
-      <div className="absolute inset-0 bg-gradient-to-b from-transparent via-primary/3 to-transparent" />
-
+    <section id="servicios" className="py-24 md:py-32 relative overflow-hidden bg-white">
+      <div className="absolute inset-0 bg-slate-50/50" />
       <div className="container relative z-10 max-w-7xl mx-auto px-4">
         {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
-
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="max-w-2xl mb-20"
+          className="max-w-2xl mb-16 md:mb-20"
         >
           <span className="inline-flex items-center gap-2 text-xs font-semibold text-primary uppercase tracking-widest mb-4">
             <span className="w-8 h-px bg-primary" />
             Nuestros Servicios
           </span>
-          <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold font-heading leading-tight mb-4">
+          <h2 className="text-3xl md:text-5xl font-bold font-heading leading-tight mb-6 text-slate-900">
             Soluciones tecnológicas
             <br />
-            <span className="text-gradient">para cada desafío</span>
+            <span className="text-primary">para cada desafío</span>
           </h2>
-          <p className="text-muted-foreground text-lg">
+          <p className="text-slate-500 text-lg leading-relaxed">
             Ofrecemos un espectro completo de servicios adaptados a las necesidades
-            específicas de tu empresa.
+            específicas de tu empresa con los más altos estándares de calidad.
           </p>
         </motion.div>
 
         {/* Grid */}
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-3 md:gap-5">
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
           {SERVICES.map((service, index) => {
             const Icon = iconMap[service.icon] || Code
             const style = cardStyles[index % cardStyles.length]
@@ -96,22 +90,22 @@ export function Services() {
                 transition={{ delay: index * 0.08 }}
               >
                 <SpotlightCard className="group h-full">
-                  <div className={`h-full rounded-2xl border border-border/50 bg-gradient-to-br ${style.gradient} bg-card/50 backdrop-blur-sm p-5 md:p-7 transition-all duration-300 hover:shadow-xl hover:-translate-y-1.5 ${style.border} ${style.glow}`}>
+                  <div className={`h-full rounded-2xl border border-slate-100 bg-white p-6 md:p-8 transition-all duration-500 hover:shadow-2xl hover:border-primary/20 group-hover:-translate-y-2`}>
                     {/* Icon */}
-                    <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${style.gradient} border border-border/50 flex items-center justify-center mb-5 group-hover:scale-110 transition-transform duration-300`}>
-                      <Icon className={`h-6 w-6 ${style.icon}`} />
+                    <div className={`w-14 h-14 rounded-2xl bg-slate-50 flex items-center justify-center mb-6 group-hover:bg-primary group-hover:text-white transition-all duration-500`}>
+                      <Icon className={`h-7 w-7 ${style.icon} group-hover:text-white`} />
                     </div>
 
-                    <h3 className="text-lg font-semibold font-heading mb-2">{service.name}</h3>
+                    <h3 className="text-xl font-bold font-heading mb-3 text-slate-900">{service.name}</h3>
 
-                    <p className="text-muted-foreground text-sm mb-5 leading-relaxed">
+                    <p className="text-slate-500 text-sm mb-6 leading-relaxed">
                       {service.description}
                     </p>
 
-                    <ul className="space-y-1.5 mb-6">
+                    <ul className="space-y-2.5 mb-8">
                       {service.features.map((f) => (
-                        <li key={f} className="flex items-center gap-2 text-xs text-muted-foreground">
-                          <div className={`w-1.5 h-1.5 rounded-full ${style.icon.replace('text-', 'bg-')} shrink-0`} />
+                        <li key={f} className="flex items-center gap-2.5 text-xs text-slate-500">
+                          <CheckCircle2 className="w-3.5 h-3.5 text-primary shrink-0" />
                           {f}
                         </li>
                       ))}
@@ -119,10 +113,10 @@ export function Services() {
 
                     <Link
                       href={`/servicios#${service.id}`}
-                      className={`inline-flex items-center gap-1 text-sm font-medium ${style.icon} opacity-60 group-hover:opacity-100 transition-all group-hover:gap-2`}
+                      className="inline-flex items-center gap-2 text-sm font-bold text-slate-400 hover:text-primary transition-all uppercase tracking-tighter"
                     >
-                      Más información <span className="sr-only">sobre {service.name}</span>
-                      <ArrowRight className="h-3.5 w-3.5" />
+                      Más detalles
+                      <ArrowRight className="h-4 w-4" />
                     </Link>
                   </div>
                 </SpotlightCard>
@@ -130,21 +124,9 @@ export function Services() {
             )
           })}
         </div>
-
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          className="mt-14 flex justify-center"
-        >
-          <Link href="/servicios">
-            <Button variant="outline" size="lg" className="group border-border/60 hover:border-primary/40 hover:bg-primary/5">
-              Ver todos los servicios
-              <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
-            </Button>
-          </Link>
-        </motion.div>
       </div>
     </section>
   )
 }
+
+import { CheckCircle2 } from 'lucide-react'

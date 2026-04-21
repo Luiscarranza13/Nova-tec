@@ -42,34 +42,16 @@ export function Stats() {
   const inView = useInView(ref, { once: true })
 
   return (
-<<<<<<< HEAD
-    <section ref={ref} className="py-16 sm:py-24 relative overflow-hidden">
-      <div className="absolute inset-0 bg-gradient-to-r from-primary/5 via-transparent to-chart-2/5" aria-hidden="true" />
-      <div className="absolute inset-0 bg-grid opacity-15" aria-hidden="true" />
-
-      <div className="container relative z-10 max-w-7xl mx-auto px-4">
-        <div className="grid grid-cols-1 min-[400px]:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5">
-
-          {STATS.map((stat, i) => {
-            const Icon = icons[i]
-            const color = colors[i]
-=======
-    <section ref={ref} className="py-24 relative overflow-hidden">
+    <section ref={ref} className="py-24 relative overflow-hidden bg-white">
       {/* Background */}
-      <div className="absolute inset-0 bg-gradient-to-r from-primary/5 via-transparent to-chart-2/5" />
-      <div className="absolute inset-0 bg-grid opacity-15" />
-      <motion.div
-        animate={{ x: [0, 40, 0], y: [0, -20, 0] }}
-        transition={{ duration: 15, repeat: Infinity, ease: 'easeInOut' }}
-        className="absolute top-0 left-1/4 w-[400px] h-[200px] bg-primary/8 rounded-full blur-[80px] pointer-events-none"
-      />
-
+      <div className="absolute inset-0 bg-slate-50/50" />
+      <div className="absolute inset-0 bg-grid opacity-10" />
+      
       <div className="container relative z-10 max-w-7xl mx-auto px-4">
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-5">
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-8">
           {STATS.map((stat, index) => {
             const Icon = icons[index]
             const color = colors[index]
->>>>>>> 9c2e4531f8850fc3b63c50e442f4d1d8e2949dfe
             return (
               <motion.div
                 key={stat.label}
@@ -77,25 +59,18 @@ export function Stats() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: index * 0.1 }}
-                whileHover={{ y: -4, transition: { duration: 0.2 } }}
-                className="group relative cursor-default"
+                className="group relative"
               >
-                {/* Card */}
-                <div className={`relative rounded-2xl border border-border/50 bg-card/60 backdrop-blur-sm p-4 md:p-6 text-center hover:border-primary/30 hover:shadow-xl ${color.glow} transition-all duration-300 overflow-hidden`}>
-                  {/* Background gradient on hover */}
-                  <div className={`absolute inset-0 bg-gradient-to-br ${color.gradient} opacity-0 group-hover:opacity-100 transition-opacity duration-300`} />
-
-                  <div className="relative z-10">
-                    <div className={`w-9 h-9 md:w-11 md:h-11 rounded-xl ${color.bg} flex items-center justify-center mx-auto mb-3 md:mb-4 group-hover:scale-110 transition-transform duration-300`}>
-                      <Icon className={`h-4 w-4 md:h-5 md:w-5 ${color.text}`} />
-                    </div>
-
-                    <div className={`text-3xl md:text-4xl lg:text-5xl font-bold font-heading ${color.text} mb-1`}>
-                      <Counter value={stat.value} suffix={stat.suffix} active={inView} />
-                    </div>
-
-                    <p className="text-xs md:text-sm text-muted-foreground">{stat.label}</p>
+                <div className={`relative rounded-3xl border border-slate-100 bg-white p-6 md:p-10 text-center hover:border-primary/20 hover:shadow-2xl transition-all duration-500`}>
+                  <div className={`w-12 h-12 md:w-16 md:h-16 rounded-2xl ${color.bg} flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform duration-500`}>
+                    <Icon className={`h-6 w-6 md:h-8 md:w-8 ${color.text}`} />
                   </div>
+
+                  <div className={`text-4xl md:text-6xl font-bold font-heading text-slate-900 mb-2`}>
+                    <Counter value={stat.value} suffix={stat.suffix} active={inView} />
+                  </div>
+
+                  <p className="text-sm md:text-base font-medium text-slate-400 uppercase tracking-widest">{stat.label}</p>
                 </div>
               </motion.div>
             )
