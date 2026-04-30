@@ -176,33 +176,38 @@ export default function ClientesPage() {
           <div className="grid gap-5 py-4">
             <div className="grid sm:grid-cols-2 gap-4">
               <div className="space-y-2">
-                <Label className="text-sm font-medium text-slate-700">Nombre <span className="text-red-500">*</span></Label>
-                <Input value={form.nombre} onChange={e => setForm(p => ({ ...p, nombre: e.target.value }))} placeholder="Nombre completo" />
+                <Label className="text-sm font-semibold text-slate-700">Nombre <span className="text-red-500">*</span></Label>
+                <Input value={form.nombre} onChange={e => setForm(p => ({ ...p, nombre: e.target.value }))} placeholder="Nombre completo"
+                  className="h-11 bg-white border-slate-200 rounded-xl focus:border-indigo-400 text-slate-900 placeholder:text-slate-400" />
               </div>
               <div className="space-y-2">
-                <Label className="text-sm font-medium text-slate-700">Correo <span className="text-red-500">*</span></Label>
-                <Input type="email" value={form.correo} onChange={e => setForm(p => ({ ...p, correo: e.target.value }))} placeholder="email@empresa.com" />
+                <Label className="text-sm font-semibold text-slate-700">Correo <span className="text-red-500">*</span></Label>
+                <Input type="email" value={form.correo} onChange={e => setForm(p => ({ ...p, correo: e.target.value }))} placeholder="email@empresa.com"
+                  className="h-11 bg-white border-slate-200 rounded-xl focus:border-indigo-400 text-slate-900 placeholder:text-slate-400" />
               </div>
             </div>
             <div className="grid sm:grid-cols-2 gap-4">
               <div className="space-y-2">
-                <Label className="text-sm font-medium text-slate-700">Empresa</Label>
-                <Input value={form.empresa} onChange={e => setForm(p => ({ ...p, empresa: e.target.value }))} placeholder="Nombre de la empresa" />
+                <Label className="text-sm font-semibold text-slate-700">Empresa</Label>
+                <Input value={form.empresa} onChange={e => setForm(p => ({ ...p, empresa: e.target.value }))} placeholder="Nombre de la empresa"
+                  className="h-11 bg-white border-slate-200 rounded-xl focus:border-indigo-400 text-slate-900 placeholder:text-slate-400" />
               </div>
               <div className="space-y-2">
-                <Label className="text-sm font-medium text-slate-700">Teléfono</Label>
-                <Input value={form.telefono} onChange={e => setForm(p => ({ ...p, telefono: e.target.value }))} placeholder="+52 55 1234 5678" />
+                <Label className="text-sm font-semibold text-slate-700">Teléfono</Label>
+                <Input value={form.telefono} onChange={e => setForm(p => ({ ...p, telefono: e.target.value }))} placeholder="+51 999 000 000"
+                  className="h-11 bg-white border-slate-200 rounded-xl focus:border-indigo-400 text-slate-900 placeholder:text-slate-400" />
               </div>
             </div>
             <div className="space-y-2">
-              <Label className="text-sm font-medium text-slate-700">Notas</Label>
-              <Textarea value={form.notas} onChange={e => setForm(p => ({ ...p, notas: e.target.value }))} placeholder="Información adicional sobre el cliente..." rows={3} className="resize-none" />
+              <Label className="text-sm font-semibold text-slate-700">Notas</Label>
+              <Textarea value={form.notas} onChange={e => setForm(p => ({ ...p, notas: e.target.value }))} placeholder="Información adicional sobre el cliente..." rows={3}
+                className="bg-white border-slate-200 rounded-xl resize-none text-slate-900 placeholder:text-slate-400 focus:border-indigo-400" />
             </div>
           </div>
           <Separator className="bg-slate-100" />
           <DialogFooter className="pt-2 gap-2">
-            <Button variant="outline" onClick={() => setIsDialogOpen(false)} className="border-slate-200 text-slate-700 hover:bg-slate-50">Cancelar</Button>
-            <Button onClick={guardar} disabled={saving} className="gap-2 min-w-[120px] bg-indigo-600 hover:bg-indigo-700">
+            <Button variant="outline" onClick={() => setIsDialogOpen(false)} className="border-slate-200 text-slate-700 hover:bg-slate-50 rounded-xl">Cancelar</Button>
+            <Button onClick={guardar} disabled={saving} className="gap-2 min-w-[120px] bg-indigo-600 hover:bg-indigo-700 rounded-xl">
               {saving ? <Loader2 className="h-4 w-4 animate-spin" /> : null}
               {saving ? 'Guardando...' : 'Guardar Cliente'}
             </Button>

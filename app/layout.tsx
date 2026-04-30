@@ -20,7 +20,7 @@ const sora = Sora({
   subsets: ["latin"],
   variable: "--font-sora",
   display: "swap",
-  preload: true,
+  preload: false,
   weight: ["600", "700", "800"],
 });
 
@@ -208,6 +208,9 @@ export default function RootLayout({
         <link rel="dns-prefetch" href="https://images.unsplash.com" />
         <link rel="dns-prefetch" href="https://wa.me" />
         <link rel="dns-prefetch" href="https://supabase.co" />
+        <link rel="preconnect" href="https://zjsaiizsmitptuznfusu.supabase.co" />
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <meta name="format-detection" content="telephone=no" />
         {/* CSP + COOP for Best Practices */}
         <meta

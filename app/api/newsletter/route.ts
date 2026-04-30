@@ -17,37 +17,40 @@ export async function POST(req: NextRequest) {
   const parsed = schema.safeParse(body)
   if (!parsed.success) return NextResponse.json({ error: 'Email inválido' }, { status: 422 })
 
+  // Fix 7: service role key para bypass de RLS
   const supabase = createServerClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+    process.env.SUPABASE_SERVICE_ROLE_KEY ?? process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
     { cookies: { getAll: () => [], setAll: () => {} } }
   )
 
   const { error } = await supabase
     .from('newsletter')
-    .upsert({ email: parsed.data.email, suscrito_en: new Date().toISOString() }, { onConflict: 'email' })
+    .upsert({ correo: parsed.data.email, activo: true, suscrito_en: new Date().toISOString() }, { onConflict: 'correo' })
 
-  if (error) return NextResponse.json({ error: 'Error al suscribirse' }, { status: 500 })
+  if (error) {
+    console.error('Newsletter insert error:', error.message)
+    return NextResponse.json({ error: 'Error al suscribirse' }, { status: 500 })
+  }
 
-  // Notificación por correo al administrador
-  try {
-    await fetch('https://formsubmit.co/ajax/carranzacortesluisarmando73@gmail.com', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Accept': 'application/json'
-      },
-      body: JSON.stringify({
-        _subject: '🎉 ¡Nuevo Suscriptor en el Newsletter de NovaTec!',
-        _template: 'box',
-        Mensaje: 'Se acaba de suscribir una nueva persona. Aquí tienes los detalles:',
-        Correo_del_Cliente: parsed.data.email,
-        Fecha_de_Suscripción: new Date().toLocaleString('es-PE', { timeZone: 'America/Lima' }),
-        _autoresponse: '¡Gracias por suscribirte al newsletter de NovaTec! Muy pronto recibirás nuestras novedades.'
+  // Fix 3: email desde variable de entorno
+  const adminEmail = process.env.ADMIN_EMAIL
+  if (adminEmail) {
+    try {
+      await fetch(`https://formsubmit.co/ajax/${adminEmail}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+        body: JSON.stringify({
+          _subject: '🎉 ¡Nuevo Suscriptor en el Newsletter de NovaTec!',
+          _template: 'box',
+          Correo_del_Cliente: parsed.data.email,
+          Fecha_de_Suscripción: new Date().toLocaleString('es-PE', { timeZone: 'America/Lima' }),
+          _autoresponse: '¡Gracias por suscribirte al newsletter de NovaTec! Muy pronto recibirás nuestras novedades.',
+        }),
       })
-    })
-  } catch (e) {
-    console.error('Email notification failed', e)
+    } catch (e) {
+      console.error('Email notification failed', e)
+    }
   }
 
   return NextResponse.json({ success: true })

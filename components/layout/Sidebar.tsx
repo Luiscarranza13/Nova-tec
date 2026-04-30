@@ -18,18 +18,18 @@ import Swal from 'sweetalert2'
 
 const sidebarItems = [
   { label: 'Panel de Control', href: '/admin',                icon: LayoutDashboard, tour: 'dashboard' },
-  { label: 'Clientes',       href: '/admin/clientes',       icon: Users },
-  { label: 'Proyectos',      href: '/admin/proyectos',      icon: FolderKanban,    tour: 'proyectos' },
-  { label: 'Servicios',      href: '/admin/servicios',      icon: Wrench },
-  { label: 'Propuestas',     href: '/admin/cotizaciones',   icon: FileText,        tour: 'cotizaciones' },
-  { label: 'Testimonios',    href: '/admin/testimonios',    icon: Star },
-  { label: 'Mensajes',       href: '/admin/mensajes',       icon: MessageSquare,   tour: 'mensajes' },
-  { label: 'Blog',           href: '/admin/blog',           icon: BookOpen },
-  { label: 'Portafolio',     href: '/admin/portafolio',     icon: Image },
-  { label: 'Newsletter',     href: '/admin/newsletter',     icon: Mail },
-  { label: 'Pipeline',       href: '/admin/pipeline',       icon: Kanban },
-  { label: 'Métricas',       href: '/admin/analytics',      icon: BarChart2 },
-  { label: 'Configuración',  href: '/admin/configuracion',  icon: Settings, tour: 'configuracion' },
+  { label: 'Clientes',        href: '/admin/clientes',       icon: Users },
+  { label: 'Proyectos',       href: '/admin/proyectos',      icon: FolderKanban,    tour: 'proyectos' },
+  { label: 'Servicios',       href: '/admin/servicios',      icon: Wrench },
+  { label: 'Propuestas',      href: '/admin/cotizaciones',   icon: FileText,        tour: 'cotizaciones' },
+  { label: 'Testimonios',     href: '/admin/testimonios',    icon: Star },
+  { label: 'Mensajes',        href: '/admin/mensajes',       icon: MessageSquare,   tour: 'mensajes' },
+  { label: 'Artículos',       href: '/admin/blog',           icon: BookOpen },
+  { label: 'Portafolio',      href: '/admin/portafolio',     icon: Image },
+  { label: 'Boletín',         href: '/admin/newsletter',     icon: Mail },
+  { label: 'Embudo de Ventas',href: '/admin/pipeline',       icon: Kanban },
+  { label: 'Métricas',        href: '/admin/analytics',      icon: BarChart2 },
+  { label: 'Configuración',   href: '/admin/configuracion',  icon: Settings, tour: 'configuracion' },
 ]
 
 interface SidebarProps {

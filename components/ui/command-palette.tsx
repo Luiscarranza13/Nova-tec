@@ -30,8 +30,6 @@ const commands = [
   { group: 'Acciones', items: [
     { label: 'Iniciar Proyecto',  href: '/contacto',  icon: ArrowRight, keywords: 'proyecto nuevo empezar' },
     { label: 'Ver Blog',          href: '/blog',       icon: FileText,   keywords: 'blog articulos posts' },
-    { label: 'Iniciar Sesión',    href: '/login',      icon: LogIn,      keywords: 'login admin acceso' },
-    { label: 'Configuración',     href: '/admin/configuracion', icon: Settings, keywords: 'config admin settings' },
   ]},
 ]
 

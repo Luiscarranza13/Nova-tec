@@ -17,6 +17,7 @@ import { toast } from 'sonner'
 import { supabase } from '@/lib/supabase/client'
 import { formatCurrency } from '@/lib/utils'
 import type { Proyecto, Cliente } from '@/lib/supabase/types'
+import { TechSelector } from '@/components/ui/tech-selector'
 
 const estadoConfig: Record<string, { label: string; variant: string; dot: string }> = {
   pendiente:   { label: 'Pendiente',   variant: 'warning',     dot: 'bg-yellow-500' },
@@ -35,7 +36,7 @@ export default function ProyectosPage() {
   const [isDialogOpen, setIsDialogOpen] = useState(false)
   const [editando, setEditando] = useState<Proyecto | null>(null)
   const [saving, setSaving] = useState(false)
-  const [form, setForm] = useState({ nombre: '', cliente_id: '', estado: 'pendiente', presupuesto: '', progreso: '0', descripcion: '', imagen_url: '', tecnologias: '', url_demo: '', fecha_inicio: '', fecha_fin: '' })
+  const [form, setForm] = useState({ nombre: '', cliente_id: '', estado: 'pendiente', presupuesto: '', progreso: '0', descripcion: '', imagen_url: '', tecnologias: [] as string[], url_demo: '', fecha_inicio: '', fecha_fin: '' })
 
   const cargar = async () => {
     setLoading(true)
@@ -52,13 +53,13 @@ export default function ProyectosPage() {
 
   const abrirNuevo = () => {
     setEditando(null)
-    setForm({ nombre: '', cliente_id: '', estado: 'pendiente', presupuesto: '', progreso: '0', descripcion: '', imagen_url: '', tecnologias: '', url_demo: '', fecha_inicio: '', fecha_fin: '' })
+    setForm({ nombre: '', cliente_id: '', estado: 'pendiente', presupuesto: '', progreso: '0', descripcion: '', imagen_url: '', tecnologias: [], url_demo: '', fecha_inicio: '', fecha_fin: '' })
     setIsDialogOpen(true)
   }
 
   const abrirEditar = (p: Proyecto) => {
     setEditando(p)
-    setForm({ nombre: p.nombre, cliente_id: p.cliente_id || '', estado: p.estado, presupuesto: p.presupuesto?.toString() || '', progreso: p.progreso.toString(), descripcion: p.descripcion || '', imagen_url: p.imagen_url || '', tecnologias: (p.tecnologias || []).join(', '), url_demo: p.url_demo || '', fecha_inicio: p.fecha_inicio || '', fecha_fin: p.fecha_fin || '' })
+    setForm({ nombre: p.nombre, cliente_id: p.cliente_id || '', estado: p.estado, presupuesto: p.presupuesto?.toString() || '', progreso: p.progreso.toString(), descripcion: p.descripcion || '', imagen_url: p.imagen_url || '', tecnologias: p.tecnologias || [], url_demo: p.url_demo || '', fecha_inicio: p.fecha_inicio || '', fecha_fin: p.fecha_fin || '' })
     setIsDialogOpen(true)
   }
 
@@ -73,7 +74,7 @@ export default function ProyectosPage() {
       progreso: parseInt(form.progreso) || 0,
       descripcion: form.descripcion || null,
       imagen_url: form.imagen_url || null,
-      tecnologias: form.tecnologias ? form.tecnologias.split(',').map(t => t.trim()).filter(Boolean) : null,
+      tecnologias: form.tecnologias.length > 0 ? form.tecnologias : null,
       url_demo: form.url_demo || null,
       fecha_inicio: form.fecha_inicio || null,
       fecha_fin: form.fecha_fin || null,
@@ -218,9 +219,8 @@ export default function ProyectosPage() {
       </Card>
 
 
-      {/* Modal */}
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-        <DialogContent className="sm:max-w-[560px]">
+        <DialogContent className="sm:max-w-[560px] max-h-[90vh] overflow-y-auto">
           <DialogHeader className="pb-2">
             <DialogTitle className="text-xl font-bold text-slate-900">{editando ? 'Editar Proyecto' : 'Nuevo Proyecto'}</DialogTitle>
             <p className="text-sm text-slate-500">Completa los datos del proyecto.</p>
@@ -228,69 +228,74 @@ export default function ProyectosPage() {
           <Separator className="bg-slate-100" />
           <div className="grid gap-5 py-4">
             <div className="space-y-2">
-              <Label className="text-sm font-medium text-slate-700">Nombre del Proyecto <span className="text-red-500">*</span></Label>
-              <Input value={form.nombre} onChange={e => setForm(p => ({ ...p, nombre: e.target.value }))} placeholder="Ej. E-commerce Platform" />
+              <Label className="text-sm font-semibold text-slate-700">Nombre del Proyecto <span className="text-red-500">*</span></Label>
+              <Input value={form.nombre} onChange={e => setForm(p => ({ ...p, nombre: e.target.value }))} placeholder="Ej. E-commerce Platform"
+                className="h-11 bg-white border-slate-200 rounded-xl focus:border-indigo-400 text-slate-900 placeholder:text-slate-400" />
             </div>
             <div className="grid sm:grid-cols-2 gap-4">
               <div className="space-y-2">
-                <Label className="text-sm font-medium text-slate-700">Cliente</Label>
+                <Label className="text-sm font-semibold text-slate-700">Cliente</Label>
                 <Select value={form.cliente_id} onValueChange={v => setForm(p => ({ ...p, cliente_id: v }))}>
-                  <SelectTrigger><SelectValue placeholder="Seleccionar cliente" /></SelectTrigger>
+                  <SelectTrigger className="h-11 bg-white border-slate-200 rounded-xl focus:border-indigo-400"><SelectValue placeholder="Seleccionar cliente" /></SelectTrigger>
                   <SelectContent>{clientes.map(c => <SelectItem key={c.id} value={c.id}>{c.nombre}</SelectItem>)}</SelectContent>
                 </Select>
               </div>
               <div className="space-y-2">
-                <Label className="text-sm font-medium text-slate-700">Estado</Label>
+                <Label className="text-sm font-semibold text-slate-700">Estado</Label>
                 <Select value={form.estado} onValueChange={v => setForm(p => ({ ...p, estado: v }))}>
-                  <SelectTrigger><SelectValue /></SelectTrigger>
+                  <SelectTrigger className="h-11 bg-white border-slate-200 rounded-xl focus:border-indigo-400"><SelectValue /></SelectTrigger>
                   <SelectContent>{Object.entries(estadoConfig).map(([v, c]) => <SelectItem key={v} value={v}>{c.label}</SelectItem>)}</SelectContent>
                 </Select>
               </div>
             </div>
             <div className="grid sm:grid-cols-2 gap-4">
               <div className="space-y-2">
-                <Label className="text-sm font-medium text-slate-700">Presupuesto (PEN)</Label>
-                <Input type="number" value={form.presupuesto} onChange={e => setForm(p => ({ ...p, presupuesto: e.target.value }))} placeholder="0.00" />
+                <Label className="text-sm font-semibold text-slate-700">Presupuesto (PEN)</Label>
+                <Input type="number" value={form.presupuesto} onChange={e => setForm(p => ({ ...p, presupuesto: e.target.value }))} placeholder="0.00"
+                  className="h-11 bg-white border-slate-200 rounded-xl focus:border-indigo-400 text-slate-900 placeholder:text-slate-400" />
               </div>
               <div className="space-y-2">
-                <Label className="text-sm font-medium text-slate-700">Progreso (%)</Label>
-                <Input type="number" min="0" max="100" value={form.progreso} onChange={e => setForm(p => ({ ...p, progreso: e.target.value }))} />
+                <Label className="text-sm font-semibold text-slate-700">Progreso (%)</Label>
+                <Input type="number" min="0" max="100" value={form.progreso} onChange={e => setForm(p => ({ ...p, progreso: e.target.value }))}
+                  className="h-11 bg-white border-slate-200 rounded-xl focus:border-indigo-400 text-slate-900" />
               </div>
             </div>
             <div className="grid sm:grid-cols-2 gap-4">
               <div className="space-y-2">
-                <Label className="text-sm font-medium text-slate-700">Fecha de Inicio</Label>
-                <Input type="date" value={form.fecha_inicio} onChange={e => setForm(p => ({ ...p, fecha_inicio: e.target.value }))} />
+                <Label className="text-sm font-semibold text-slate-700">Fecha de Inicio</Label>
+                <Input type="date" value={form.fecha_inicio} onChange={e => setForm(p => ({ ...p, fecha_inicio: e.target.value }))}
+                  className="h-11 bg-white border-slate-200 rounded-xl focus:border-indigo-400 text-slate-900" />
               </div>
               <div className="space-y-2">
-                <Label className="text-sm font-medium text-slate-700">Fecha de Fin</Label>
-                <Input type="date" value={form.fecha_fin} onChange={e => setForm(p => ({ ...p, fecha_fin: e.target.value }))} />
+                <Label className="text-sm font-semibold text-slate-700">Fecha de Fin</Label>
+                <Input type="date" value={form.fecha_fin} onChange={e => setForm(p => ({ ...p, fecha_fin: e.target.value }))}
+                  className="h-11 bg-white border-slate-200 rounded-xl focus:border-indigo-400 text-slate-900" />
               </div>
             </div>
             <div className="space-y-2">
-              <Label className="text-sm font-medium text-slate-700">Descripción</Label>
-              <Textarea value={form.descripcion} onChange={e => setForm(p => ({ ...p, descripcion: e.target.value }))} placeholder="Descripción del proyecto..." rows={3} className="resize-none" />
+              <Label className="text-sm font-semibold text-slate-700">Descripción</Label>
+              <Textarea value={form.descripcion} onChange={e => setForm(p => ({ ...p, descripcion: e.target.value }))} placeholder="Descripción del proyecto..." rows={3}
+                className="bg-white border-slate-200 rounded-xl resize-none text-slate-900 placeholder:text-slate-400 focus:border-indigo-400" />
             </div>
             <div className="space-y-2">
-              <Label className="text-sm font-medium text-slate-700">URL de Imagen</Label>
-              <Input value={form.imagen_url} onChange={e => setForm(p => ({ ...p, imagen_url: e.target.value }))} placeholder="https://images.unsplash.com/..." />
+              <Label className="text-sm font-semibold text-slate-700">URL de Imagen</Label>
+              <Input value={form.imagen_url} onChange={e => setForm(p => ({ ...p, imagen_url: e.target.value }))} placeholder="https://..."
+                className="h-11 bg-white border-slate-200 rounded-xl focus:border-indigo-400 text-slate-900 placeholder:text-slate-400" />
             </div>
-            <div className="grid sm:grid-cols-2 gap-4">
-              <div className="space-y-2">
-                <Label className="text-sm font-medium text-slate-700">Tecnologías</Label>
-                <Input value={form.tecnologias} onChange={e => setForm(p => ({ ...p, tecnologias: e.target.value }))} placeholder="React, Node.js, Supabase" />
-                <p className="text-xs text-slate-400">Separadas por coma</p>
-              </div>
-              <div className="space-y-2">
-                <Label className="text-sm font-medium text-slate-700">URL Demo</Label>
-                <Input value={form.url_demo} onChange={e => setForm(p => ({ ...p, url_demo: e.target.value }))} placeholder="https://demo.proyecto.com" />
-              </div>
+            <div className="space-y-2">
+              <Label className="text-sm font-semibold text-slate-700">Tecnologías utilizadas</Label>
+              <TechSelector value={form.tecnologias} onChange={techs => setForm(p => ({ ...p, tecnologias: techs }))} />
+            </div>
+            <div className="space-y-2">
+              <Label className="text-sm font-semibold text-slate-700">URL Demo</Label>
+              <Input value={form.url_demo} onChange={e => setForm(p => ({ ...p, url_demo: e.target.value }))} placeholder="https://demo.proyecto.com"
+                className="h-11 bg-white border-slate-200 rounded-xl focus:border-indigo-400 text-slate-900 placeholder:text-slate-400" />
             </div>
           </div>
           <Separator className="bg-slate-100" />
           <DialogFooter className="pt-2 gap-2">
-            <Button variant="outline" onClick={() => setIsDialogOpen(false)} className="border-slate-200 text-slate-700 hover:bg-slate-50">Cancelar</Button>
-            <Button onClick={guardar} disabled={saving} className="gap-2 min-w-[130px] bg-indigo-600 hover:bg-indigo-700">
+            <Button variant="outline" onClick={() => setIsDialogOpen(false)} className="border-slate-200 text-slate-700 hover:bg-slate-50 rounded-xl">Cancelar</Button>
+            <Button onClick={guardar} disabled={saving} className="gap-2 min-w-[130px] bg-indigo-600 hover:bg-indigo-700 rounded-xl">
               {saving ? <Loader2 className="h-4 w-4 animate-spin" /> : null}
               {saving ? 'Guardando...' : 'Guardar Proyecto'}
             </Button>

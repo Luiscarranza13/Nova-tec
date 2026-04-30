@@ -20,11 +20,12 @@ import { supabase } from '@/lib/supabase/client'
 import { exportToCSV } from '@/lib/export'
 import type { PortafolioItem } from '@/lib/supabase/types'
 import Image from 'next/image'
+import { TechSelector } from '@/components/ui/tech-selector'
 
 const CATEGORIES = ['Web', 'Móvil', 'Dashboard', 'E-commerce', 'SaaS', 'Otro']
 
 const emptyForm = {
-  nombre: '', descripcion: '', imagen_url: '', tecnologias: '',
+  nombre: '', descripcion: '', imagen_url: '', tecnologias: [] as string[],
   url_demo: '', url_repo: '', categoria: 'Web', cliente: '',
   resultado: '', destacado: false, publicado: true, orden: '0',
 }
@@ -40,7 +41,7 @@ export default function PortafolioAdminPage() {
 
   const load = async () => {
     setLoading(true)
-    const { data } = await supabase.from('portafolio_items').select('*').order('orden')
+    const { data } = await supabase.from('elementos_portafolio').select('*').order('orden')
     setItems(data || [])
     setLoading(false)
   }
@@ -52,8 +53,8 @@ export default function PortafolioAdminPage() {
     setEditing(item)
     setForm({
       nombre: item.nombre, descripcion: item.descripcion || '',
-      imagen_url: item.imagen_url || '', tecnologias: (item.tecnologias || []).join(', '),
-      url_demo: item.url_demo || '', url_repo: item.url_repo || '',
+      imagen_url: item.imagen_url || '', tecnologias: item.tecnologias || [],
+      url_demo: item.url_demo || '', url_repo: item.url_repositorio || '',
       categoria: item.categoria, cliente: item.cliente || '',
       resultado: item.resultado || '', destacado: item.destacado,
       publicado: item.publicado, orden: String(item.orden),
@@ -66,30 +67,30 @@ export default function PortafolioAdminPage() {
     setSaving(true)
     const payload = {
       nombre: form.nombre, descripcion: form.descripcion || null,
-      imagen_url: form.imagen_url || null,
-      tecnologias: form.tecnologias ? form.tecnologias.split(',').map(t => t.trim()).filter(Boolean) : null,
-      url_demo: form.url_demo || null, url_repo: form.url_repo || null,
+      imagen_url: (form.imagen_url && (form.imagen_url.startsWith('http://') || form.imagen_url.startsWith('https://'))) ? form.imagen_url : null,
+      tecnologias: form.tecnologias.length > 0 ? form.tecnologias : null,
+      url_demo: form.url_demo || null, url_repositorio: form.url_repo || null,
       categoria: form.categoria, cliente: form.cliente || null,
       resultado: form.resultado || null, destacado: form.destacado,
       publicado: form.publicado, orden: parseInt(form.orden) || 0,
     }
     const { error } = editing
-      ? await supabase.from('portafolio_items').update(payload).eq('id', editing.id)
-      : await supabase.from('portafolio_items').insert(payload)
+      ? await supabase.from('elementos_portafolio').update(payload).eq('id', editing.id)
+      : await supabase.from('elementos_portafolio').insert(payload)
     if (error) toast.error('Error: ' + error.message)
     else { toast.success(editing ? 'Item actualizado' : 'Item creado'); setOpen(false); load() }
     setSaving(false)
   }
 
   const del = async (id: string) => {
-    const { error } = await supabase.from('portafolio_items').delete().eq('id', id)
+    const { error } = await supabase.from('elementos_portafolio').delete().eq('id', id)
     if (error) { toast.error('Error al eliminar'); return }
     setItems(prev => prev.filter(i => i.id !== id))
     toast.success('Item eliminado')
   }
 
   const togglePublished = async (item: PortafolioItem) => {
-    await supabase.from('portafolio_items').update({ publicado: !item.publicado }).eq('id', item.id)
+    await supabase.from('elementos_portafolio').update({ publicado: !item.publicado }).eq('id', item.id)
     setItems(prev => prev.map(i => i.id === item.id ? { ...i, publicado: !i.publicado } : i))
   }
 
@@ -157,7 +158,7 @@ export default function PortafolioAdminPage() {
               className="group rounded-2xl border border-slate-200 bg-white overflow-hidden hover:shadow-lg transition-all duration-300">
               {/* Image */}
               <div className="relative h-44 bg-gradient-to-br from-slate-100 to-slate-200 overflow-hidden">
-                {item.imagen_url ? (
+                {item.imagen_url && (item.imagen_url.startsWith('http://') || item.imagen_url.startsWith('https://') || item.imagen_url.startsWith('/')) ? (
                   <Image src={item.imagen_url} alt={item.nombre} fill className="object-cover group-hover:scale-105 transition-transform duration-500" sizes="400px" />
                 ) : (
                   <div className="flex items-center justify-center h-full">
@@ -226,76 +227,84 @@ export default function PortafolioAdminPage() {
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogContent className="sm:max-w-[600px] max-h-[90vh] overflow-y-auto">
           <DialogHeader>
-            <DialogTitle>{editing ? 'Editar Item' : 'Nuevo Item de Portafolio'}</DialogTitle>
+            <DialogTitle className="text-xl font-bold text-slate-900">{editing ? 'Editar Item' : 'Nuevo Item de Portafolio'}</DialogTitle>
           </DialogHeader>
-          <Separator />
+          <Separator className="bg-slate-100" />
           <div className="grid gap-4 py-4">
             <div className="grid sm:grid-cols-2 gap-4">
               <div className="space-y-1.5">
-                <Label>Nombre *</Label>
-                <Input value={form.nombre} onChange={e => setForm(p => ({ ...p, nombre: e.target.value }))} placeholder="Nombre del proyecto" />
+                <Label className="text-sm font-semibold text-slate-700">Nombre *</Label>
+                <Input value={form.nombre} onChange={e => setForm(p => ({ ...p, nombre: e.target.value }))} placeholder="Nombre del proyecto"
+                  className="h-11 bg-white border-slate-200 rounded-xl focus:border-cyan-400 text-slate-900 placeholder:text-slate-400" />
               </div>
               <div className="space-y-1.5">
-                <Label>Categoría</Label>
+                <Label className="text-sm font-semibold text-slate-700">Categoría</Label>
                 <Select value={form.categoria} onValueChange={v => setForm(p => ({ ...p, categoria: v }))}>
-                  <SelectTrigger><SelectValue /></SelectTrigger>
+                  <SelectTrigger className="h-11 bg-white border-slate-200 rounded-xl focus:border-cyan-400"><SelectValue /></SelectTrigger>
                   <SelectContent>{CATEGORIES.map(c => <SelectItem key={c} value={c}>{c}</SelectItem>)}</SelectContent>
                 </Select>
               </div>
             </div>
             <div className="space-y-1.5">
-              <Label>Descripción</Label>
-              <Textarea value={form.descripcion} onChange={e => setForm(p => ({ ...p, descripcion: e.target.value }))} rows={3} className="resize-none" />
+              <Label className="text-sm font-semibold text-slate-700">Descripción</Label>
+              <Textarea value={form.descripcion} onChange={e => setForm(p => ({ ...p, descripcion: e.target.value }))} rows={3}
+                className="bg-white border-slate-200 rounded-xl resize-none text-slate-900 placeholder:text-slate-400 focus:border-cyan-400" />
             </div>
             <div className="grid sm:grid-cols-2 gap-4">
               <div className="space-y-1.5">
-                <Label>Cliente</Label>
-                <Input value={form.cliente} onChange={e => setForm(p => ({ ...p, cliente: e.target.value }))} placeholder="Nombre del cliente" />
+                <Label className="text-sm font-semibold text-slate-700">Cliente</Label>
+                <Input value={form.cliente} onChange={e => setForm(p => ({ ...p, cliente: e.target.value }))} placeholder="Nombre del cliente"
+                  className="h-11 bg-white border-slate-200 rounded-xl focus:border-cyan-400 text-slate-900 placeholder:text-slate-400" />
               </div>
               <div className="space-y-1.5">
-                <Label>Resultado / Métrica</Label>
-                <Input value={form.resultado} onChange={e => setForm(p => ({ ...p, resultado: e.target.value }))} placeholder="+180% ventas" />
+                <Label className="text-sm font-semibold text-slate-700">Resultado / Métrica</Label>
+                <Input value={form.resultado} onChange={e => setForm(p => ({ ...p, resultado: e.target.value }))} placeholder="+180% ventas"
+                  className="h-11 bg-white border-slate-200 rounded-xl focus:border-cyan-400 text-slate-900 placeholder:text-slate-400" />
               </div>
             </div>
             <div className="space-y-1.5">
-              <Label>Tecnologías (separadas por coma)</Label>
-              <Input value={form.tecnologias} onChange={e => setForm(p => ({ ...p, tecnologias: e.target.value }))} placeholder="React, Node.js, Supabase" />
+              <Label className="text-sm font-semibold text-slate-700">Tecnologías utilizadas</Label>
+              <TechSelector value={form.tecnologias} onChange={techs => setForm(p => ({ ...p, tecnologias: techs }))} />
             </div>
             <div className="grid sm:grid-cols-2 gap-4">
               <div className="space-y-1.5">
-                <Label>URL Demo</Label>
-                <Input value={form.url_demo} onChange={e => setForm(p => ({ ...p, url_demo: e.target.value }))} placeholder="https://..." />
+                <Label className="text-sm font-semibold text-slate-700">URL Demo</Label>
+                <Input value={form.url_demo} onChange={e => setForm(p => ({ ...p, url_demo: e.target.value }))} placeholder="https://..."
+                  className="h-11 bg-white border-slate-200 rounded-xl focus:border-cyan-400 text-slate-900 placeholder:text-slate-400" />
               </div>
               <div className="space-y-1.5">
-                <Label>URL Repositorio</Label>
-                <Input value={form.url_repo} onChange={e => setForm(p => ({ ...p, url_repo: e.target.value }))} placeholder="https://github.com/..." />
+                <Label className="text-sm font-semibold text-slate-700">URL Repositorio</Label>
+                <Input value={form.url_repo} onChange={e => setForm(p => ({ ...p, url_repo: e.target.value }))} placeholder="https://github.com/..."
+                  className="h-11 bg-white border-slate-200 rounded-xl focus:border-cyan-400 text-slate-900 placeholder:text-slate-400" />
               </div>
             </div>
             <div className="space-y-1.5">
-              <Label>URL Imagen</Label>
-              <Input value={form.imagen_url} onChange={e => setForm(p => ({ ...p, imagen_url: e.target.value }))} placeholder="https://..." />
+              <Label className="text-sm font-semibold text-slate-700">URL Imagen</Label>
+              <Input value={form.imagen_url} onChange={e => setForm(p => ({ ...p, imagen_url: e.target.value }))} placeholder="https://..."
+                className="h-11 bg-white border-slate-200 rounded-xl focus:border-cyan-400 text-slate-900 placeholder:text-slate-400" />
             </div>
             <div className="grid sm:grid-cols-2 gap-4">
               <div className="space-y-1.5">
-                <Label>Orden</Label>
-                <Input type="number" value={form.orden} onChange={e => setForm(p => ({ ...p, orden: e.target.value }))} min="0" />
+                <Label className="text-sm font-semibold text-slate-700">Orden</Label>
+                <Input type="number" value={form.orden} onChange={e => setForm(p => ({ ...p, orden: e.target.value }))} min="0"
+                  className="h-11 bg-white border-slate-200 rounded-xl focus:border-cyan-400 text-slate-900" />
               </div>
               <div className="flex items-end gap-6 pb-1">
                 <label className="flex items-center gap-2 cursor-pointer">
                   <Switch checked={form.publicado} onCheckedChange={v => setForm(p => ({ ...p, publicado: v }))} />
-                  <span className="text-sm">Publicado</span>
+                  <span className="text-sm font-medium text-slate-700">Publicado</span>
                 </label>
                 <label className="flex items-center gap-2 cursor-pointer">
                   <Switch checked={form.destacado} onCheckedChange={v => setForm(p => ({ ...p, destacado: v }))} />
-                  <span className="text-sm">Destacado</span>
+                  <span className="text-sm font-medium text-slate-700">Destacado</span>
                 </label>
               </div>
             </div>
           </div>
-          <Separator />
+          <Separator className="bg-slate-100" />
           <DialogFooter className="gap-2">
-            <Button variant="outline" onClick={() => setOpen(false)}>Cancelar</Button>
-            <Button onClick={save} disabled={saving} className="min-w-[120px]">
+            <Button variant="outline" onClick={() => setOpen(false)} className="border-slate-200 text-slate-700 hover:bg-slate-50 rounded-xl">Cancelar</Button>
+            <Button onClick={save} disabled={saving} className="min-w-[120px] bg-cyan-600 hover:bg-cyan-700 rounded-xl">
               {saving ? <Loader2 className="h-4 w-4 animate-spin" /> : (editing ? 'Actualizar' : 'Crear Item')}
             </Button>
           </DialogFooter>

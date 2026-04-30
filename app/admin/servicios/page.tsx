@@ -159,46 +159,49 @@ export default function ServiciosPage() {
 
       {/* Modal */}
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-        <DialogContent className="sm:max-w-[520px] bg-background border-border">
+        <DialogContent className="sm:max-w-[520px] bg-white border-slate-200">
           <DialogHeader className="pb-2">
-            <DialogTitle className="text-xl font-bold">{editando ? 'Editar Servicio' : 'Nuevo Servicio'}</DialogTitle>
-            <p className="text-sm text-muted-foreground">Completa los datos del servicio.</p>
+            <DialogTitle className="text-xl font-bold text-slate-900">{editando ? 'Editar Servicio' : 'Nuevo Servicio'}</DialogTitle>
+            <p className="text-sm text-slate-500">Completa los datos del servicio.</p>
           </DialogHeader>
-          <Separator />
+          <Separator className="bg-slate-100" />
           <div className="grid gap-5 py-4">
             <div className="space-y-2">
-              <Label className="text-sm font-medium">Nombre <span className="text-destructive">*</span></Label>
-              <Input value={form.nombre} onChange={e => setForm(p => ({ ...p, nombre: e.target.value }))} placeholder="Ej. Desarrollo Web" className="bg-muted/20 border-border/60" />
+              <Label className="text-sm font-semibold text-slate-700">Nombre <span className="text-red-500">*</span></Label>
+              <Input value={form.nombre} onChange={e => setForm(p => ({ ...p, nombre: e.target.value }))} placeholder="Ej. Desarrollo Web"
+                className="h-11 bg-white border-slate-200 rounded-xl focus:border-indigo-400 text-slate-900 placeholder:text-slate-400" />
             </div>
             <div className="grid sm:grid-cols-2 gap-4">
               <div className="space-y-2">
-                <Label className="text-sm font-medium">Categoría</Label>
+                <Label className="text-sm font-semibold text-slate-700">Categoría</Label>
                 <Select value={form.categoria} onValueChange={v => setForm(p => ({ ...p, categoria: v }))}>
-                  <SelectTrigger className="bg-muted/20 border-border/60"><SelectValue /></SelectTrigger>
+                  <SelectTrigger className="h-11 bg-white border-slate-200 rounded-xl focus:border-indigo-400"><SelectValue /></SelectTrigger>
                   <SelectContent>{['Desarrollo', 'Diseño', 'Infraestructura', 'Consultoría'].map(c => <SelectItem key={c} value={c}>{c}</SelectItem>)}</SelectContent>
                 </Select>
               </div>
               <div className="space-y-2">
-                <Label className="text-sm font-medium">Ícono</Label>
+                <Label className="text-sm font-semibold text-slate-700">Ícono</Label>
                 <Select value={form.icono} onValueChange={v => setForm(p => ({ ...p, icono: v }))}>
-                  <SelectTrigger className="bg-muted/20 border-border/60"><SelectValue /></SelectTrigger>
+                  <SelectTrigger className="h-11 bg-white border-slate-200 rounded-xl focus:border-indigo-400"><SelectValue /></SelectTrigger>
                   <SelectContent>{Object.keys(iconMap).map(i => <SelectItem key={i} value={i}>{i}</SelectItem>)}</SelectContent>
                 </Select>
               </div>
             </div>
             <div className="space-y-2">
-              <Label className="text-sm font-medium">Precio (PEN)</Label>
-              <Input type="number" value={form.precio} onChange={e => setForm(p => ({ ...p, precio: e.target.value }))} placeholder="0.00" className="bg-muted/20 border-border/60" />
+              <Label className="text-sm font-semibold text-slate-700">Precio (PEN)</Label>
+              <Input type="number" value={form.precio} onChange={e => setForm(p => ({ ...p, precio: e.target.value }))} placeholder="0.00"
+                className="h-11 bg-white border-slate-200 rounded-xl focus:border-indigo-400 text-slate-900 placeholder:text-slate-400" />
             </div>
             <div className="space-y-2">
-              <Label className="text-sm font-medium">Descripción</Label>
-              <Textarea value={form.descripcion} onChange={e => setForm(p => ({ ...p, descripcion: e.target.value }))} placeholder="Describe brevemente el servicio..." rows={3} className="bg-muted/20 border-border/60 resize-none" />
+              <Label className="text-sm font-semibold text-slate-700">Descripción</Label>
+              <Textarea value={form.descripcion} onChange={e => setForm(p => ({ ...p, descripcion: e.target.value }))} placeholder="Describe brevemente el servicio..." rows={3}
+                className="bg-white border-slate-200 rounded-xl resize-none text-slate-900 placeholder:text-slate-400 focus:border-indigo-400" />
             </div>
           </div>
-          <Separator />
+          <Separator className="bg-slate-100" />
           <DialogFooter className="pt-2 gap-2">
-            <Button variant="outline" onClick={() => setIsDialogOpen(false)} className="border-border/60">Cancelar</Button>
-            <Button onClick={guardar} disabled={saving} className="gap-2 min-w-[130px]">
+            <Button variant="outline" onClick={() => setIsDialogOpen(false)} className="border-slate-200 text-slate-700 hover:bg-slate-50 rounded-xl">Cancelar</Button>
+            <Button onClick={guardar} disabled={saving} className="gap-2 min-w-[130px] bg-indigo-600 hover:bg-indigo-700 rounded-xl">
               {saving ? <Loader2 className="h-4 w-4 animate-spin" /> : null}
               {saving ? 'Guardando...' : 'Guardar Servicio'}
             </Button>

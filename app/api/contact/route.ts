@@ -11,7 +11,6 @@ const schema = z.object({
 })
 
 export async function POST(req: NextRequest) {
-  // Rate limit: 5 requests per minute per IP
   const ip = req.headers.get('x-forwarded-for') ?? req.headers.get('x-real-ip') ?? 'unknown'
   const { success, remaining } = rateLimit(`contact:${ip}`, 5, 60_000)
 
@@ -33,18 +32,20 @@ export async function POST(req: NextRequest) {
 
   const { nombre, email, asunto, mensaje } = parsed.data
 
+  // Fix 7: usar service role key en server-side para bypass de RLS
   const supabase = createServerClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+    process.env.SUPABASE_SERVICE_ROLE_KEY ?? process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
     { cookies: { getAll: () => [], setAll: () => {} } }
   )
 
   const { error } = await supabase.from('mensajes').insert({
     nombre,
-    email,
+    correo: email,
     asunto: asunto || 'Sin asunto',
     mensaje,
     leido: false,
+    resuelto: false,
     creado_en: new Date().toISOString(),
   })
 
@@ -53,27 +54,27 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: 'Error al guardar el mensaje' }, { status: 500 })
   }
 
-  // Notificación por correo al administrador sobre nuevo mensaje de contacto
-  try {
-    await fetch('https://formsubmit.co/ajax/carranzacortesluisarmando73@gmail.com', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Accept': 'application/json'
-      },
-      body: JSON.stringify({
-        _subject: `📩 Nuevo Mensaje: ${asunto || 'Sin Asunto'}`,
-        _template: 'box',
-        Nombre_del_Cliente: nombre,
-        Correo_del_Cliente: email,
-        Asunto: asunto || 'Sin asunto expresado',
-        Mensaje_Recibido: mensaje,
-        _replyto: email, // Para poder responderle al cliente presionando simplemente "Responder" en Gmail
-        _autoresponse: '¡Hola! Hemos recibido tu mensaje en NovaTec. Estaremos leyéndolo y nos contactaremos a la brevedad posible.'
+  // Fix 3: email desde variable de entorno
+  const adminEmail = process.env.ADMIN_EMAIL
+  if (adminEmail) {
+    try {
+      await fetch(`https://formsubmit.co/ajax/${adminEmail}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+        body: JSON.stringify({
+          _subject: `📩 Nuevo Mensaje: ${asunto || 'Sin Asunto'}`,
+          _template: 'box',
+          Nombre_del_Cliente: nombre,
+          Correo_del_Cliente: email,
+          Asunto: asunto || 'Sin asunto expresado',
+          Mensaje_Recibido: mensaje,
+          _replyto: email,
+          _autoresponse: '¡Hola! Hemos recibido tu mensaje en NovaTec. Estaremos leyéndolo y nos contactaremos a la brevedad posible.',
+        }),
       })
-    })
-  } catch (e) {
-    console.error('Email notification failed', e)
+    } catch (e) {
+      console.error('Email notification failed', e)
+    }
   }
 
   return NextResponse.json(

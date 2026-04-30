@@ -31,6 +31,26 @@ function applySecurityHeaders(response: NextResponse) {
   return response;
 }
 
+// Cache del modo mantenimiento (30s) para no hacer query a Supabase en cada request
+let maintCache: { value: boolean; exp: number } | null = null
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+async function isMaintenanceMode(supabase: any): Promise<boolean> {
+  if (maintCache && Date.now() < maintCache.exp) return maintCache.value
+  try {
+    const { data } = await supabase
+      .from('configuracion')
+      .select('valor')
+      .eq('clave', 'modo_mantenimiento')
+      .single()
+    const value = data?.valor === 'true'
+    maintCache = { value, exp: Date.now() + 30_000 }
+    return value
+  } catch {
+    return false
+  }
+}
+
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
@@ -76,26 +96,16 @@ export async function middleware(request: NextRequest) {
     authError = e;
   }
 
-  // Versión segura de la caché de mantenimiento para evitar fetch excesivos
+  // Fix 5: modo mantenimiento cacheado (30s) — evita query a Supabase en cada request
   const isBypassRoute = MAINTENANCE_BYPASS.some((r) => pathname.startsWith(r));
   if (!isBypassRoute) {
-    try {
-      const { data: maint } = await supabase
-        .from("configuracion")
-        .select("valor")
-        .eq("clave", "modo_mantenimiento")
-        .single();
-
-      if (maint?.valor === "true") {
-        return applySecurityHeaders(
-          NextResponse.redirect(new URL("/mantenimiento", request.url)),
-        );
-      }
-    } catch (e) {
-      console.error("Error al verificar modo mantenimiento:", e);
+    const inMaintenance = await isMaintenanceMode(supabase)
+    if (inMaintenance) {
+      return applySecurityHeaders(
+        NextResponse.redirect(new URL("/mantenimiento", request.url)),
+      );
     }
   }
-  // ───────────────────────────────────────────────────────────────────────────
 
   const isProtected = PROTECTED_ROUTES.some((r) => pathname.startsWith(r));
   const isAuthPage = AUTH_ROUTES.some((r) => pathname.startsWith(r));

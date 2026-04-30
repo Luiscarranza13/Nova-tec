@@ -1,9 +1,6 @@
 "use client";
 
-import {
-  ThemeProvider as NextThemesProvider,
-  type ThemeProviderProps,
-} from "next-themes";
+import { ThemeProvider as NextThemesProvider, type ThemeProviderProps } from "next-themes";
 import { Toaster as Sonner } from "sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
@@ -18,8 +15,8 @@ export function Providers({ children, ...props }: ThemeProviderProps) {
       new QueryClient({
         defaultOptions: {
           queries: {
-            staleTime: 2 * 60 * 1000, // 2 min - data stays fresh for 2 minutes
-            gcTime: 10 * 60 * 1000, // 10 min - cache kept for 10 min
+            staleTime: 10 * 60 * 1000,      // 10 min — datos frescos más tiempo
+            gcTime: 30 * 60 * 1000,          // 30 min — cache en memoria
             retry: 1,
             refetchOnWindowFocus: false,
             refetchOnReconnect: "always",
@@ -45,12 +42,7 @@ export function Providers({ children, ...props }: ThemeProviderProps) {
             richColors
             closeButton
             duration={4000}
-            style={
-              {
-                "--sonner-background": "hsl(var(--card))",
-                "--sonner-border": "hsl(var(--border))",
-              } as React.CSSProperties
-            }
+            style={{ "--sonner-background": "hsl(var(--card))", "--sonner-border": "hsl(var(--border))" } as React.CSSProperties}
           />
         </TooltipProvider>
       </NextThemesProvider>

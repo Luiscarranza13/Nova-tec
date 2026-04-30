@@ -36,7 +36,7 @@ export default function NewsletterPage() {
     toast.success('Suscriptor eliminado')
   }
 
-  const filtered = subs.filter(s => s.email.toLowerCase().includes(search.toLowerCase()))
+  const filtered = subs.filter(s => s.correo.toLowerCase().includes(search.toLowerCase()))
   const activos = subs.filter(s => s.activo).length
   const thisMonth = subs.filter(s => new Date(s.suscrito_en).getMonth() === new Date().getMonth()).length
 
@@ -77,7 +77,7 @@ export default function NewsletterPage() {
       {/* Search */}
       <div className="relative max-w-sm">
         <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
-        <Input placeholder="Buscar por email..." value={search} onChange={e => setSearch(e.target.value)}
+        <Input placeholder="Buscar por correo..." value={search} onChange={e => setSearch(e.target.value)}
           className="pl-9 h-10 bg-white border-slate-200 rounded-xl" />
       </div>
 
@@ -99,7 +99,7 @@ export default function NewsletterPage() {
                   <Mail className="h-4 w-4 text-indigo-600" />
                 </div>
                 <div className="flex-1 min-w-0">
-                  <p className="font-medium text-slate-900 truncate">{sub.email}</p>
+                  <p className="font-medium text-slate-900 truncate">{sub.correo}</p>
                   <p className="text-xs text-slate-400 mt-0.5">
                     {new Date(sub.suscrito_en).toLocaleDateString('es-PE', { day: '2-digit', month: 'short', year: 'numeric' })}
                   </p>

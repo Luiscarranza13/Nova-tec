@@ -120,23 +120,12 @@ export type Configuracion = {
 
 export type Newsletter = {
   id: string
-  email: string
+  correo: string
   activo: boolean
   suscrito_en: string
 }
 
-export type ActivityLog = {
-  id: string
-  accion: 'INSERT' | 'UPDATE' | 'DELETE' | 'LOGIN' | 'CONFIG' | 'VIEW'
-  tabla: string
-  descripcion: string
-  usuario_id: string | null
-  usuario_email: string | null
-  metadata: Record<string, unknown> | null
-  creado_en: string
-}
-
-export type BlogPost = {
+export type EntradaBlog = {
   id: string
   titulo: string
   slug: string
@@ -144,7 +133,7 @@ export type BlogPost = {
   contenido: string | null
   imagen_url: string | null
   categoria: string
-  tags: string[] | null
+  etiquetas: string[] | null
   publicado: boolean
   destacado: boolean
   tiempo_lectura: number
@@ -154,14 +143,17 @@ export type BlogPost = {
   actualizado_en: string
 }
 
-export type PortafolioItem = {
+// Alias para compatibilidad con código existente
+export type BlogPost = EntradaBlog
+
+export type ElementoPortafolio = {
   id: string
   nombre: string
   descripcion: string | null
   imagen_url: string | null
   tecnologias: string[] | null
   url_demo: string | null
-  url_repo: string | null
+  url_repositorio: string | null
   categoria: string
   cliente: string | null
   resultado: string | null
@@ -172,11 +164,31 @@ export type PortafolioItem = {
   actualizado_en: string
 }
 
-export type PageView = {
+// Alias para compatibilidad con código existente
+export type PortafolioItem = ElementoPortafolio
+
+export type VisitaPagina = {
   id: string
-  path: string
-  referrer: string | null
-  user_agent: string | null
-  country: string | null
+  ruta: string
+  referidor: string | null
+  agente_usuario: string | null
+  pais: string | null
   creado_en: string
 }
+
+// Alias para compatibilidad con código existente
+export type PageView = VisitaPagina
+
+export type RegistroActividad = {
+  id: string
+  accion: 'INSERTAR' | 'ACTUALIZAR' | 'ELIMINAR' | 'INICIO_SESION' | 'CONFIGURAR' | 'VER'
+  tabla: string
+  descripcion: string
+  usuario_id: string | null
+  correo_usuario: string | null
+  metadatos: Record<string, unknown> | null
+  creado_en: string
+}
+
+// Alias para compatibilidad con código existente
+export type ActivityLog = RegistroActividad

@@ -49,7 +49,7 @@ export default function BlogAdminPage() {
 
   const load = async () => {
     setLoading(true)
-    const { data } = await supabase.from('blog_posts').select('*').order('creado_en', { ascending: false })
+    const { data } = await supabase.from('entradas_blog').select('*').order('creado_en', { ascending: false })
     setPosts(data || [])
     setLoading(false)
   }
@@ -88,15 +88,15 @@ export default function BlogAdminPage() {
       publicado_en: form.publicado ? new Date().toISOString() : null,
     }
     const { error } = editing
-      ? await supabase.from('blog_posts').update(payload).eq('id', editing.id)
-      : await supabase.from('blog_posts').insert(payload)
+      ? await supabase.from('entradas_blog').update(payload).eq('id', editing.id)
+      : await supabase.from('entradas_blog').insert(payload)
     if (error) toast.error('Error al guardar: ' + error.message)
     else { toast.success(editing ? 'Post actualizado' : 'Post creado'); setOpen(false); load() }
     setSaving(false)
   }
 
   const togglePublished = async (p: BlogPost) => {
-    const { error } = await supabase.from('blog_posts')
+    const { error } = await supabase.from('entradas_blog')
       .update({ publicado: !p.publicado, publicado_en: !p.publicado ? new Date().toISOString() : null })
       .eq('id', p.id)
     if (error) { toast.error('Error'); return }
@@ -105,7 +105,7 @@ export default function BlogAdminPage() {
   }
 
   const del = async (id: string) => {
-    const { error } = await supabase.from('blog_posts').delete().eq('id', id)
+    const { error } = await supabase.from('entradas_blog').delete().eq('id', id)
     if (error) { toast.error('Error al eliminar'); return }
     setPosts(prev => prev.filter(p => p.id !== id))
     toast.success('Post eliminado')
@@ -221,61 +221,69 @@ export default function BlogAdminPage() {
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogContent className="sm:max-w-[640px] max-h-[90vh] overflow-y-auto">
           <DialogHeader>
-            <DialogTitle>{editing ? 'Editar Post' : 'Nuevo Post'}</DialogTitle>
+            <DialogTitle className="text-xl font-bold text-slate-900">{editing ? 'Editar Post' : 'Nuevo Post'}</DialogTitle>
           </DialogHeader>
-          <Separator />
+          <Separator className="bg-slate-100" />
           <div className="grid gap-4 py-4">
             <div className="space-y-1.5">
-              <Label>Título *</Label>
+              <Label className="text-sm font-semibold text-slate-700">Título *</Label>
               <Input value={form.titulo} onChange={e => {
                 const t = e.target.value
                 setForm(p => ({ ...p, titulo: t, slug: editing ? p.slug : generateSlug(t) }))
-              }} placeholder="Título del artículo" />
+              }} placeholder="Título del artículo"
+                className="h-11 bg-white border-slate-200 rounded-xl focus:border-violet-400 text-slate-900 placeholder:text-slate-400" />
             </div>
             <div className="space-y-1.5">
-              <Label>Slug *</Label>
-              <Input value={form.slug} onChange={e => setForm(p => ({ ...p, slug: e.target.value }))} placeholder="url-del-articulo" className="font-mono text-sm" />
+              <Label className="text-sm font-semibold text-slate-700">Slug *</Label>
+              <Input value={form.slug} onChange={e => setForm(p => ({ ...p, slug: e.target.value }))} placeholder="url-del-articulo"
+                className="h-11 bg-white border-slate-200 rounded-xl focus:border-violet-400 font-mono text-sm text-slate-900 placeholder:text-slate-400" />
             </div>
             <div className="grid sm:grid-cols-2 gap-4">
               <div className="space-y-1.5">
-                <Label>Categoría</Label>
+                <Label className="text-sm font-semibold text-slate-700">Categoría</Label>
                 <Select value={form.categoria} onValueChange={v => setForm(p => ({ ...p, categoria: v }))}>
-                  <SelectTrigger><SelectValue /></SelectTrigger>
+                  <SelectTrigger className="h-11 bg-white border-slate-200 rounded-xl focus:border-violet-400"><SelectValue /></SelectTrigger>
                   <SelectContent>{CATEGORIES.map(c => <SelectItem key={c} value={c}>{c}</SelectItem>)}</SelectContent>
                 </Select>
               </div>
               <div className="space-y-1.5">
-                <Label>Tiempo de lectura (min)</Label>
-                <Input type="number" min="1" value={form.tiempo_lectura} onChange={e => setForm(p => ({ ...p, tiempo_lectura: e.target.value }))} />
+                <Label className="text-sm font-semibold text-slate-700">Tiempo de lectura (min)</Label>
+                <Input type="number" min="1" value={form.tiempo_lectura} onChange={e => setForm(p => ({ ...p, tiempo_lectura: e.target.value }))}
+                  className="h-11 bg-white border-slate-200 rounded-xl focus:border-violet-400 text-slate-900" />
               </div>
             </div>
             <div className="space-y-1.5">
-              <Label>Extracto</Label>
-              <Textarea value={form.extracto} onChange={e => setForm(p => ({ ...p, extracto: e.target.value }))} rows={2} placeholder="Breve descripción del artículo..." className="resize-none" />
+              <Label className="text-sm font-semibold text-slate-700">Extracto</Label>
+              <Textarea value={form.extracto} onChange={e => setForm(p => ({ ...p, extracto: e.target.value }))} rows={2}
+                placeholder="Breve descripción del artículo..."
+                className="bg-white border-slate-200 rounded-xl resize-none text-slate-900 placeholder:text-slate-400 focus:border-violet-400" />
             </div>
             <div className="space-y-1.5">
-              <Label>Contenido (Markdown)</Label>
-              <Textarea value={form.contenido} onChange={e => setForm(p => ({ ...p, contenido: e.target.value }))} rows={8} placeholder="# Título&#10;&#10;Contenido en Markdown..." className="font-mono text-sm resize-none" />
+              <Label className="text-sm font-semibold text-slate-700">Contenido (Markdown)</Label>
+              <Textarea value={form.contenido} onChange={e => setForm(p => ({ ...p, contenido: e.target.value }))} rows={8}
+                placeholder="# Título&#10;&#10;Contenido en Markdown..."
+                className="bg-white border-slate-200 rounded-xl font-mono text-sm resize-none text-slate-900 placeholder:text-slate-400 focus:border-violet-400" />
             </div>
             <div className="space-y-1.5">
-              <Label>URL de imagen de portada</Label>
-              <Input value={form.imagen_url} onChange={e => setForm(p => ({ ...p, imagen_url: e.target.value }))} placeholder="https://..." />
+              <Label className="text-sm font-semibold text-slate-700">URL de imagen de portada</Label>
+              <Input value={form.imagen_url} onChange={e => setForm(p => ({ ...p, imagen_url: e.target.value }))} placeholder="https://..."
+                className="h-11 bg-white border-slate-200 rounded-xl focus:border-violet-400 text-slate-900 placeholder:text-slate-400" />
             </div>
-            <div className="flex items-center gap-6">
+            <div className="flex items-center gap-6 pt-1">
               <label className="flex items-center gap-2 cursor-pointer">
                 <Switch checked={form.publicado} onCheckedChange={v => setForm(p => ({ ...p, publicado: v }))} />
-                <span className="text-sm font-medium">Publicado</span>
+                <span className="text-sm font-medium text-slate-700">Publicado</span>
               </label>
               <label className="flex items-center gap-2 cursor-pointer">
                 <Switch checked={form.destacado} onCheckedChange={v => setForm(p => ({ ...p, destacado: v }))} />
-                <span className="text-sm font-medium">Destacado</span>
+                <span className="text-sm font-medium text-slate-700">Destacado</span>
               </label>
             </div>
           </div>
-          <Separator />
+          <Separator className="bg-slate-100" />
           <DialogFooter className="gap-2">
-            <Button variant="outline" onClick={() => setOpen(false)}>Cancelar</Button>
-            <Button onClick={save} disabled={saving} className="min-w-[120px]">
+            <Button variant="outline" onClick={() => setOpen(false)} className="border-slate-200 text-slate-700 hover:bg-slate-50 rounded-xl">Cancelar</Button>
+            <Button onClick={save} disabled={saving} className="min-w-[120px] bg-violet-600 hover:bg-violet-700 rounded-xl">
               {saving ? <Loader2 className="h-4 w-4 animate-spin" /> : (editing ? 'Actualizar' : 'Crear Post')}
             </Button>
           </DialogFooter>

@@ -16,16 +16,6 @@ import { toast } from 'sonner'
 import { supabase } from '@/lib/supabase/client'
 import type { Testimonio } from '@/lib/supabase/types'
 
-// ── Datos ficticios de respaldo ──────────────────────────────────
-const MOCK: Testimonio[] = [
-  { id: '1', nombre_cliente: 'María González', empresa: 'RetailMax', comentario: 'NovaTec transformó completamente nuestra presencia digital. Los resultados superaron todas nuestras expectativas. El equipo fue profesional y entregó en tiempo.', calificacion: 5, destacado: true,  creado_en: '2024-03-15', foto_url: null },
-  { id: '2', nombre_cliente: 'Carlos Ruiz',    empresa: 'FinCorp',   comentario: 'Trabajar con NovaTec fue una experiencia excepcional. Entregaron en tiempo y con una calidad impresionante. Sin duda los recomendaría a cualquier empresa.', calificacion: 5, destacado: true,  creado_en: '2024-03-10', foto_url: null },
-  { id: '3', nombre_cliente: 'Ana Martínez',   empresa: 'TechStart', comentario: 'Necesitábamos un partner tecnológico que entendiera el ritmo startup. NovaTec fue exactamente eso: ágiles, creativos y muy comprometidos con el resultado.', calificacion: 5, destacado: false, creado_en: '2024-03-05', foto_url: null },
-  { id: '4', nombre_cliente: 'Roberto Sánchez',empresa: 'FastShip',  comentario: 'La aplicación de logística optimizó nuestras operaciones en un 40%. Increíble trabajo del equipo. La comunicación durante todo el proyecto fue excelente.', calificacion: 5, destacado: true,  creado_en: '2024-02-28', foto_url: null },
-  { id: '5', nombre_cliente: 'Laura Pérez',    empresa: 'MediCare+', comentario: 'El sistema de gestión que desarrollaron para nuestra clínica es exactamente lo que necesitábamos. Intuitivo, rápido y muy bien diseñado.', calificacion: 4, destacado: false, creado_en: '2024-02-20', foto_url: null },
-  { id: '6', nombre_cliente: 'Diego Torres',   empresa: 'EduTech MX',comentario: 'Nuestra plataforma educativa quedó espectacular. Los estudiantes la adoptaron de inmediato y los profesores están encantados con las herramientas.', calificacion: 5, destacado: false, creado_en: '2024-02-15', foto_url: null },
-]
-
 const avatarColors = [
   'bg-violet-100 text-violet-700',
   'bg-blue-100 text-blue-700',
@@ -36,8 +26,8 @@ const avatarColors = [
 ]
 
 export default function TestimoniosPage() {
-  const [testimonios, setTestimonios] = useState<Testimonio[]>(MOCK)
-  const [loading, setLoading] = useState(false)
+  const [testimonios, setTestimonios] = useState<Testimonio[]>([])
+  const [loading, setLoading] = useState(true)
   const [searchTerm, setSearchTerm] = useState('')
   const [isDialogOpen, setIsDialogOpen] = useState(false)
   const [editando, setEditando] = useState<Testimonio | null>(null)
@@ -48,7 +38,8 @@ export default function TestimoniosPage() {
   const cargar = async () => {
     setLoading(true)
     const { data, error } = await supabase.from('testimonios').select('*').order('creado_en', { ascending: false })
-    if (!error && data && data.length > 0) setTestimonios(data)
+    if (error) toast.error('Error al cargar testimonios')
+    else setTestimonios(data || [])
     setLoading(false)
   }
 
@@ -218,24 +209,26 @@ export default function TestimoniosPage() {
           <div className="grid gap-4 py-4">
             <div className="grid sm:grid-cols-2 gap-4">
               <div className="space-y-2">
-                <Label className="text-sm font-medium text-slate-700">Nombre <span className="text-red-500">*</span></Label>
+                <Label className="text-sm font-semibold text-slate-700">Nombre <span className="text-red-500">*</span></Label>
                 <Input value={form.nombre_cliente} onChange={e => setForm(p => ({ ...p, nombre_cliente: e.target.value }))}
-                  placeholder="Nombre completo" className="bg-slate-50 border-slate-200 text-slate-900 h-11 rounded-xl placeholder:text-slate-400" />
+                  placeholder="Nombre completo"
+                  className="h-11 bg-white border-slate-200 rounded-xl focus:border-amber-400 text-slate-900 placeholder:text-slate-400" />
               </div>
               <div className="space-y-2">
-                <Label className="text-sm font-medium text-slate-700">Empresa</Label>
+                <Label className="text-sm font-semibold text-slate-700">Empresa</Label>
                 <Input value={form.empresa} onChange={e => setForm(p => ({ ...p, empresa: e.target.value }))}
-                  placeholder="Nombre de la empresa" className="bg-slate-50 border-slate-200 text-slate-900 h-11 rounded-xl placeholder:text-slate-400" />
+                  placeholder="Nombre de la empresa"
+                  className="h-11 bg-white border-slate-200 rounded-xl focus:border-amber-400 text-slate-900 placeholder:text-slate-400" />
               </div>
             </div>
             <div className="space-y-2">
-              <Label className="text-sm font-medium text-slate-700">Testimonio <span className="text-red-500">*</span></Label>
+              <Label className="text-sm font-semibold text-slate-700">Testimonio <span className="text-red-500">*</span></Label>
               <Textarea value={form.comentario} onChange={e => setForm(p => ({ ...p, comentario: e.target.value }))}
                 placeholder="Escribe el testimonio..." rows={4}
-                className="bg-slate-50 border-slate-200 text-slate-900 rounded-xl resize-none placeholder:text-slate-400" />
+                className="bg-white border-slate-200 rounded-xl resize-none text-slate-900 placeholder:text-slate-400 focus:border-amber-400" />
             </div>
             <div className="space-y-2">
-              <Label className="text-sm font-medium text-slate-700">Calificación</Label>
+              <Label className="text-sm font-semibold text-slate-700">Calificación</Label>
               <div className="flex gap-1">
                 {[1,2,3,4,5].map(star => (
                   <button key={star} type="button" onClick={() => setCalificacion(star)} className="p-1 hover:scale-110 transition-transform">
@@ -247,7 +240,7 @@ export default function TestimoniosPage() {
           </div>
           <Separator className="bg-slate-100" />
           <DialogFooter className="pt-2 gap-2">
-            <Button variant="outline" onClick={() => setIsDialogOpen(false)} className="border-slate-200 text-slate-600 rounded-xl">Cancelar</Button>
+            <Button variant="outline" onClick={() => setIsDialogOpen(false)} className="border-slate-200 text-slate-600 rounded-xl hover:bg-slate-50">Cancelar</Button>
             <Button onClick={guardar} disabled={saving}
               className="bg-gradient-to-r from-amber-500 to-orange-500 text-white border-0 rounded-xl hover:from-amber-400 hover:to-orange-400 min-w-[130px]">
               {saving ? <Loader2 className="h-4 w-4 animate-spin" /> : 'Guardar Testimonio'}

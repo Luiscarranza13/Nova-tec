@@ -475,3 +475,28 @@
   transform: translateY(0);
   transition: opacity 0.3s ease-out, transform 0.3s ease-out;
 }
+
+/* ─── Performance ────────────────────────────────────────────────────────────── */
+/* Secciones below-the-fold: el navegador omite render hasta que sean visibles */
+section:not(:first-child) {
+  content-visibility: auto;
+  contain-intrinsic-size: 0 600px;
+}
+
+/* Evitar layout shift en imágenes */
+img { height: auto; }
+
+/* GPU acceleration para animaciones */
+.animate-spin,
+.animate-bounce,
+.animate-pulse {
+  will-change: transform;
+}
+
+/* Reducir repaints en hover de cards */
+.group {
+  will-change: auto;
+}
+.group:hover {
+  will-change: transform;
+}
