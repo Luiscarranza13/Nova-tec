@@ -4,7 +4,8 @@ import { createServerClient } from '@supabase/ssr'
 export async function GET(req: NextRequest) {
   const supabase = createServerClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.SUPABASE_SERVICE_ROLE_KEY ?? process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,`n    { cookies: { getAll: () => [], setAll: () => {} } }
+    process.env.SUPABASE_SERVICE_ROLE_KEY ?? process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+    { cookies: { getAll: () => [], setAll: () => {} } }
   )
 
   const { searchParams } = new URL(req.url)
@@ -12,7 +13,7 @@ export async function GET(req: NextRequest) {
   const since = new Date(Date.now() - days * 24 * 60 * 60 * 1000).toISOString()
 
   const [
-    { data: vistas, count: totalVistas },
+    { count: totalVistas },
     { data: todasVistas },
     { data: visitasDiarias },
   ] = await Promise.all([
@@ -21,7 +22,6 @@ export async function GET(req: NextRequest) {
     supabase.from('visitas_pagina').select('creado_en').gte('creado_en', since).order('creado_en'),
   ])
 
-  // Contar por ruta
   const conteoRutas: Record<string, number> = {}
   ;(todasVistas || []).forEach(v => {
     conteoRutas[v.ruta] = (conteoRutas[v.ruta] || 0) + 1
@@ -31,7 +31,6 @@ export async function GET(req: NextRequest) {
     .slice(0, 10)
     .map(([path, count]) => ({ path, count }))
 
-  // Visitas por día
   const conteoDiario: Record<string, number> = {}
   ;(visitasDiarias || []).forEach(v => {
     const dia = v.creado_en.split('T')[0]

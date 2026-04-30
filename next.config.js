@@ -3,6 +3,7 @@ const nextConfig = {
   reactStrictMode: true,
   compress: true,
   poweredByHeader: false,
+  outputFileTracingRoot: __dirname,
 
   images: {
     formats: ["image/avif", "image/webp"],
@@ -61,7 +62,6 @@ const nextConfig = {
 
   experimental: {
     optimizeCss: true,
-    outputFileTracingRoot: __dirname,
     optimizePackageImports: [
       "lucide-react",
       "framer-motion",
