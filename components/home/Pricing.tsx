@@ -1,15 +1,12 @@
 'use client'
 
-import dynamic from 'next/dynamic'
+import { motion } from 'framer-motion'
 import { Check, Sparkles, ArrowRight } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { PRICING_PLANS } from '@/lib/constants'
 import { formatCurrency } from '@/lib/utils'
 import Link from 'next/link'
 import { trackEvent } from '@/lib/analytics'
-
-// Lazy load Framer Motion
-const motion = dynamic(() => import('framer-motion').then(mod => ({ default: mod.motion })), { ssr: false })
 
 export function Pricing() {
   return (

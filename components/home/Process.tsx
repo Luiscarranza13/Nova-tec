@@ -1,13 +1,9 @@
 'use client'
 
-import dynamic from 'next/dynamic'
+import { motion, useInView } from 'framer-motion'
 import { Search, PenTool, Code2, Bug, Rocket } from 'lucide-react'
 import { PROCESS_STEPS } from '@/lib/constants'
 import { useRef } from 'react'
-
-// Lazy load Framer Motion
-const motion = dynamic(() => import('framer-motion').then(mod => ({ default: mod.motion })), { ssr: false })
-const useInView = dynamic(() => import('framer-motion').then(mod => ({ default: mod.useInView })), { ssr: false }) as any
 
 const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
   Search, PenTool, Code2, Bug, Rocket,

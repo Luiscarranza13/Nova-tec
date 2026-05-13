@@ -1,6 +1,6 @@
 'use client';
 
-import dynamic from 'next/dynamic';
+import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 import Image from "next/image";
 import { useEffect, useState } from "react";
@@ -11,10 +11,6 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { supabase } from "@/lib/supabase/client";
-
-// Lazy load Framer Motion
-const motion = dynamic(() => import('framer-motion').then(mod => ({ default: mod.motion })), { ssr: false });
-const AnimatePresence = dynamic(() => import('framer-motion').then(mod => ({ default: mod.AnimatePresence })), { ssr: false });
 
 const categories = ["Todos", "En Progreso", "Completado", "En Revisión"];
 
