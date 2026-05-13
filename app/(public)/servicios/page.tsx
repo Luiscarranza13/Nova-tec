@@ -378,8 +378,8 @@ export default function ServiciosPage() {
       precio: null as number | null,
       activo: true,
       orden: i + 1,
-      created_at: '',
-      updated_at: '',
+      creado_en: '',
+      actualizado_en: '',
     } as Servicio))
 
   const [servicios, setServicios] = useState<Servicio[]>(buildStatic())

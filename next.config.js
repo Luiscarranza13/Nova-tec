@@ -2,11 +2,9 @@
 
 // ── Fix SSL certificate verification errors in local dev on Windows ──────────
 // The error UNABLE_TO_VERIFY_LEAF_SIGNATURE causes every external fetch
-// (Supabase, Unsplash, etc.) to fail/timeout, making ALL pages slow.
-// This is safe: only active when NODE_ENV !== 'production'.
-if (process.env.NODE_ENV !== 'production') {
-  process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0'
-}
+// (Supabase, Unsplash, Google Fonts, etc.) to fail/timeout.
+// Safe to disable locally — Vercel has proper certs in production.
+process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0'
 
 const nextConfig = {
   reactStrictMode: true,
