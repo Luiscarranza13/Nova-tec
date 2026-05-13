@@ -392,6 +392,8 @@ function SocialTab({ saveMultiple }: { saveMultiple: (pairs: Record<string, stri
 }
 
 // ─── Main Page ────────────────────────────────────────────────────────────────
+export const dynamic = 'force-dynamic'
+
 export default function ConfiguracionPage() {
   const saveMultiple = async (pairs: Record<string, string>) => {
     const rows = Object.entries(pairs).map(([clave, valor]) => ({ clave, valor, actualizado_en: new Date().toISOString() }))

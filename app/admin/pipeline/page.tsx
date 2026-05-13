@@ -62,6 +62,8 @@ function KanbanCard({ lead, isDragging }: { lead: Lead; isDragging?: boolean }) 
   )
 }
 
+export const dynamic = 'force-dynamic'
+
 export default function PipelinePage() {
   const [columns, setColumns] = useState<Record<string, Lead[]>>({
     borrador: [], enviada: [], aceptada: [], rechazada: [],

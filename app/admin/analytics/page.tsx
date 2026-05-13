@@ -32,6 +32,8 @@ type AnalyticsData = {
 
 const DAYS_OPTIONS = [7, 14, 30, 90];
 
+export const dynamic = 'force-dynamic'
+
 export default function AnalyticsPage() {
   const [data, setData] = useState<AnalyticsData | null>(null);
   const [loading, setLoading] = useState(true);

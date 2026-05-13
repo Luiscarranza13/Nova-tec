@@ -53,6 +53,8 @@ const fmt = (n: number) =>
 const fmtDate = (d: string) =>
   new Date(d).toLocaleDateString('es-MX', { day: '2-digit', month: 'short', year: 'numeric' })
 
+export const dynamic = 'force-dynamic'
+
 export default function CotizacionesPage() {
   const [cotizaciones, setCotizaciones] = useState<any[]>(MOCK_COTIZACIONES)
   const [clientes, setClientes] = useState<any[]>(MOCK_CLIENTES)

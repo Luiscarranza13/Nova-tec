@@ -22,6 +22,8 @@ import type { Servicio } from '@/lib/supabase/types'
 const iconMap: Record<string, React.ComponentType<{ className?: string }>> = { Globe, Smartphone, Code, Palette, Cloud, Lightbulb }
 const categoriaColors: Record<string, string> = { Desarrollo: 'bg-blue-500/10 text-blue-500', Diseño: 'bg-pink-500/10 text-pink-500', Infraestructura: 'bg-orange-500/10 text-orange-500', Consultoría: 'bg-green-500/10 text-green-500' }
 
+export const dynamic = 'force-dynamic'
+
 export default function ServiciosPage() {
   const [servicios, setServicios] = useState<Servicio[]>([])
   const [loading, setLoading] = useState(true)

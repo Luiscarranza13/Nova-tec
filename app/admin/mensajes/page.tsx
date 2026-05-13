@@ -31,6 +31,8 @@ const avatarColors = [
   'bg-cyan-100 text-cyan-700',
 ]
 
+export const dynamic = 'force-dynamic'
+
 export default function MensajesPage() {
   const [mensajes, setMensajes] = useState<Mensaje[]>(MOCK)
   const [loading, setLoading] = useState(false)

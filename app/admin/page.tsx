@@ -84,6 +84,8 @@ const estadoConfig: Record<
   },
 };
 
+export const dynamic = 'force-dynamic'
+
 export default function DashboardPage() {
   const [stats, setStats] = useState<Stats>({
     clientes: 0,

@@ -10,6 +10,8 @@ import { supabase } from '@/lib/supabase/client'
 import { exportToCSV } from '@/lib/export'
 import type { Newsletter } from '@/lib/supabase/types'
 
+export const dynamic = 'force-dynamic'
+
 export default function NewsletterPage() {
   const [subs, setSubs] = useState<Newsletter[]>([])
   const [loading, setLoading] = useState(true)

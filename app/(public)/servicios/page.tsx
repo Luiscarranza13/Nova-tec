@@ -14,7 +14,7 @@ import {
   DollarSign, Star, Loader2,
 } from 'lucide-react'
 import Link from 'next/link'
-import { supabase } from '@/lib/supabase/client'
+import { supabase, isSupabaseConfigured } from '@/lib/supabase/client'
 import type { Servicio } from '@/lib/supabase/types'
 import { SERVICES } from '@/lib/constants'
 
@@ -387,6 +387,11 @@ export default function ServiciosPage() {
   const [activeCategory, setActiveCategory] = useState('Todos')
 
   useEffect(() => {
+    // Only try to load from Supabase if it's configured
+    if (!isSupabaseConfigured()) {
+      return
+    }
+
     // Try to enrich with live Supabase data (3s timeout, non-blocking)
     const controller = new AbortController()
     const timeout = setTimeout(() => controller.abort(), 3000)

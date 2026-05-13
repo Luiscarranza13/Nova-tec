@@ -18,6 +18,8 @@ import { supabase } from '@/lib/supabase/client'
 import { exportToCSV } from '@/lib/export'
 import type { Cliente } from '@/lib/supabase/types'
 
+export const dynamic = 'force-dynamic'
+
 export default function ClientesPage() {
   const [clientes, setClientes] = useState<Cliente[]>([])
   const [loading, setLoading] = useState(true)

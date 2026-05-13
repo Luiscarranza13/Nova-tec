@@ -2,10 +2,10 @@
 
 import Script from 'next/script'
 import { usePathname, useSearchParams } from 'next/navigation'
-import { useEffect } from 'react'
+import { useEffect, Suspense } from 'react'
 import { FB_PIXEL_ID, fbTrack, isProduction } from '@/lib/analytics'
 
-export function FacebookPixel() {
+function FacebookPixelInner() {
   const pathname = usePathname()
   const searchParams = useSearchParams()
 
@@ -49,5 +49,13 @@ export function FacebookPixel() {
         />
       </noscript>
     </>
+  )
+}
+
+export function FacebookPixel() {
+  return (
+    <Suspense fallback={null}>
+      <FacebookPixelInner />
+    </Suspense>
   )
 }

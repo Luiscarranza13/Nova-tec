@@ -30,6 +30,8 @@ const emptyForm = {
   resultado: '', destacado: false, publicado: true, orden: '0',
 }
 
+export const dynamic = 'force-dynamic'
+
 export default function PortafolioAdminPage() {
   const [items, setItems] = useState<PortafolioItem[]>([])
   const [loading, setLoading] = useState(true)

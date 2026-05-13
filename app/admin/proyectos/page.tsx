@@ -27,6 +27,8 @@ const estadoConfig: Record<string, { label: string; variant: string; dot: string
   cancelado:   { label: 'Cancelado',   variant: 'destructive', dot: 'bg-red-500' },
 }
 
+export const dynamic = 'force-dynamic'
+
 export default function ProyectosPage() {
   const [proyectos, setProyectos] = useState<(Proyecto & { clientes: Cliente | null })[]>([])
   const [clientes, setClientes] = useState<Cliente[]>([])

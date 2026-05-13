@@ -38,6 +38,8 @@ const emptyForm = {
   publicado: false, destacado: false,
 }
 
+export const dynamic = 'force-dynamic'
+
 export default function BlogAdminPage() {
   const [posts, setPosts] = useState<BlogPost[]>([])
   const [loading, setLoading] = useState(true)
