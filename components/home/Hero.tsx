@@ -51,7 +51,7 @@ function TypewriterWord() {
   return (
     <span className="text-gradient inline-block min-w-[100px] sm:min-w-[160px]">
       {displayed}
-      <span className="animate-pulse text-primary">|</span>
+      <span className="text-primary opacity-75">|</span>
     </span>
   )
 }
@@ -63,8 +63,12 @@ export function Hero() {
   const springY = useSpring(mouseY, { stiffness: 30, damping: 20 })
 
   const [deferredPrompt, setDeferredPrompt] = useState<any>(null)
+  const [isMobile, setIsMobile] = useState(false)
 
   useEffect(() => {
+    // Detectar móvil para reducir animaciones
+    setIsMobile(window.innerWidth < 768)
+    
     const handleBeforeInstall = (e: any) => {
       e.preventDefault();
       setDeferredPrompt(e);
@@ -169,17 +173,21 @@ export function Hero() {
     >
       <div className="absolute inset-0 bg-grid opacity-10" />
 
-      {/* Animated aurora blobs */}
-      <motion.div
-        animate={{ x: [0, 60, -40, 0], y: [0, -80, 40, 0], scale: [1, 1.2, 0.9, 1] }}
-        transition={{ duration: 18, repeat: Infinity, ease: 'easeInOut' }}
-        className="absolute top-[-10%] left-[-5%] w-[700px] h-[700px] rounded-full bg-primary/10 blur-[120px] pointer-events-none"
-      />
-      <motion.div
-        animate={{ x: [0, -50, 70, 0], y: [0, 60, -50, 0], scale: [1, 0.85, 1.15, 1] }}
-        transition={{ duration: 22, repeat: Infinity, ease: 'easeInOut', delay: 3 }}
-        className="absolute bottom-[-10%] right-[-5%] w-[600px] h-[600px] rounded-full bg-chart-2/10 blur-[100px] pointer-events-none"
-      />
+      {/* Animated aurora blobs - Reducidas en móvil */}
+      {!isMobile && (
+        <>
+          <motion.div
+            animate={{ x: [0, 60, -40, 0], y: [0, -80, 40, 0], scale: [1, 1.2, 0.9, 1] }}
+            transition={{ duration: 18, repeat: Infinity, ease: 'easeInOut' }}
+            className="absolute top-[-10%] left-[-5%] w-[700px] h-[700px] rounded-full bg-primary/10 blur-[120px] pointer-events-none"
+          />
+          <motion.div
+            animate={{ x: [0, -50, 70, 0], y: [0, 60, -50, 0], scale: [1, 0.85, 1.15, 1] }}
+            transition={{ duration: 22, repeat: Infinity, ease: 'easeInOut', delay: 3 }}
+            className="absolute bottom-[-10%] right-[-5%] w-[600px] h-[600px] rounded-full bg-chart-2/10 blur-[100px] pointer-events-none"
+          />
+        </>
+      )}
 
       <div className="container mx-auto px-5 sm:px-6 max-w-7xl relative z-10 pt-10 pb-8 md:pt-14 md:pb-12 w-full">
         <div className="grid lg:grid-cols-2 gap-8 xl:gap-16 items-center">
@@ -188,13 +196,12 @@ export function Hero() {
           <div className="flex flex-col items-start">
             {/* Badge */}
             <motion.div
-              initial={{ opacity: 0, y: -16 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5 }}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.3 }}
               className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-primary/25 bg-primary/8 backdrop-blur-sm mb-5"
             >
               <span className="relative flex h-2 w-2">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75" />
                 <span className="relative inline-flex rounded-full h-2 w-2 bg-primary" />
               </span>
               <Sparkles className="h-3.5 w-3.5 text-primary" />
@@ -203,9 +210,9 @@ export function Hero() {
 
             {/* Headline */}
             <motion.h1
-              initial={{ opacity: 0, y: 24 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.1 }}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.4, delay: 0.1 }}
               className="text-[clamp(1.75rem,6vw,3.75rem)] font-bold font-heading leading-[1.05] tracking-tight mb-4 text-slate-900"
             >
               Convertimos tus{' '}
@@ -217,9 +224,9 @@ export function Hero() {
 
             {/* Subtitle */}
             <motion.p
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.2 }}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.4, delay: 0.2 }}
               className="text-base sm:text-lg text-slate-500 max-w-xl leading-relaxed mb-5"
             >
               Somos tu socio estratégico en tecnología. Creamos soluciones innovadoras,
@@ -231,9 +238,9 @@ export function Hero() {
               {benefits.map((b, i) => (
                 <motion.div
                   key={b}
-                  initial={{ opacity: 0, x: -10 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: 0.35 + i * 0.07 }}
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ delay: 0.3 + i * 0.05 }}
                   className="flex items-center gap-2 text-sm text-slate-500"
                 >
                   <CheckCircle2 className="h-4 w-4 text-primary shrink-0" />
@@ -306,11 +313,10 @@ export function Hero() {
 
           {/* Right column */}
           <motion.div
-            initial={{ opacity: 0, x: 40, scale: 0.95 }}
-            animate={{ opacity: 1, x: 0, scale: 1 }}
-            transition={{ duration: 0.7, delay: 0.25 }}
-            style={{ rotateX: springY, rotateY: springX }}
-            className="hidden lg:block relative perspective-1000"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.5, delay: 0.2 }}
+            className="hidden lg:block relative"
           >
             <div className="relative rounded-3xl border border-slate-200 bg-white/80 backdrop-blur-xl p-8 shadow-2xl">
               {/* Window bar */}
@@ -354,12 +360,16 @@ export function Hero() {
               </div>
             </div>
 
-            {/* Floating cards */}
+            {/* Floating cards - Animación simple */}
             {floatingCards.map((card, i) => (
               <motion.div
                 key={i}
-                animate={{ y: [0, 8, 0] }}
-                transition={{ duration: 4, repeat: Infinity, delay: card.delay }}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1, y: [0, 6, 0] }}
+                transition={{ 
+                  opacity: { duration: 0.3, delay: 0.5 + i * 0.1 },
+                  y: { duration: 3, repeat: Infinity, delay: card.delay }
+                }}
                 className={`absolute ${card.pos} bg-white rounded-xl px-4 py-3 shadow-xl border border-slate-100 min-w-[170px] hidden xl:block`}
               >
                 <div className="flex items-center gap-3">

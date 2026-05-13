@@ -371,15 +371,25 @@ export default function RootLayout({
       <head>
         <link rel="dns-prefetch" href="https://images.unsplash.com" />
         <link rel="dns-prefetch" href="https://wa.me" />
-        <link rel="dns-prefetch" href="https://supabase.co" />
-        <link
-          rel="preconnect"
-          href="https://zjsaiizsmitptuznfusu.supabase.co"
-        />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link
           rel="preconnect"
           href="https://fonts.gstatic.com"
+          crossOrigin="anonymous"
+        />
+        {/* Preload critical fonts */}
+        <link
+          rel="preload"
+          href="/_next/static/media/3dc379dc9b5dec12-s.woff2"
+          as="font"
+          type="font/woff2"
+          crossOrigin="anonymous"
+        />
+        <link
+          rel="preload"
+          href="/_next/static/media/e4af272ccee01ff0-s.p.woff2"
+          as="font"
+          type="font/woff2"
           crossOrigin="anonymous"
         />
         <meta name="format-detection" content="telephone=no" />
