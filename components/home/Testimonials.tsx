@@ -1,9 +1,13 @@
 'use client'
 
-import { motion, AnimatePresence } from 'framer-motion'
+import dynamic from 'next/dynamic'
 import { Quote, Star, ChevronLeft, ChevronRight, TrendingUp } from 'lucide-react'
 import { useState, useEffect } from 'react'
 import Image from 'next/image'
+
+// Lazy load Framer Motion
+const motion = dynamic(() => import('framer-motion').then(mod => ({ default: mod.motion })), { ssr: false })
+const AnimatePresence = dynamic(() => import('framer-motion').then(mod => ({ default: mod.AnimatePresence })), { ssr: false })
 
 const testimonials = [
   {

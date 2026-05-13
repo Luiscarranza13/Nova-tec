@@ -1,10 +1,13 @@
 'use client'
 
-import { motion } from 'framer-motion'
+import dynamic from 'next/dynamic'
 import { ArrowRight, Sparkles, Calendar, CheckCircle2, Zap } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import Link from 'next/link'
 import { useState, useEffect } from 'react'
+
+// Lazy load Framer Motion
+const motion = dynamic(() => import('framer-motion').then(mod => ({ default: mod.motion })), { ssr: false })
 
 const stats = [
   { value: '250+', label: 'Proyectos entregados' },

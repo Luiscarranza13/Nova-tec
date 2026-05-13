@@ -1,10 +1,14 @@
 'use client'
 
-import { motion, AnimatePresence } from 'framer-motion'
+import dynamic from 'next/dynamic'
 import { ChevronDown } from 'lucide-react'
 import { useState } from 'react'
 import { FAQ_ITEMS } from '@/lib/constants'
 import { cn } from '@/lib/utils'
+
+// Lazy load Framer Motion
+const motion = dynamic(() => import('framer-motion').then(mod => ({ default: mod.motion })), { ssr: false })
+const AnimatePresence = dynamic(() => import('framer-motion').then(mod => ({ default: mod.AnimatePresence })), { ssr: false })
 
 type FAQCategory = 'todos' | 'proyecto' | 'precio' | 'tecnico' | 'soporte' | 'empresa'
 

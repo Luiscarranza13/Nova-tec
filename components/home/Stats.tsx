@@ -1,9 +1,13 @@
 'use client'
 
+import dynamic from 'next/dynamic'
 import { useEffect, useRef, useState } from 'react'
-import { motion, useInView } from 'framer-motion'
 import { STATS } from '@/lib/constants'
 import { TrendingUp, Users, Briefcase, Award } from 'lucide-react'
+
+// Lazy load Framer Motion
+const motion = dynamic(() => import('framer-motion').then(mod => ({ default: mod.motion })), { ssr: false })
+const useInView = dynamic(() => import('framer-motion').then(mod => ({ default: mod.useInView })), { ssr: false }) as any
 
 const icons = [Briefcase, Users, Award, TrendingUp]
 const colors = [

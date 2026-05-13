@@ -1,12 +1,17 @@
 'use client'
 
+import dynamic from 'next/dynamic'
 import Link from 'next/link'
-import { motion, useMotionValue, useTransform } from 'framer-motion'
 import { ArrowRight, Globe, Smartphone, Code, Palette, Cloud, Lightbulb } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { SERVICES } from '@/lib/constants'
 import { useRef } from 'react'
 import { trackEvent } from '@/lib/analytics'
+
+// Lazy load Framer Motion
+const motion = dynamic(() => import('framer-motion').then(mod => ({ default: mod.motion })), { ssr: false })
+const useMotionValue = dynamic(() => import('framer-motion').then(mod => ({ default: mod.useMotionValue })), { ssr: false }) as any
+const useTransform = dynamic(() => import('framer-motion').then(mod => ({ default: mod.useTransform })), { ssr: false }) as any
 
 const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
   Globe, Smartphone, Code, Palette, Cloud, Lightbulb,

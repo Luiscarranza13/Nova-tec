@@ -9,6 +9,15 @@ module.exports = {
     './app/**/*.{js,ts,jsx,tsx,mdx}',
     './src/**/*.{js,ts,jsx,tsx,mdx}',
   ],
+  safelist: [
+    // Clases dinámicas usadas en componentes
+    'from-blue-500/15', 'to-cyan-500/15', 'hover:border-blue-500/40', 'text-blue-500', 'bg-blue-500/10',
+    'from-violet-500/15', 'to-purple-500/15', 'hover:border-violet-500/40', 'text-violet-500', 'bg-violet-500/10',
+    'from-primary/15', 'to-indigo-500/15', 'hover:border-primary/40', 'bg-primary/10',
+    'from-pink-500/15', 'to-rose-500/15', 'hover:border-pink-500/40', 'text-pink-500', 'bg-pink-500/10',
+    'from-cyan-500/15', 'to-teal-500/15', 'hover:border-cyan-500/40', 'text-cyan-500', 'bg-cyan-500/10',
+    'from-amber-500/15', 'to-orange-500/15', 'hover:border-amber-500/40', 'text-amber-500', 'bg-amber-500/10',
+  ],
   theme: {
     container: {
       center: true,
