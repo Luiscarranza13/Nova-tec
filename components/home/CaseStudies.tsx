@@ -15,33 +15,33 @@ const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
 
 export function CaseStudies() {
   return (
-    <section id="casos-exito" className="py-32 relative overflow-hidden">
-      <div className="absolute inset-0 bg-gradient-to-b from-transparent via-card/30 to-transparent" />
+    <section id="casos-exito" className="home-section">
+      <div className="absolute inset-0 bg-gradient-to-b from-transparent via-card/20 to-transparent" />
 
-      <div className="container relative z-10 max-w-7xl mx-auto px-4">
+      <div className="section-container">
         {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="max-w-2xl mb-16"
+          className="max-w-2xl mb-8 md:mb-10"
         >
           <span className="inline-flex items-center gap-2 text-xs font-semibold text-primary uppercase tracking-widest mb-4">
             <span className="w-8 h-px bg-primary" />
             Casos de Éxito
           </span>
-          <h2 className="text-4xl md:text-5xl font-bold font-heading leading-tight mb-4">
+          <h2 className="text-2xl md:text-3xl font-bold font-heading leading-tight mb-3">
             Proyectos que
             <br />
             <span className="text-gradient">generaron impacto</span>
           </h2>
-          <p className="text-muted-foreground text-lg">
+          <p className="text-muted-foreground text-sm md:text-base">
             Descubre cómo ayudamos a empresas a lograr sus objetivos con soluciones tecnológicas innovadoras.
           </p>
         </motion.div>
 
         {/* Grid */}
-        <div className="grid md:grid-cols-3 gap-6">
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5 md:gap-6">
           {CASE_STUDIES.map((study, idx) => (
             <motion.div
               key={study.id}
@@ -49,7 +49,7 @@ export function CaseStudies() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: idx * 0.1 }}
-              className="group relative rounded-2xl border border-border/50 bg-card/60 backdrop-blur-sm overflow-hidden hover:border-primary/30 transition-all duration-300 p-8"
+              className="group relative rounded-2xl border border-slate-200 bg-white shadow-sm overflow-hidden hover:border-primary/30 transition-all duration-300 p-8"
             >
               {/* Gradient Background */}
               <div className={`absolute inset-0 bg-gradient-to-br ${study.client.includes('Logistics') ? 'from-amber-500/5 to-orange-500/5' : study.client.includes('FinCorp') ? 'from-emerald-500/5 to-teal-500/5' : 'from-blue-500/5 to-cyan-500/5'} opacity-0 group-hover:opacity-100 transition-opacity duration-300`} />
@@ -115,7 +115,7 @@ export function CaseStudies() {
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="text-center mt-16"
+          className="text-center mt-8"
         >
           <p className="text-muted-foreground mb-6">
             ¿Tienes un proyecto similar? Queremos ayudarte a lograrlo.

@@ -48,7 +48,7 @@ function TypewriterWord() {
   }, [displayed, deleting, index])
 
   return (
-    <span className="text-gradient inline-block min-w-[180px]">
+    <span className="text-gradient inline-block min-w-[100px] sm:min-w-[160px]">
       {displayed}
       <span className="animate-pulse text-primary">|</span>
     </span>
@@ -73,14 +73,12 @@ export function Hero() {
   }, []);
 
   const handleInstallClick = () => {
-    // Si el navegador soporta el evento nativo directamente, disparamos la instalación sin interrumpir con modals extra
     if (deferredPrompt) {
       deferredPrompt.prompt();
       deferredPrompt.userChoice.then(() => setDeferredPrompt(null));
       return;
     }
 
-    // Modal moderno súper estético de Fallback para iOS o navegadores de escritorio que requieren pasos manuales
     const installHtml = `
       <div class="text-left font-sans pb-1 pt-2">
         <div class="flex items-center gap-4 mb-7 relative px-1">
@@ -165,10 +163,10 @@ export function Hero() {
 
   return (
     <section
-      className="relative min-h-screen flex items-center overflow-hidden bg-slate-50"
+      className="relative min-h-[100svh] sm:min-h-[85vh] flex items-center overflow-hidden bg-white"
       onMouseMove={handleMouseMove}
     >
-      <div className="absolute inset-0 bg-grid opacity-20" />
+      <div className="absolute inset-0 bg-grid opacity-10" />
 
       {/* Animated aurora blobs */}
       <motion.div
@@ -182,8 +180,8 @@ export function Hero() {
         className="absolute bottom-[-10%] right-[-5%] w-[600px] h-[600px] rounded-full bg-chart-2/10 blur-[100px] pointer-events-none"
       />
 
-      <div className="container relative z-10 max-w-7xl mx-auto px-4 pt-24 pb-12 md:pt-32 md:pb-20">
-        <div className="grid lg:grid-cols-2 gap-8 xl:gap-20 items-center">
+      <div className="container mx-auto px-5 sm:px-6 max-w-7xl relative z-10 pt-10 pb-8 md:pt-14 md:pb-12 w-full">
+        <div className="grid lg:grid-cols-2 gap-8 xl:gap-16 items-center">
 
           {/* Left column */}
           <div className="flex flex-col items-start">
@@ -192,7 +190,7 @@ export function Hero() {
               initial={{ opacity: 0, y: -16 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5 }}
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-primary/25 bg-primary/8 backdrop-blur-sm mb-8"
+              className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-primary/25 bg-primary/8 backdrop-blur-sm mb-5"
             >
               <span className="relative flex h-2 w-2">
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75" />
@@ -207,7 +205,7 @@ export function Hero() {
               initial={{ opacity: 0, y: 24 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.1 }}
-              className="text-4xl md:text-5xl lg:text-7xl font-bold font-heading leading-[1.05] tracking-tight mb-6 text-slate-900"
+              className="text-[clamp(1.75rem,6vw,3.75rem)] font-bold font-heading leading-[1.05] tracking-tight mb-4 text-slate-900"
             >
               Convertimos tus{' '}
               <br />
@@ -221,14 +219,14 @@ export function Hero() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.2 }}
-              className="text-lg text-slate-500 max-w-xl leading-relaxed mb-8"
+              className="text-base sm:text-lg text-slate-500 max-w-xl leading-relaxed mb-5"
             >
               Somos tu socio estratégico en tecnología. Creamos soluciones innovadoras,
               escalables y de alta calidad que impulsan el crecimiento de tu negocio.
             </motion.p>
 
             {/* Benefits */}
-            <div className="grid grid-cols-2 gap-x-6 gap-y-2.5 mb-10">
+            <div className="grid grid-cols-2 gap-x-6 gap-y-2 mb-6">
               {benefits.map((b, i) => (
                 <motion.div
                   key={b}
@@ -244,21 +242,21 @@ export function Hero() {
             </div>
 
             {/* CTAs */}
-            <div className="flex flex-col sm:flex-row flex-wrap gap-4 mb-10 w-full lg:w-auto">
+            <div className="flex flex-col sm:flex-row flex-wrap gap-3 mb-6 w-full">
               <Link href="/contacto" className="w-full sm:w-auto">
-                <Button size="xl" className="group shadow-lg shadow-primary/30 w-full sm:min-w-[200px]">
+                <Button size="lg" className="group shadow-lg shadow-primary/30 w-full sm:min-w-[160px]">
                   Iniciar Proyecto
-                  <ArrowRight className="ml-2 h-5 w-5 transition-transform group-hover:translate-x-1" />
+                  <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
                 </Button>
               </Link>
               <Link href="/portafolio" className="w-full sm:w-auto">
-                <Button size="xl" variant="outline" className="group w-full sm:min-w-[200px] border-slate-200">
-                  <Zap className="mr-2 h-5 w-5 text-amber-500" />
+                <Button size="lg" variant="outline" className="group w-full sm:min-w-[160px] border-slate-200">
+                  <Zap className="mr-2 h-4 w-4 text-amber-500" />
                   Ver Portafolio
                 </Button>
               </Link>
-              <Button size="xl" variant="outline" onClick={handleInstallClick} className="group w-full sm:w-auto sm:min-w-[200px] border-slate-200 bg-white hover:bg-slate-50 transition-colors">
-                <Download className="mr-2 h-5 w-5 text-blue-500" />
+              <Button size="lg" variant="outline" onClick={handleInstallClick} className="group w-full sm:w-auto sm:min-w-[160px] border-slate-200 bg-white hover:bg-slate-50 transition-colors">
+                <Download className="mr-2 h-4 w-4 text-blue-500" />
                 Descargar App
               </Button>
             </div>

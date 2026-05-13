@@ -42,17 +42,11 @@ export function Stats() {
   const inView = useInView(ref, { once: true })
 
   return (
-    <section ref={ref} className="py-16 lg:py-24 relative overflow-hidden">
-      <div className="absolute inset-0 bg-gradient-to-r from-primary/5 via-transparent to-chart-2/5" />
-      <div className="absolute inset-0 bg-grid opacity-15" />
-      <motion.div
-        animate={{ x: [0, 40, 0], y: [0, -20, 0] }}
-        transition={{ duration: 15, repeat: Infinity, ease: 'easeInOut' }}
-        className="absolute top-0 left-1/4 w-[400px] h-[200px] bg-primary/8 rounded-full blur-[80px] pointer-events-none"
-      />
-
-      <div className="container relative z-10 max-w-7xl mx-auto px-4">
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 lg:gap-5">
+    <section ref={ref} className="home-section">
+      <div className="absolute inset-0 bg-gradient-to-r from-primary/3 via-transparent to-chart-2/3" />
+      <div className="absolute inset-0 bg-grid opacity-10" />
+      <div className="section-container">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-5">
           {STATS.map((stat, index) => {
             const Icon = icons[index]
             const color = colors[index]
@@ -66,9 +60,7 @@ export function Stats() {
                 whileHover={{ y: -4, transition: { duration: 0.2 } }}
                 className="group relative cursor-default"
               >
-                {/* Card */}
-                <div className={`relative rounded-2xl border border-border/50 bg-card/60 backdrop-blur-sm p-4 lg:p-6 text-center hover:border-primary/30 hover:shadow-xl ${color.glow} transition-all duration-300 overflow-hidden`}>
-                  {/* Background gradient on hover */}
+                <div className={`relative rounded-2xl border border-slate-200 bg-white shadow-sm p-4 md:p-6 text-center hover:border-primary/30 hover:shadow-xl ${color.glow} transition-all duration-300 overflow-hidden`}>
                   <div className={`absolute inset-0 bg-gradient-to-br ${color.gradient} opacity-0 group-hover:opacity-100 transition-opacity duration-300`} />
 
                   <div className="relative z-10">
@@ -76,7 +68,7 @@ export function Stats() {
                       <Icon className={`h-4 w-4 lg:h-5 lg:w-5 ${color.text}`} />
                     </div>
 
-                    <div className={`text-3xl lg:text-5xl font-bold font-heading ${color.text} mb-1`}>
+                    <div className={`text-2xl sm:text-3xl lg:text-5xl font-bold font-heading ${color.text} mb-1`}>
                       <Counter value={stat.value} suffix={stat.suffix} active={inView} />
                     </div>
 

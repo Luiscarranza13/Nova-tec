@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
@@ -73,10 +73,10 @@ export function Portfolio() {
         });
 
   return (
-    <section id="portafolio" className="py-24 md:py-32 relative overflow-hidden bg-slate-50/30">
-      <div className="container relative z-10 max-w-7xl mx-auto px-4">
+    <section id="portafolio" className="home-section">
+      <div className="section-container">
         {/* Header */}
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-8">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -86,7 +86,7 @@ export function Portfolio() {
               <span className="w-8 h-px bg-primary" />
               Nuestro Trabajo
             </span>
-            <h2 className="text-3xl md:text-5xl font-bold font-heading leading-tight text-slate-900">
+            <h2 className="text-2xl md:text-3xl font-bold font-heading leading-tight">
               Proyectos que están
               <br />
               <span className="text-gradient">transformando ideas</span>
@@ -114,7 +114,7 @@ export function Portfolio() {
           initial={{ opacity: 0, y: 16 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="flex gap-2 mb-10 flex-wrap"
+          className="flex gap-2 mb-6 flex-wrap"
         >
           {categories.map((cat) => (
             <button
@@ -162,7 +162,7 @@ export function Portfolio() {
               </p>
             </div>
           ) : (
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
               <AnimatePresence mode="popLayout">
                 {filtered.map((project, index) => (
                   <motion.div
@@ -195,7 +195,7 @@ export function Portfolio() {
                         />
                       ) : (
                         <div className={`absolute inset-0 bg-gradient-to-br ${gradients[index % gradients.length]} flex items-center justify-center`}>
-                           <FolderKanban className="h-12 w-12 text-slate-200" />
+                          <FolderKanban className="h-12 w-12 text-slate-200" />
                         </div>
                       )}
 
@@ -230,7 +230,7 @@ export function Portfolio() {
                           </a>
                         )}
                       </div>
-                      
+
                       {project.descripcion && (
                         <p className="text-sm text-slate-500 mb-6 leading-relaxed line-clamp-2">
                           {project.descripcion}
@@ -239,18 +239,18 @@ export function Portfolio() {
 
                       {/* Progreso */}
                       <div className="mb-6 pt-4 border-t border-slate-50">
-                         <div className="flex justify-between text-[11px] mb-2">
-                           <span className="text-slate-400 font-medium uppercase tracking-wider">Desarrollo</span>
-                           <span className="text-slate-900 font-bold">{project.progreso}%</span>
-                         </div>
-                         <div className="h-1.5 bg-slate-100 rounded-full overflow-hidden">
-                           <motion.div
-                             initial={{ width: 0 }}
-                             animate={{ width: `${project.progreso}%` }}
-                             transition={{ duration: 1, delay: 0.5 }}
-                             className="h-full bg-primary rounded-full"
-                           />
-                         </div>
+                        <div className="flex justify-between text-[11px] mb-2">
+                          <span className="text-slate-400 font-medium uppercase tracking-wider">Desarrollo</span>
+                          <span className="text-slate-900 font-bold">{project.progreso}%</span>
+                        </div>
+                        <div className="h-1.5 bg-slate-100 rounded-full overflow-hidden">
+                          <motion.div
+                            initial={{ width: 0 }}
+                            animate={{ width: `${project.progreso}%` }}
+                            transition={{ duration: 1, delay: 0.5 }}
+                            className="h-full bg-primary rounded-full"
+                          />
+                        </div>
                       </div>
 
                       <div className="flex flex-wrap gap-1.5">

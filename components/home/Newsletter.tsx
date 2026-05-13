@@ -42,7 +42,7 @@ export function Newsletter() {
   }
 
   return (
-    <section className="py-24 relative overflow-hidden">
+    <section className="home-section">
       {/* Background */}
       <div className="absolute inset-0 bg-gradient-to-br from-primary/8 via-transparent to-chart-2/8" />
       <div className="absolute inset-0 bg-dots opacity-20" />
@@ -52,12 +52,12 @@ export function Newsletter() {
         className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[300px] bg-primary rounded-full blur-[100px] pointer-events-none"
       />
 
-      <div className="container relative z-10 max-w-4xl mx-auto px-4">
+      <div className="section-container">
         <motion.div
           initial={{ opacity: 0, y: 24 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="rounded-3xl border border-border/50 bg-card/60 backdrop-blur-xl p-10 md:p-14 text-center shadow-2xl shadow-primary/5"
+          className="rounded-3xl border border-slate-200 bg-white p-8 md:p-10 text-center shadow-xl"
         >
           {/* Icon */}
           <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-primary/10 border border-primary/20 mb-6 mx-auto">
@@ -70,17 +70,17 @@ export function Newsletter() {
             <span className="text-xs font-semibold text-primary">Newsletter Gratuito</span>
           </div>
 
-          <h2 className="text-3xl md:text-4xl font-bold font-heading mb-3">
+          <h2 className="text-2xl md:text-3xl font-bold font-heading mb-3">
             Mantente al día con
             <br />
             <span className="text-gradient">las últimas tendencias tech</span>
           </h2>
-          <p className="text-muted-foreground text-base mb-8 max-w-xl mx-auto">
+          <p className="text-muted-foreground text-sm md:text-base mb-6 max-w-xl mx-auto">
             Únete a más de 500 profesionales que reciben contenido exclusivo sobre desarrollo, diseño y tecnología.
           </p>
 
           {/* Perks */}
-          <div className="flex flex-wrap justify-center gap-4 mb-10">
+          <div className="flex flex-wrap justify-center gap-3 mb-6">
             {perks.map(({ icon: Icon, text }) => (
               <div key={text} className="flex items-center gap-2 text-sm text-muted-foreground">
                 <Icon className="h-4 w-4 text-primary shrink-0" />

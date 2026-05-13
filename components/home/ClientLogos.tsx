@@ -24,10 +24,10 @@ export function ClientLogos() {
   const { ref, inView } = useInView({ triggerOnce: true, threshold: 0.1 })
 
   return (
-    <section ref={ref} className="py-16 relative overflow-hidden" aria-label="Clientes que confían en nosotros">
-      <div className="container max-w-6xl mx-auto px-4">
+    <section ref={ref} className="home-section" aria-label="Clientes que confían en nosotros">
+      <div className="section-container">
         <div
-          className="text-center mb-10"
+          className="text-center mb-6"
           style={{ opacity: inView ? 1 : 0, transform: inView ? 'none' : 'translateY(16px)', transition: 'opacity 0.5s ease, transform 0.5s ease' }}
         >
           <p className="text-xs font-semibold text-muted-foreground uppercase tracking-widest mb-2">
@@ -48,7 +48,7 @@ export function ClientLogos() {
               }}
             >
               <div className={`w-14 h-14 rounded-2xl bg-gradient-to-br ${client.color} p-0.5 shadow-lg group-hover:shadow-xl transition-shadow`}>
-                <div className="w-full h-full rounded-[14px] bg-card flex items-center justify-center">
+                <div className="w-full h-full rounded-[14px] bg-white flex items-center justify-center">
                   <span className="text-xs font-bold text-foreground" aria-hidden="true">{client.abbr}</span>
                 </div>
               </div>
@@ -60,7 +60,7 @@ export function ClientLogos() {
         </div>
 
         <div
-          className="flex flex-wrap justify-center gap-8 mt-12 pt-8 border-t border-border/30"
+          className="flex flex-wrap justify-center gap-6 mt-8 pt-6 border-t border-border/30"
           style={{ opacity: inView ? 1 : 0, transition: 'opacity 0.6s ease 0.4s' }}
         >
           {trust.map(({ value, label }) => (

@@ -1,14 +1,23 @@
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: 'Servicios — Desarrollo Web, Móvil y Software a Medida',
+  title: 'Servicios de Desarrollo Web, Apps y Software a Medida en Cajamarca, Perú',
   description:
-    'Descubre todos los servicios de NovaTec: desarrollo web, apps móviles, software a medida, diseño UI/UX, soluciones cloud y consultoría tecnológica en Cajamarca, Perú.',
+    'NovaTec ofrece desarrollo web profesional, aplicaciones móviles iOS/Android, software a medida, diseño UI/UX y consultoría tecnológica en Cajamarca, Perú. Cotiza gratis.',
+  keywords: [
+    'servicios de desarrollo web Cajamarca',
+    'desarrollo de software a medida Perú',
+    'aplicaciones móviles Cajamarca',
+    'diseño web profesional Perú',
+    'consultoría tecnológica Cajamarca',
+    'agencia digital Cajamarca',
+    'NovaTec servicios',
+  ],
   alternates: { canonical: '/servicios' },
   openGraph: {
-    title: 'Servicios | NovaTec',
+    title: 'Servicios de Desarrollo Web y Software | NovaTec Cajamarca',
     description:
-      'Desarrollo web, apps móviles, software a medida, diseño UI/UX y más. Soluciones tecnológicas premium en Lima, Perú.',
+      'Desarrollo web, apps móviles, software a medida, diseño UI/UX y consultoría tecnológica en Cajamarca, Perú. Cotiza gratis con NovaTec.',
     url: '/servicios',
   },
 }

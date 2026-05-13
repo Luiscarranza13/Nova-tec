@@ -1,9 +1,9 @@
 'use client'
 
-import Link from 'next/link'
 import { motion } from 'framer-motion'
 import { ArrowRight, Sparkles, Calendar, CheckCircle2, Zap } from 'lucide-react'
 import { Button } from '@/components/ui/button'
+import Link from 'next/link'
 import { useState, useEffect } from 'react'
 
 const stats = [
@@ -27,8 +27,8 @@ export function CTA() {
   }, [])
 
   return (
-    <section className="py-24 md:py-32 relative overflow-hidden bg-white">
-      <div className="absolute inset-0 bg-slate-50 opacity-50" />
+    <section className="home-section">
+      <div className="absolute inset-0 bg-white opacity-50" />
       <div className="absolute inset-0 bg-grid opacity-10" />
 
       {/* Floating particles */}
@@ -42,14 +42,14 @@ export function CTA() {
         />
       ))}
 
-      <div className="container relative z-10 max-w-5xl mx-auto px-4">
+      <div className="section-container">
         <div className="text-center">
           {/* Badge */}
           <motion.div
             initial={{ opacity: 0, y: -16 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-slate-200 bg-white shadow-sm mb-8"
+            className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-slate-200 bg-white shadow-sm mb-4"
           >
             <span className="relative flex h-2 w-2">
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75" />
@@ -63,40 +63,40 @@ export function CTA() {
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="text-4xl md:text-5xl lg:text-6xl font-bold font-heading text-slate-900 leading-tight mb-8"
+            className="text-3xl md:text-4xl font-bold font-heading text-slate-900 leading-tight mb-4"
           >
-            ¿Listo para llevar tu
+            ¿Listo para llevar tu negocio
             <br />
-            negocio al <span className="text-primary">siguiente nivel?</span>
+            al <span className="text-primary">siguiente nivel?</span>
           </motion.h2>
 
           <motion.p
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="text-lg text-slate-500 max-w-2xl mx-auto mb-12 leading-relaxed"
+            className="text-base text-slate-500 max-w-xl mx-auto mb-7 leading-relaxed"
           >
             Únete a más de 120 empresas que ya confían en NovaTec para transformar
             sus ideas en productos digitales de alto impacto.
           </motion.p>
 
-          <div className="flex flex-col sm:flex-row gap-4 justify-center mb-16">
+          <div className="flex flex-col sm:flex-row gap-3 justify-center mb-8">
             <Link href="/contacto" className="w-full sm:w-auto">
-              <Button size="xl" className="w-full sm:min-w-[220px] shadow-lg shadow-primary/30">
-                <Zap className="mr-2 h-5 w-5" />
+              <Button size="lg" className="w-full sm:min-w-[200px] shadow-lg shadow-primary/30">
+                <Zap className="mr-2 h-4 w-4" />
                 Iniciar Proyecto
-                <ArrowRight className="ml-2 h-5 w-5" />
+                <ArrowRight className="ml-2 h-4 w-4" />
               </Button>
             </Link>
             <a href="https://calendly.com/novatec" target="_blank" rel="noopener noreferrer" className="w-full sm:w-auto">
-              <Button size="xl" variant="outline" className="w-full sm:min-w-[220px] border-slate-200">
-                <Calendar className="mr-2 h-5 w-5 text-slate-400" />
+              <Button size="lg" variant="outline" className="w-full sm:min-w-[200px] border-slate-200">
+                <Calendar className="mr-2 h-4 w-4 text-slate-400" />
                 Agendar Reunión
               </Button>
             </a>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-8 pt-16 border-t border-slate-100">
+          <div className="grid grid-cols-3 gap-4 pt-6 border-t border-slate-100">
             {stats.map((s, i) => (
               <motion.div
                 key={s.label}
@@ -105,8 +105,8 @@ export function CTA() {
                 viewport={{ once: true }}
                 transition={{ delay: i * 0.1 }}
               >
-                <p className="text-3xl md:text-4xl font-bold text-slate-900">{s.value}</p>
-                <p className="text-sm text-slate-400 mt-1 uppercase tracking-widest font-medium">{s.label}</p>
+                <p className="text-xl sm:text-2xl md:text-3xl font-bold text-slate-900">{s.value}</p>
+                <p className="text-[10px] sm:text-xs text-slate-400 mt-0.5 uppercase tracking-widest font-medium leading-tight">{s.label}</p>
               </motion.div>
             ))}
           </div>

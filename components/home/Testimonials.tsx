@@ -99,57 +99,49 @@ export function Testimonials() {
   const t = testimonials[current]
 
   return (
-    <section id="testimonios" className="py-16 lg:py-32 relative overflow-hidden">
-      <div className="absolute inset-0 bg-gradient-to-b from-transparent via-primary/3 to-transparent" />
+    <section id="testimonios" className="home-section">
+      <div className="absolute inset-0 bg-gradient-to-b from-transparent via-primary/2 to-transparent" />
       <div className="hidden md:block absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[400px] bg-primary/5 rounded-full blur-[100px] pointer-events-none" />
 
       {/* Floating orbs */}
       <motion.div
         animate={{ y: [0, -18, 0], x: [0, 10, 0] }}
         transition={{ duration: 8, repeat: Infinity, ease: 'easeInOut' }}
-        className="absolute top-20 left-[10%] w-64 h-64 rounded-full blur-3xl opacity-[0.06]"
+        className="absolute top-20 left-[10%] w-64 h-64 rounded-full blur-3xl opacity-[0.04]"
         style={{ background: t.color }}
       />
       <motion.div
         animate={{ y: [0, 14, 0], x: [0, -8, 0] }}
         transition={{ duration: 10, repeat: Infinity, ease: 'easeInOut', delay: 1 }}
-        className="absolute bottom-20 right-[10%] w-48 h-48 rounded-full blur-3xl opacity-[0.06]"
+        className="absolute bottom-20 right-[10%] w-48 h-48 rounded-full blur-3xl opacity-[0.04]"
         style={{ background: t.color }}
       />
 
-      <div className="container relative z-10 max-w-6xl mx-auto px-4">
-
+      <div className="section-container">
         {/* Header */}
         <motion.div
-          initial={{ opacity: 0, y: 30 }}
+          initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.7 }}
-          className="text-center max-w-2xl mx-auto mb-20"
+          className="text-center max-w-xl mx-auto mb-8"
         >
-          <motion.span
-            initial={{ opacity: 0, scaleX: 0.5 }}
-            whileInView={{ opacity: 1, scaleX: 1 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6, delay: 0.2 }}
-            className="inline-flex items-center gap-3 text-xs font-semibold text-primary uppercase tracking-[0.25em] mb-6"
-          >
-            <span className="w-12 h-px bg-gradient-to-r from-transparent to-primary" />
+          <span className="inline-flex items-center gap-3 text-xs font-semibold text-primary uppercase tracking-[0.2em] mb-3">
+            <span className="w-8 h-px bg-gradient-to-r from-transparent to-primary" />
             Testimonios
-            <span className="w-12 h-px bg-gradient-to-l from-transparent to-primary" />
-          </motion.span>
-          <h2 className="text-3xl lg:text-5xl font-bold font-heading leading-tight mb-5">
+            <span className="w-8 h-px bg-gradient-to-l from-transparent to-primary" />
+          </span>
+          <h2 className="text-2xl md:text-3xl font-bold font-heading leading-tight mb-2">
             Lo que dicen{' '}
             <span className="text-gradient">nuestros clientes</span>
           </h2>
-          <p className="text-muted-foreground text-lg leading-relaxed">
+          <p className="text-sm text-muted-foreground">
             La satisfacción de nuestros clientes es nuestro mayor logro.
           </p>
         </motion.div>
 
         {/* Main carousel */}
         <div className="max-w-4xl mx-auto">
-          <div className="relative overflow-hidden rounded-3xl border border-border/50 bg-card/60 backdrop-blur-sm min-h-[280px]">
+          <div className="relative overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-sm min-h-[280px]">
             <AnimatePresence mode="wait" custom={direction}>
               <motion.div
                 key={t.id}
@@ -158,22 +150,22 @@ export function Testimonials() {
                 animate={{ opacity: 1, x: 0 }}
                 exit={{ opacity: 0, x: direction * -60 }}
                 transition={{ duration: 0.35, ease: 'easeInOut' }}
-                className="p-6 lg:p-14"
+                className="p-5 lg:p-10"
               >
                 {/* Quote icon */}
-                <div className={`w-12 h-12 rounded-2xl bg-gradient-to-br ${t.gradient} opacity-20 flex items-center justify-center mb-8`}>
-                  <Quote className="h-6 w-6 text-foreground" />
+                <div className={`w-8 h-8 rounded-xl bg-gradient-to-br ${t.gradient} opacity-20 flex items-center justify-center mb-5`}>
+                  <Quote className="h-4 w-4 text-foreground" />
                 </div>
 
                 {/* Stars */}
-                <div className="flex gap-1 mb-6">
+                <div className="flex gap-1 mb-4">
                   {[...Array(t.rating)].map((_, i) => (
-                    <Star key={i} className="w-5 h-5 fill-yellow-400 text-yellow-400" />
+                    <Star key={i} className="w-4 h-4 fill-yellow-400 text-yellow-400" />
                   ))}
                 </div>
 
                 {/* Quote */}
-                <blockquote className="text-base lg:text-2xl font-medium text-foreground/85 leading-relaxed mb-8">
+                <blockquote className="text-sm lg:text-lg font-medium text-foreground/85 leading-relaxed mb-6">
                   "{t.quote}"
                 </blockquote>
 
@@ -219,14 +211,14 @@ export function Testimonials() {
               <button
                 onClick={prev}
                 aria-label="Testimonio anterior"
-                className="w-10 h-10 rounded-full border border-border/50 bg-card/60 flex items-center justify-center text-muted-foreground hover:text-foreground hover:border-primary/30 transition-all"
+                className="w-10 h-10 rounded-full border border-slate-200 bg-white shadow-sm flex items-center justify-center text-muted-foreground hover:text-foreground hover:border-primary/30 transition-all"
               >
                 <ChevronLeft className="h-4 w-4" />
               </button>
               <button
                 onClick={next}
                 aria-label="Siguiente testimonio"
-                className="w-10 h-10 rounded-full border border-border/50 bg-card/60 flex items-center justify-center text-muted-foreground hover:text-foreground hover:border-primary/30 transition-all"
+                className="w-10 h-10 rounded-full border border-slate-200 bg-white shadow-sm flex items-center justify-center text-muted-foreground hover:text-foreground hover:border-primary/30 transition-all"
               >
                 <ChevronRight className="h-4 w-4" />
               </button>
@@ -235,7 +227,7 @@ export function Testimonials() {
         </div>
 
         {/* Mini cards below */}
-        <div className="grid grid-cols-2 md:grid-cols-5 gap-3 mt-12 max-w-4xl mx-auto">
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-2 mt-8 md:mt-10 max-w-4xl mx-auto">
           {testimonials.map((item, i) => (
             <button
               key={item.id}
@@ -243,7 +235,7 @@ export function Testimonials() {
               className={`rounded-xl p-3 border transition-all duration-200 text-left ${
                 i === current
                   ? 'border-primary/40 bg-primary/5'
-                  : 'border-border/40 bg-card/40 hover:border-border hover:bg-card/60'
+                  : 'border-slate-200 bg-white hover:border-primary/20'
               }`}
             >
               <div className="flex items-center gap-2 mb-1">
@@ -256,7 +248,6 @@ export function Testimonials() {
             </button>
           ))}
         </div>
-
       </div>
     </section>
   )

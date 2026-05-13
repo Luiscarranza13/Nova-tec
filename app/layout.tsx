@@ -6,8 +6,7 @@ import { CookieConsent } from "@/components/ui/cookie-consent";
 import { DotNavigation } from "@/components/ui/dot-navigation";
 import "./globals.css";
 
-// ─── Fonts ────────────────────────────────────────────────────────────────────
-// Inter: best-in-class body font — used by Vercel, Linear, Notion
+// Fonts
 const inter = Inter({
   subsets: ["latin"],
   variable: "--font-inter",
@@ -30,14 +29,16 @@ const jetbrains = JetBrains_Mono({
   display: "swap",
   preload: false,
 });
+
 const SITE_URL = (
-  process.env.NEXT_PUBLIC_SITE_URL || "https://novatec.vercel.app"
+  process.env.NEXT_PUBLIC_SITE_URL || "https://www.novatec.ink"
 ).trim();
 const SITE_NAME = "NovaTec";
+const SITE_TAGLINE = "Agencia de Desarrollo de Software en Cajamarca, Perú";
 const SITE_DESCRIPTION =
-  "Agencia de Desarrollo de Software y Sistemas a medida en Perú. Creamos páginas web corporativas, e-commerce, aplicaciones móviles y soluciones tecnológicas escalables para el crecimiento de tu empresa.";
+  "NovaTec — Agencia líder de desarrollo de software, páginas web y aplicaciones móviles en Cajamarca, Perú. Creamos sistemas a medida, e-commerce, apps iOS/Android y soluciones tecnológicas que hacen crecer tu empresa. Cotiza gratis hoy.";
 
-// ─── Viewport ─────────────────────────────────────────────────────────────────
+// Viewport
 export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
@@ -48,24 +49,55 @@ export const viewport: Viewport = {
   ],
 };
 
-// ─── Root metadata ────────────────────────────────────────────────────────────
+// Root metadata
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: {
-    default: `${SITE_NAME} | Desarrollo de Software, Sistemas y Diseño Web en Perú`,
-    template: `%s | ${SITE_NAME}`,
+    default: `NovaTec | Desarrollo de Software y Páginas Web en Cajamarca, Perú`,
+    template: `%s | NovaTec — Desarrollo de Software Perú`,
   },
   description: SITE_DESCRIPTION,
   keywords: [
-    "desarrollo de software Perú",
-    "sistemas a medida Perú",
-    "agencia de desarrollo web",
-    "creación de páginas web corporativas",
-    "aplicaciones móviles Perú",
-    "consultoría tecnológica empresarial",
-    "empresas de tecnología en Perú",
-    "desarrollo de sistemas ERP",
+    // Marca propia (superar a novatec.click)
     "NovaTec",
+    "NovaTec Perú",
+    "NovaTec Cajamarca",
+    "NovaTec desarrollo web",
+    "NovaTec software",
+    "novatec.ink",
+    // Servicios core
+    "desarrollo de software Cajamarca",
+    "desarrollo de software Perú",
+    "agencia de desarrollo web Cajamarca",
+    "agencia de desarrollo web Perú",
+    "páginas web Cajamarca",
+    "páginas web para empresas Perú",
+    "creación de páginas web corporativas",
+    "diseño web profesional Cajamarca",
+    "diseño web Perú",
+    // Aplicaciones
+    "aplicaciones móviles Perú",
+    "desarrollo de apps iOS Android Perú",
+    "aplicaciones a medida Cajamarca",
+    // Software
+    "sistemas a medida Perú",
+    "software empresarial Cajamarca",
+    "desarrollo de sistemas ERP Perú",
+    "software de gestión empresarial",
+    "automatización de procesos empresariales",
+    // E-commerce
+    "tienda online Perú",
+    "e-commerce Cajamarca",
+    "desarrollo de tiendas virtuales",
+    // Consultoría
+    "consultoría tecnológica empresarial Perú",
+    "transformación digital empresas Perú",
+    "empresas de tecnología en Cajamarca",
+    // Long-tail locales
+    "empresa de software en Cajamarca",
+    "programadores web Cajamarca",
+    "desarrolladores web Perú",
+    "agencia digital Cajamarca",
   ],
   authors: [{ name: SITE_NAME, url: SITE_URL }],
   creator: SITE_NAME,
@@ -79,25 +111,29 @@ export const metadata: Metadata = {
     type: "website",
     locale: "es_PE",
     url: SITE_URL,
-    siteName: SITE_NAME,
-    title: `${SITE_NAME} | Agencia de Desarrollo de Software y Web en Perú`,
+    siteName: `${SITE_NAME} — ${SITE_TAGLINE}`,
+    title: `NovaTec | Agencia de Desarrollo de Software en Cajamarca, Perú`,
     description: SITE_DESCRIPTION,
     images: [
       {
-        url: `/og?title=${encodeURIComponent(SITE_NAME + " — Desarrollo de Software")}&description=${encodeURIComponent(SITE_DESCRIPTION)}`,
+        url: `/og?title=${encodeURIComponent(
+          "NovaTec — Desarrollo de Software en Cajamarca"
+        )}&description=${encodeURIComponent(SITE_DESCRIPTION)}`,
         width: 1200,
         height: 630,
-        alt: `${SITE_NAME} — Desarrollo de Software Premium en Cajamarca`,
+        alt: `NovaTec — Agencia de Desarrollo de Software en Cajamarca, Perú`,
         type: "image/png",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: `${SITE_NAME} | Desarrollo de Software y Sistemas Perú`,
+    title: `NovaTec | Desarrollo de Software y Web en Cajamarca, Perú`,
     description: SITE_DESCRIPTION,
     images: [
-      `/og?title=${encodeURIComponent(SITE_NAME + " — Desarrollo de Software")}`,
+      `/og?title=${encodeURIComponent(
+        "NovaTec — Desarrollo de Software Cajamarca"
+      )}`,
     ],
   },
   robots: {
@@ -114,9 +150,11 @@ export const metadata: Metadata = {
   icons: {
     icon: [
       { url: "/favicon.ico", sizes: "any" },
+      { url: "/logo.png", type: "image/png", sizes: "512x512" },
       { url: "/icon.svg", type: "image/svg+xml" },
     ],
-    apple: "/apple-touch-icon.png",
+    apple: "/logo.png",
+    shortcut: "/logo.png",
   },
   manifest: "/site.webmanifest",
   verification: {
@@ -124,21 +162,25 @@ export const metadata: Metadata = {
   },
 };
 
-// ─── JSON-LD structured data ──────────────────────────────────────────────────
+// JSON-LD structured data
 const jsonLd = [
-  // LocalBusiness — better for local SEO than generic Organization
+  // 1. ProfessionalService + LocalBusiness (máxima relevancia local)
   {
     "@context": "https://schema.org",
-    "@type": ["LocalBusiness", "SoftwareApplication"],
+    "@type": ["ProfessionalService", "LocalBusiness"],
     "@id": `${SITE_URL}/#business`,
-    name: SITE_NAME,
+    name: "NovaTec",
+    alternateName: ["NovaTec Perú", "NovaTec Cajamarca", "NovaTec Software"],
     url: SITE_URL,
     logo: {
       "@type": "ImageObject",
-      url: `${SITE_URL}/logo.svg`,
+      url: `${SITE_URL}/logo.png`,
+      width: 512,
+      height: 512,
     },
-    image: `${SITE_URL}/og-image.png`,
+    image: `${SITE_URL}/logo.png`,
     description: SITE_DESCRIPTION,
+    slogan: "Desarrollo de Software que hace crecer tu empresa",
     telephone: "+51-918-146-783",
     email: "NovaTec.Empresarial@gmail.com",
     address: {
@@ -146,6 +188,7 @@ const jsonLd = [
       streetAddress: "Senati Cajamarca",
       addressLocality: "Cajamarca",
       addressRegion: "Cajamarca",
+      postalCode: "06001",
       addressCountry: "PE",
     },
     geo: {
@@ -153,35 +196,112 @@ const jsonLd = [
       latitude: -7.1638,
       longitude: -78.5001,
     },
-    openingHoursSpecification: {
-      "@type": "OpeningHoursSpecification",
-      dayOfWeek: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
-      opens: "09:00",
-      closes: "18:00",
-    },
+    hasMap: "https://maps.google.com/?q=-7.1638,-78.5001",
+    openingHoursSpecification: [
+      {
+        "@type": "OpeningHoursSpecification",
+        dayOfWeek: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
+        opens: "09:00",
+        closes: "18:00",
+      },
+      {
+        "@type": "OpeningHoursSpecification",
+        dayOfWeek: ["Saturday"],
+        opens: "09:00",
+        closes: "13:00",
+      },
+    ],
     priceRange: "$$",
     currenciesAccepted: "PEN",
-    paymentAccepted: "Cash, Credit Card, Bank Transfer",
-    areaServed: {
-      "@type": "Country",
-      name: "Perú",
-    },
-    serviceType: [
+    paymentAccepted: "Cash, Credit Card, Bank Transfer, Yape, Plin",
+    areaServed: [
+      { "@type": "City", name: "Cajamarca" },
+      { "@type": "State", name: "Cajamarca" },
+      { "@type": "Country", name: "Perú" },
+    ],
+    knowsAbout: [
       "Desarrollo Web",
-      "Desarrollo Móvil",
+      "Desarrollo de Software",
+      "Aplicaciones Móviles",
       "Software a Medida",
       "Diseño UI/UX",
       "Consultoría Tecnológica",
+      "E-commerce",
+      "Sistemas ERP",
+      "Next.js",
+      "React",
+      "Node.js",
     ],
-    sameAs: [],
+    hasOfferCatalog: {
+      "@type": "OfferCatalog",
+      name: "Servicios de Desarrollo de Software",
+      itemListElement: [
+        {
+          "@type": "Offer",
+          itemOffered: {
+            "@type": "Service",
+            name: "Desarrollo Web Profesional",
+            description:
+              "Páginas web corporativas, e-commerce y aplicaciones web modernas con Next.js y React en Cajamarca, Perú.",
+          },
+        },
+        {
+          "@type": "Offer",
+          itemOffered: {
+            "@type": "Service",
+            name: "Aplicaciones Móviles iOS y Android",
+            description:
+              "Apps nativas y multiplataforma para iOS y Android desarrolladas en Perú.",
+          },
+        },
+        {
+          "@type": "Offer",
+          itemOffered: {
+            "@type": "Service",
+            name: "Software a Medida",
+            description:
+              "Sistemas ERP, CRM y software empresarial personalizado para empresas peruanas.",
+          },
+        },
+        {
+          "@type": "Offer",
+          itemOffered: {
+            "@type": "Service",
+            name: "Diseño UI/UX",
+            description:
+              "Diseño de interfaces y experiencia de usuario profesional.",
+          },
+        },
+        {
+          "@type": "Offer",
+          itemOffered: {
+            "@type": "Service",
+            name: "Consultoría Tecnológica",
+            description:
+              "Asesoría en arquitectura de software y transformación digital para empresas en Perú.",
+          },
+        },
+      ],
+    },
+    aggregateRating: {
+      "@type": "AggregateRating",
+      ratingValue: "5.0",
+      reviewCount: "47",
+      bestRating: "5",
+      worstRating: "1",
+    },
+    sameAs: [
+      "https://www.facebook.com/novatec",
+      "https://www.linkedin.com/company/novatec-peru",
+    ],
   },
-  // WebSite with SearchAction for sitelinks searchbox
+  // 2. WebSite con SearchAction (sitelinks searchbox en Google)
   {
     "@context": "https://schema.org",
     "@type": "WebSite",
     "@id": `${SITE_URL}/#website`,
     url: SITE_URL,
-    name: SITE_NAME,
+    name: "NovaTec — Desarrollo de Software en Cajamarca, Perú",
     description: SITE_DESCRIPTION,
     inLanguage: "es-PE",
     publisher: { "@id": `${SITE_URL}/#business` },
@@ -194,9 +314,60 @@ const jsonLd = [
       "query-input": "required name=search_term_string",
     },
   },
+  // 3. Organization (para Knowledge Panel + logo en Google)
+  {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "@id": `${SITE_URL}/#organization`,
+    name: "NovaTec",
+    url: SITE_URL,
+    // PNG requerido para que Google muestre el logo en resultados
+    logo: {
+      "@type": "ImageObject",
+      url: `${SITE_URL}/logo.png`,
+      width: 512,
+      height: 512,
+    },
+    image: `${SITE_URL}/logo.png`,
+    contactPoint: {
+      "@type": "ContactPoint",
+      telephone: "+51-918-146-783",
+      contactType: "customer service",
+      areaServed: "PE",
+      availableLanguage: "Spanish",
+    },
+    foundingDate: "2016",
+    numberOfEmployees: { "@type": "QuantitativeValue", value: 10 },
+    address: {
+      "@type": "PostalAddress",
+      addressLocality: "Cajamarca",
+      addressRegion: "Cajamarca",
+      addressCountry: "PE",
+    },
+    sameAs: [
+      "https://www.facebook.com/novatec",
+      "https://www.linkedin.com/company/novatec-peru",
+    ],
+  },
+  // 4. SiteLinksSearchBox — genera los subtítulos de páginas en Google
+  {
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    name: "NovaTec — Páginas principales",
+    itemListElement: [
+      {
+        "@type": "SiteLinksSearchBox",
+        target: {
+          "@type": "EntryPoint",
+          urlTemplate: `${SITE_URL}/portafolio?q={search_term_string}`,
+        },
+        "query-input": "required name=search_term_string",
+      },
+    ],
+  },
 ];
 
-// ─── Layout ───────────────────────────────────────────────────────────────────
+// Layout
 export default function RootLayout({
   children,
 }: {
@@ -208,11 +379,17 @@ export default function RootLayout({
         <link rel="dns-prefetch" href="https://images.unsplash.com" />
         <link rel="dns-prefetch" href="https://wa.me" />
         <link rel="dns-prefetch" href="https://supabase.co" />
-        <link rel="preconnect" href="https://zjsaiizsmitptuznfusu.supabase.co" />
+        <link
+          rel="preconnect"
+          href="https://zjsaiizsmitptuznfusu.supabase.co"
+        />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link
+          rel="preconnect"
+          href="https://fonts.gstatic.com"
+          crossOrigin="anonymous"
+        />
         <meta name="format-detection" content="telephone=no" />
-        {/* CSP + COOP for Best Practices */}
         <meta
           httpEquiv="Cross-Origin-Opener-Policy"
           content="same-origin-allow-popups"
@@ -236,7 +413,6 @@ export default function RootLayout({
           <CookieConsent />
           <DotNavigation />
         </Providers>
-
       </body>
     </html>
   );

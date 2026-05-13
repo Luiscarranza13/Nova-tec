@@ -50,48 +50,47 @@ export function DotNavigation() {
     <AnimatePresence>
       {visible && (
         <motion.nav
-          initial={{ opacity: 0, x: 20 }}
+          initial={{ opacity: 0, x: 10 }}
           animate={{ opacity: 1, x: 0 }}
-          exit={{ opacity: 0, x: 20 }}
-          className="fixed right-6 top-1/2 -translate-y-1/2 z-50 flex flex-col gap-3 hidden lg:flex"
+          exit={{ opacity: 0, x: 10 }}
+          // Moved further right and only shown on xl+ to avoid overlapping WhatsApp/scroll-to-top
+          className="fixed right-4 top-1/2 -translate-y-1/2 z-40 flex-col gap-2.5 hidden xl:flex"
           aria-label="Navegación por secciones"
         >
           {sections.map(s => (
             <div key={s.id} className="relative flex items-center justify-end gap-2">
+              {/* Tooltip label on hover */}
               <AnimatePresence>
                 {hoveredDot === s.id && (
                   <motion.span
-                    initial={{ opacity: 0, x: 8 }}
+                    initial={{ opacity: 0, x: 6 }}
                     animate={{ opacity: 1, x: 0 }}
-                    exit={{ opacity: 0, x: 8 }}
-                    className="text-xs font-medium text-foreground bg-card/90 backdrop-blur-sm border border-border/50 px-2 py-1 rounded-md shadow-sm whitespace-nowrap"
+                    exit={{ opacity: 0, x: 6 }}
+                    className="text-[11px] font-medium text-foreground/80 bg-card/95 backdrop-blur-sm border border-border/40 px-2 py-0.5 rounded shadow-sm whitespace-nowrap"
                   >
                     {s.label}
                   </motion.span>
                 )}
               </AnimatePresence>
+
               <button
                 onClick={() => scrollTo(s.id)}
                 onMouseEnter={() => setHoveredDot(s.id)}
                 onMouseLeave={() => setHoveredDot(null)}
                 aria-label={`Ir a ${s.label}`}
-                className="relative flex items-center justify-center w-5 h-5"
+                className="flex items-center justify-center w-4 h-4"
               >
                 <motion.div
                   animate={{
-                    width: active === s.id ? 10 : 6,
-                    height: active === s.id ? 10 : 6,
-                    backgroundColor: active === s.id ? 'hsl(var(--primary))' : 'hsl(var(--muted-foreground) / 0.4)',
+                    width:  active === s.id ? 8 : 5,
+                    height: active === s.id ? 8 : 5,
+                    backgroundColor: active === s.id
+                      ? 'hsl(var(--primary))'
+                      : 'hsl(var(--muted-foreground) / 0.25)',
                   }}
                   transition={{ duration: 0.2 }}
                   className="rounded-full"
                 />
-                {active === s.id && (
-                  <motion.div
-                    layoutId="dot-ring"
-                    className="absolute inset-0 rounded-full border-2 border-primary/50"
-                  />
-                )}
               </button>
             </div>
           ))}

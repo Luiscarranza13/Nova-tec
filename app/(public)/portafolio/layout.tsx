@@ -1,14 +1,21 @@
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: 'Portafolio — Proyectos de Software',
+  title: 'Portafolio de Proyectos Web y Software en Cajamarca, Perú | NovaTec',
   description:
-    'Explora el portafolio de NovaTec: proyectos de desarrollo web, apps móviles y software a medida que han transformado negocios en Lima, Perú.',
+    'Descubre los proyectos de NovaTec: páginas web corporativas, apps móviles y software a medida que han transformado empresas en Cajamarca y todo Perú. +250 proyectos entregados.',
+  keywords: [
+    'portafolio desarrollo web Cajamarca',
+    'proyectos de software Perú',
+    'ejemplos páginas web Cajamarca',
+    'NovaTec proyectos',
+    'casos de éxito desarrollo software Perú',
+  ],
   alternates: { canonical: '/portafolio' },
   openGraph: {
-    title: 'Portafolio | NovaTec',
+    title: 'Portafolio de Proyectos | NovaTec Cajamarca, Perú',
     description:
-      'Proyectos de desarrollo web, apps móviles y software a medida. Descubre nuestro trabajo.',
+      '+250 proyectos de desarrollo web, apps móviles y software a medida en Cajamarca y Perú.',
     url: '/portafolio',
   },
 }

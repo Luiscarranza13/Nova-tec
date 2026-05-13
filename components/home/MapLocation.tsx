@@ -12,37 +12,37 @@ const INFO = [
 
 export function MapLocation() {
   return (
-    <section className="py-24 relative overflow-hidden">
-      <div className="absolute inset-0 bg-gradient-to-b from-transparent via-card/30 to-transparent" />
-      <div className="container relative z-10 max-w-6xl mx-auto px-4">
+    <section className="home-section">
+      <div className="absolute inset-0 bg-gradient-to-b from-transparent via-card/20 to-transparent" />
+      <div className="section-container">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="text-center mb-12"
+          className="text-center max-w-2xl mx-auto mb-8 md:mb-12"
         >
           <span className="inline-flex items-center gap-2 text-xs font-semibold text-primary uppercase tracking-widest mb-4">
             <span className="w-8 h-px bg-primary" />Dónde estamos<span className="w-8 h-px bg-primary" />
           </span>
-          <h2 className="text-3xl md:text-4xl font-bold font-heading">
+          <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold font-heading">
             Encuéntranos en <span className="text-gradient">Cajamarca</span>
           </h2>
         </motion.div>
 
-        <div className="grid lg:grid-cols-3 gap-6">
+        {/* 50/50 grid: map left, info right */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-5 md:gap-6 max-w-5xl mx-auto">
           {/* Map embed */}
           <motion.div
             initial={{ opacity: 0, x: -20 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
-            className="lg:col-span-2 rounded-2xl overflow-hidden border border-border/50 shadow-xl"
-            style={{ minHeight: 360 }}
+            className="rounded-2xl overflow-hidden border border-slate-200 shadow-lg h-[320px] md:h-auto md:min-h-[400px]"
           >
             <iframe
               src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3900.123456789!2d-78.5001!3d-7.1638!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x91b2a5b5b5b5b5b5%3A0x1234567890abcdef!2sSenati%20Cajamarca!5e0!3m2!1ses!2spe!4v1234567890"
               width="100%"
               height="100%"
-              style={{ border: 0, minHeight: 360 }}
+              style={{ border: 0, minHeight: 320 }}
               allowFullScreen
               loading="lazy"
               referrerPolicy="no-referrer-when-downgrade"
@@ -58,7 +58,7 @@ export function MapLocation() {
             className="flex flex-col gap-4"
           >
             {INFO.map(({ icon: Icon, label, value, href }) => (
-              <div key={label} className="rounded-2xl border border-border/50 bg-card/60 backdrop-blur-sm p-5 hover:border-primary/30 transition-colors group">
+              <div key={label} className="rounded-2xl border border-slate-200 bg-white shadow-sm p-5 hover:border-primary/30 transition-colors group">
                 <div className="flex items-start gap-3">
                   <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center shrink-0 group-hover:bg-primary/20 transition-colors">
                     <Icon className="h-5 w-5 text-primary" />

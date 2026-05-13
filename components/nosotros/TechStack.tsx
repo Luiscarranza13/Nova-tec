@@ -154,10 +154,9 @@ const allTechs = categories.flatMap((c) => c.techs.map((t) => ({ name: t.name, c
 
 export function TechStack() {
   return (
-    <section className="py-24 relative overflow-hidden">
-      <div className="absolute inset-0 bg-dots opacity-20" />
+    <section className="home-section">
 
-      <div className="container relative z-10 max-w-7xl mx-auto px-4">
+      <div className="section-container">
         {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -170,12 +169,11 @@ export function TechStack() {
             Tecnologías
             <span className="w-8 h-px bg-primary" />
           </span>
-          <h2 className="text-4xl md:text-5xl font-bold font-heading leading-tight mb-4">
-            Nuestro stack
-            <br />
+          <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold font-heading leading-tight mb-4">
+            Nuestro stack{' '}
             <span className="text-gradient">tecnológico</span>
           </h2>
-          <p className="text-muted-foreground text-lg">
+          <p className="text-muted-foreground text-sm md:text-base">
             Trabajamos con las herramientas más modernas y probadas del mercado
             para garantizar soluciones robustas y escalables.
           </p>
@@ -197,7 +195,7 @@ export function TechStack() {
         </motion.div>
 
         {/* Grid */}
-        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-16">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-12">
           {categories.map((cat, index) => (
             <motion.div
               key={cat.label}
@@ -205,7 +203,7 @@ export function TechStack() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: index * 0.06 }}
-              className={`rounded-2xl border border-border/50 bg-card/60 backdrop-blur-sm p-5 hover:border-primary/20 transition-all duration-300 group ${cat.glow}`}
+              className={`rounded-2xl border border-slate-200 bg-white shadow-sm p-5 hover:border-primary/20 transition-all duration-300 group ${cat.glow}`}
             >
               {/* Card header */}
               <div className="flex items-center gap-2 mb-4">
@@ -238,7 +236,7 @@ export function TechStack() {
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
           viewport={{ once: true }}
-          className="relative overflow-hidden rounded-2xl border border-border/40 bg-card/40 backdrop-blur-sm py-4"
+          className="relative overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm py-4"
         >
           {/* fade edges */}
           <div className="pointer-events-none absolute left-0 top-0 h-full w-16 bg-gradient-to-r from-background to-transparent z-10" />

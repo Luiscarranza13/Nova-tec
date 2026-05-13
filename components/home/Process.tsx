@@ -22,28 +22,27 @@ export function Process() {
   const lineInView = useInView(lineRef, { once: true })
 
   return (
-    <section className="py-16 lg:py-32 relative overflow-hidden">
+    <section className="home-section">
       <div className="absolute inset-0 bg-gradient-to-b from-transparent via-primary/3 to-transparent" />
-      <div className="absolute inset-0 bg-dots opacity-20" />
+      <div className="absolute inset-0 bg-dots opacity-10" />
 
-      <div className="container relative z-10 max-w-7xl mx-auto px-4">
+      <div className="section-container">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="text-center max-w-2xl mx-auto mb-12 lg:mb-24"
+          className="text-center max-w-2xl mx-auto mb-10 lg:mb-16"
         >
           <span className="inline-flex items-center gap-2 text-xs font-semibold text-primary uppercase tracking-widest mb-4">
             <span className="w-8 h-px bg-primary" />
             Nuestro Proceso
             <span className="w-8 h-px bg-primary" />
           </span>
-          <h2 className="text-3xl lg:text-5xl font-bold font-heading leading-tight mb-4">
-            Metodología que garantiza
-            <br />
+          <h2 className="text-2xl md:text-3xl font-bold font-heading leading-tight mb-3">
+            Metodología que garantiza{' '}
             <span className="text-gradient">resultados excepcionales</span>
           </h2>
-          <p className="text-muted-foreground text-lg">
+          <p className="text-muted-foreground text-sm md:text-base">
             Un proceso estructurado y transparente en cada proyecto,
             manteniéndote informado en cada etapa.
           </p>
@@ -51,7 +50,7 @@ export function Process() {
 
         {/* Steps */}
         <div className="relative" ref={lineRef}>
-          {/* Animated connector line */}
+          {/* Animated connector line — desktop only */}
           <div className="hidden lg:block absolute top-12 left-[10%] right-[10%] h-px bg-border/50">
             <motion.div
               initial={{ scaleX: 0 }}
@@ -59,7 +58,6 @@ export function Process() {
               transition={{ duration: 1.8, delay: 0.3, ease: 'easeInOut' }}
               className="absolute inset-0 bg-gradient-to-r from-blue-500 via-primary to-amber-500 origin-left"
             />
-            {/* Traveling dot */}
             {lineInView && (
               <motion.div
                 initial={{ left: '0%' }}
@@ -71,7 +69,7 @@ export function Process() {
             )}
           </div>
 
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 lg:gap-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6 lg:gap-8">
             {PROCESS_STEPS.map((step, index) => {
               const Icon = iconMap[step.icon] || Search
               const color = stepColors[index]
@@ -93,7 +91,7 @@ export function Process() {
                       className={`absolute inset-0 bg-gradient-to-br ${color.gradient} rounded-full blur-xl`}
                     />
                     <div className={`relative w-16 h-16 lg:w-24 lg:h-24 rounded-full bg-gradient-to-br ${color.gradient} p-0.5 shadow-lg ${color.glow} group-hover:scale-110 transition-transform duration-300`}>
-                      <div className="w-full h-full rounded-full bg-background flex items-center justify-center">
+                      <div className="w-full h-full rounded-full bg-white flex items-center justify-center">
                         <Icon className="h-6 w-6 lg:h-8 lg:w-8 text-foreground" />
                       </div>
                     </div>

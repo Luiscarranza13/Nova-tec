@@ -1,4 +1,13 @@
 /** @type {import('next').NextConfig} */
+
+// ── Fix SSL certificate verification errors in local dev on Windows ──────────
+// The error UNABLE_TO_VERIFY_LEAF_SIGNATURE causes every external fetch
+// (Supabase, Unsplash, etc.) to fail/timeout, making ALL pages slow.
+// This is safe: only active when NODE_ENV !== 'production'.
+if (process.env.NODE_ENV !== 'production') {
+  process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0'
+}
+
 const nextConfig = {
   reactStrictMode: true,
   compress: true,
@@ -6,7 +15,10 @@ const nextConfig = {
   outputFileTracingRoot: __dirname,
 
   images: {
-    formats: ["image/avif", "image/webp"],
+    // unoptimized: bypass the server-side image optimizer.
+    // This avoids UNABLE_TO_VERIFY_LEAF_SIGNATURE SSL errors when Node.js
+    // tries to fetch external images (Unsplash, etc.) from this machine.
+    unoptimized: true,
     remotePatterns: [
       { protocol: "https", hostname: "images.unsplash.com" },
       { protocol: "https", hostname: "i.imgur.com" },

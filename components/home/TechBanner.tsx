@@ -37,26 +37,27 @@ function TechPill({ tech }: { tech: typeof techs[0] }) {
 
 export function TechBanner() {
   return (
-    <section className="py-16 relative overflow-hidden border-y border-border/30" aria-label="Stack tecnológico">
+    <section className="home-section border-y border-border/20" aria-label="Stack tecnológico que usamos">
       <div className="absolute inset-0 bg-gradient-to-r from-background via-transparent to-background z-10 pointer-events-none" aria-hidden="true" />
-
-      <div className="mb-8 text-center">
-        <span className="text-xs font-semibold text-muted-foreground uppercase tracking-widest">
-          Stack tecnológico que usamos
-        </span>
-      </div>
-
-      {/* Row 1 — CSS animation only, no JS */}
-      <div className="flex overflow-hidden" aria-hidden="true">
-        <div className="flex gap-4 shrink-0 animate-marquee-left">
-          {doubled.map((tech, i) => <TechPill key={i} tech={tech} />)}
+      <div className="section-container">
+        <div className="mb-5 text-center">
+          <span className="text-xs font-semibold text-muted-foreground uppercase tracking-widest">
+            Stack tecnológico que usamos
+          </span>
         </div>
-      </div>
 
-      {/* Row 2 */}
-      <div className="flex overflow-hidden mt-4" aria-hidden="true">
-        <div className="flex gap-4 shrink-0 animate-marquee-right">
-          {[...doubled].reverse().map((tech, i) => <TechPill key={i} tech={tech} />)}
+        {/* Row 1 — CSS animation only, no JS */}
+        <div className="flex overflow-hidden" aria-hidden="true">
+          <div className="flex gap-4 shrink-0 animate-marquee-left">
+            {doubled.map((tech, i) => <TechPill key={i} tech={tech} />)}
+          </div>
+        </div>
+
+        {/* Row 2 */}
+        <div className="flex overflow-hidden mt-4" aria-hidden="true">
+          <div className="flex gap-4 shrink-0 animate-marquee-right">
+            {[...doubled].reverse().map((tech, i) => <TechPill key={i} tech={tech} />)}
+          </div>
         </div>
       </div>
     </section>

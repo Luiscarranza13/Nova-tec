@@ -5,11 +5,20 @@ import { BlogList } from '@/components/blog/BlogList'
 import { Breadcrumbs } from '@/components/ui/breadcrumbs'
 
 export const metadata: Metadata = {
-  title: 'Blog — Tips y Tendencias Tech',
-  description: 'Artículos sobre desarrollo web, móvil, diseño UI/UX y tecnología para empresas.',
+  title: 'Blog de Tecnología y Desarrollo Web en Perú | NovaTec',
+  description:
+    'Artículos sobre desarrollo web, apps móviles, diseño UI/UX y tecnología para empresas en Cajamarca y Perú. Tips, tendencias y casos de éxito de NovaTec.',
+  keywords: [
+    'blog desarrollo web Perú',
+    'tips tecnología empresas Cajamarca',
+    'tendencias software Perú',
+    'NovaTec blog',
+  ],
+  alternates: { canonical: '/blog' },
   openGraph: {
-    title: 'Blog NovaTec — Tips y Tendencias Tech',
-    description: 'Artículos sobre desarrollo web, móvil, diseño UI/UX y tecnología.',
+    title: 'Blog de Tecnología | NovaTec Cajamarca, Perú',
+    description:
+      'Artículos sobre desarrollo web, apps móviles y tecnología para empresas en Cajamarca y Perú.',
     images: [{ url: '/og?title=Blog NovaTec&description=Tips y tendencias tech para tu negocio', width: 1200, height: 630 }],
   },
 }

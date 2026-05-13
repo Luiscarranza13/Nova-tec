@@ -51,35 +51,35 @@ function SpotlightCard({ children, className }: { children: React.ReactNode; cla
 
 export function Services() {
   return (
-    <section id="servicios" className="py-16 lg:py-32 relative overflow-hidden">
+    <section id="servicios" className="home-section">
       <div className="absolute inset-0 bg-gradient-to-b from-transparent via-primary/3 to-transparent" />
 
-      <div className="container relative z-10 max-w-7xl mx-auto px-4">
+      <div className="section-container">
         {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
 
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="max-w-2xl mb-20"
+          className="max-w-2xl mb-8"
         >
-          <span className="inline-flex items-center gap-2 text-xs font-semibold text-primary uppercase tracking-widest mb-4">
+          <span className="inline-flex items-center gap-2 text-xs font-semibold text-primary uppercase tracking-widest mb-3">
             <span className="w-8 h-px bg-primary" />
             Nuestros Servicios
           </span>
-          <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold font-heading leading-tight mb-4">
+          <h2 className="text-2xl md:text-3xl font-bold font-heading leading-tight mb-3">
             Soluciones tecnológicas
             <br />
             <span className="text-gradient">para cada desafío</span>
           </h2>
-          <p className="text-muted-foreground text-lg">
+          <p className="text-muted-foreground text-sm md:text-base">
             Ofrecemos un espectro completo de servicios adaptados a las necesidades
             específicas de tu empresa.
           </p>
         </motion.div>
 
         {/* Grid */}
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-3 md:gap-5">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-5">
           {SERVICES.map((service, index) => {
             const Icon = iconMap[service.icon] || Code
             const style = cardStyles[index % cardStyles.length]
@@ -92,7 +92,7 @@ export function Services() {
                 transition={{ delay: index * 0.08 }}
               >
                 <SpotlightCard className="group h-full">
-                  <div className={`h-full rounded-2xl border border-border/50 bg-gradient-to-br ${style.gradient} bg-card/50 backdrop-blur-sm p-5 md:p-7 transition-all duration-300 hover:shadow-xl hover:-translate-y-1.5 ${style.border} ${style.glow}`}>
+                  <div className={`h-full rounded-2xl border border-slate-200 bg-white p-5 md:p-6 transition-all duration-300 hover:shadow-xl hover:border-primary/30 hover:-translate-y-1.5 ${style.glow}`}>
                     {/* Icon */}
                     <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${style.gradient} border border-border/50 flex items-center justify-center mb-5 group-hover:scale-110 transition-transform duration-300`}>
                       <Icon className={`h-6 w-6 ${style.icon}`} />
@@ -131,7 +131,7 @@ export function Services() {
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="mt-14 flex justify-center"
+          className="mt-8 flex justify-center"
         >
           <Link href="/servicios">
             <Button variant="outline" size="lg" className="group border-border/60 hover:border-primary/40 hover:bg-primary/5">

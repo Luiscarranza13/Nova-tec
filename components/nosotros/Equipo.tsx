@@ -57,10 +57,9 @@ const team = [
 
 export function Equipo() {
   return (
-    <section className="py-24 relative overflow-hidden">
-      <div className="absolute inset-0 bg-gradient-to-b from-transparent via-card/40 to-transparent" />
+    <section className="home-section">
 
-      <div className="container relative z-10 max-w-7xl mx-auto px-4">
+      <div className="section-container">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -72,18 +71,17 @@ export function Equipo() {
             Nuestro Equipo
             <span className="w-8 h-px bg-primary" />
           </span>
-          <h2 className="text-4xl md:text-5xl font-bold font-heading leading-tight mb-4">
-            Las personas detrás
-            <br />
+          <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold font-heading leading-tight mb-4">
+            Las personas detrás{' '}
             <span className="text-gradient">de cada proyecto</span>
           </h2>
-          <p className="text-muted-foreground text-lg">
+          <p className="text-muted-foreground text-sm md:text-base">
             Un equipo multidisciplinario de expertos apasionados por la tecnología
             y comprometidos con tu éxito.
           </p>
         </motion.div>
 
-        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
           {team.map((member, index) => (
             <motion.div
               key={member.name}
@@ -91,7 +89,7 @@ export function Equipo() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: index * 0.1 }}
-              className="group rounded-2xl border border-border/50 bg-card/60 backdrop-blur-sm overflow-hidden hover:border-primary/30 hover:shadow-xl hover:-translate-y-1 transition-all duration-300"
+              className="group rounded-2xl border border-slate-200 bg-white shadow-sm overflow-hidden hover:border-primary/30 hover:shadow-xl hover:-translate-y-1 transition-all duration-300"
             >
               <div className={`h-1.5 w-full bg-gradient-to-r ${member.gradient}`} />
               <div className="p-7">
@@ -101,7 +99,7 @@ export function Equipo() {
                   </div>
                   <div className="flex gap-2">
                     {[Github, Linkedin, Twitter].map((Icon, i) => (
-                      <a key={i} href="#" aria-label="Perfil social" className="w-8 h-8 rounded-lg bg-muted/50 flex items-center justify-center text-muted-foreground hover:text-primary hover:bg-primary/10 transition-all duration-200">
+                      <a key={i} href="#" aria-label="Perfil social" className="w-8 h-8 rounded-lg border border-slate-200 bg-white flex items-center justify-center text-muted-foreground hover:text-primary hover:border-primary/30 transition-all duration-200">
                         <Icon className="h-3.5 w-3.5" />
                       </a>
                     ))}
@@ -112,7 +110,7 @@ export function Equipo() {
                 <p className="text-sm text-muted-foreground leading-relaxed mb-5">{member.bio}</p>
                 <div className="flex flex-wrap gap-2">
                   {member.skills.map((skill) => (
-                    <span key={skill} className="px-2.5 py-1 text-xs rounded-lg bg-muted/60 text-muted-foreground border border-border/50">
+                    <span key={skill} className="px-2.5 py-1 text-xs rounded-lg bg-slate-50 text-slate-500 border border-slate-100">
                       {skill}
                     </span>
                   ))}
@@ -149,14 +147,14 @@ function JoinForm() {
     window.open(`https://wa.me/51918146783?text=${encodeURIComponent(text)}`, '_blank')
   }
 
-  const field = 'px-3 py-2 text-sm rounded-lg border border-border/60 bg-background/60 focus:outline-none focus:ring-2 focus:ring-primary/40 w-full'
+  const field = 'px-3 py-2 text-sm rounded-lg border border-slate-200 bg-white focus:outline-none focus:ring-2 focus:ring-primary/40 w-full'
 
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
-      className="mt-12 rounded-2xl border border-dashed border-border/60 bg-card/30 p-8"
+      className="mt-12 rounded-2xl border border-slate-200 bg-white shadow-sm p-6 md:p-8"
     >
       <div className="text-center mb-8">
         <p className="text-lg font-semibold font-heading mb-2">¿Quieres unirte al equipo?</p>

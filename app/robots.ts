@@ -1,5 +1,5 @@
 import { MetadataRoute } from 'next'
-const BASE = (process.env.NEXT_PUBLIC_SITE_URL || 'https://novatec.vercel.app').trim()
+const BASE = (process.env.NEXT_PUBLIC_SITE_URL || 'https://www.novatec.ink').trim()
 export default function robots(): MetadataRoute.Robots {
   return {
     rules: [

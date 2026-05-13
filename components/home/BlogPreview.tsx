@@ -10,30 +10,30 @@ export function BlogPreview() {
   const featured = BLOG_POSTS.filter(p => p.featured)
 
   return (
-    <section id="blog" className="py-32 relative overflow-hidden">
-      <div className="absolute inset-0 bg-gradient-to-b from-transparent via-primary/3 to-transparent" />
+    <section id="blog" className="home-section">
+      <div className="absolute inset-0 bg-gradient-to-b from-transparent via-primary/2 to-transparent" />
 
-      <div className="container relative z-10 max-w-7xl mx-auto px-4">
+      <div className="section-container">
         {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="flex items-center justify-between mb-16"
+          className="flex flex-col gap-3 mb-8 sm:flex-row sm:items-end sm:justify-between"
         >
           <div className="max-w-2xl">
             <span className="inline-flex items-center gap-2 text-xs font-semibold text-primary uppercase tracking-widest mb-4">
               <span className="w-8 h-px bg-primary" />
               Blog
             </span>
-            <h2 className="text-4xl md:text-5xl font-bold font-heading leading-tight mb-4">
+            <h2 className="text-2xl md:text-3xl font-bold font-heading leading-tight mb-3">
               Artículos y Tips
               <br />
               <span className="text-gradient">para tu negocio</span>
             </h2>
           </div>
 
-          <Link href="/blog">
+          <Link href="/blog" className="self-start sm:self-auto shrink-0">
             <Button variant="outline" className="gap-2">
               Ver Todo
               <ArrowRight className="h-4 w-4" />
@@ -50,7 +50,7 @@ export function BlogPreview() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: idx * 0.1 }}
-              className="group relative rounded-xl border border-border/50 bg-card/60 backdrop-blur-sm overflow-hidden hover:border-primary/30 transition-all duration-300"
+              className="group relative rounded-xl border border-slate-200 bg-white shadow-sm overflow-hidden hover:border-primary/30 transition-all duration-300"
             >
               {/* Gradient Overlay */}
               <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />

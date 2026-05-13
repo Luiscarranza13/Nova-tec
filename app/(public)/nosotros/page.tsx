@@ -13,12 +13,20 @@ import { ScrollToTop } from '@/components/ui/scroll-to-top'
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: 'Nosotros — Equipo y Misión',
-  description: 'Conoce al equipo de NovaTec: nuestra misión, visión, historia, valores y los profesionales detrás de cada proyecto de software en Lima, Perú.',
+  title: 'Nosotros — Equipo de Desarrollo de Software en Cajamarca, Perú',
+  description:
+    'Conoce al equipo de NovaTec: agencia de desarrollo de software en Cajamarca, Perú. Nuestra misión, visión, historia, valores y los profesionales detrás de cada proyecto.',
+  keywords: [
+    'equipo desarrollo software Cajamarca',
+    'NovaTec quiénes somos',
+    'agencia tecnológica Cajamarca',
+    'empresa de software Perú',
+  ],
   alternates: { canonical: '/nosotros' },
   openGraph: {
-    title: 'Nosotros | NovaTec',
-    description: 'Conoce al equipo de NovaTec: misión, visión, historia y valores.',
+    title: 'Nosotros | NovaTec — Agencia de Software en Cajamarca',
+    description:
+      'Conoce al equipo de NovaTec en Cajamarca, Perú: misión, visión, historia y valores.',
     url: '/nosotros',
   },
 }
