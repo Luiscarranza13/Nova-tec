@@ -1,6 +1,8 @@
 import type { Metadata, Viewport } from "next";
 import { Inter, Sora, JetBrains_Mono } from "next/font/google";
 import { Providers } from "@/components/providers";
+import { GoogleAnalytics } from "@/components/analytics/GoogleAnalytics";
+import { FacebookPixel } from "@/components/analytics/FacebookPixel";
 
 import { CookieConsent } from "@/components/ui/cookie-consent";
 import { DotNavigation } from "@/components/ui/dot-navigation";
@@ -402,6 +404,8 @@ export default function RootLayout({
       <body
         className={`${inter.variable} ${sora.variable} ${jetbrains.variable} font-sans antialiased`}
       >
+        <GoogleAnalytics />
+        <FacebookPixel />
         <Providers
           attribute="class"
           defaultTheme="light"

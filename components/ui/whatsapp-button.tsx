@@ -3,16 +3,18 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { MessageCircle, X } from "lucide-react";
+import { trackEvent } from "@/lib/analytics";
 
 const WHATSAPP = "51918146783";
 const MSG = encodeURIComponent(
-  "¡Hola! 👋 Me interesa conocer más sobre sus servicios. ¿Podrían ayudarme?",
+  "¡Hola! 👋 Me comunico desde el sitio web de NovaTec. Me interesa conocer más sobre sus servicios de desarrollo de software. ¿Podrían ayudarme?",
 );
 
 export function WhatsAppButton() {
   const [visible, setVisible] = useState(false);
   const [tooltip, setTooltip] = useState(false);
   const [dismissed, setDismissed] = useState(false);
+  
   useEffect(() => {
     const t = setTimeout(() => setVisible(true), 3000);
     const t2 = setTimeout(() => setTooltip(true), 5000);
@@ -23,6 +25,10 @@ export function WhatsAppButton() {
       clearTimeout(t3);
     };
   }, []);
+
+  const handleClick = () => {
+    trackEvent.contactWhatsApp();
+  };
 
   return (
     <AnimatePresence>
@@ -40,23 +46,23 @@ export function WhatsAppButton() {
                 initial={{ opacity: 0, x: 10, scale: 0.95 }}
                 animate={{ opacity: 1, x: 0, scale: 1 }}
                 exit={{ opacity: 0, x: 10, scale: 0.95 }}
-                className="relative bg-card border border-border/60 rounded-2xl shadow-xl p-4 max-w-[220px]"
+                className="relative bg-white border border-slate-200 rounded-2xl shadow-xl p-4 max-w-[240px]"
               >
                 <button
                   onClick={() => setDismissed(true)}
                   aria-label="Cerrar tooltip"
-                  className="absolute -top-2 -right-2 w-5 h-5 rounded-full bg-muted border border-border flex items-center justify-center hover:bg-muted/80"
+                  className="absolute -top-2 -right-2 w-6 h-6 rounded-full bg-white border border-slate-200 flex items-center justify-center hover:bg-slate-50 shadow-sm transition-colors"
                 >
-                  <X className="h-3 w-3 text-muted-foreground" />
+                  <X className="h-3 w-3 text-slate-400" />
                 </button>
-                <p className="text-xs font-semibold mb-0.5">
-                  ¿Tienes alguna duda?
+                <p className="text-sm font-bold mb-1 text-slate-900">
+                  ¿Necesitas ayuda? 💬
                 </p>
-                <p className="text-xs text-muted-foreground">
-                  Escríbenos por WhatsApp, respondemos en minutos.
+                <p className="text-xs text-slate-600 leading-relaxed">
+                  Escríbenos por WhatsApp. Respondemos en minutos y sin compromiso.
                 </p>
                 {/* Arrow */}
-                <div className="absolute -bottom-2 right-6 w-4 h-4 bg-card border-r border-b border-border/60 rotate-45" />
+                <div className="absolute -bottom-2 right-6 w-4 h-4 bg-white border-r border-b border-slate-200 rotate-45" />
               </motion.div>
             )}
           </AnimatePresence>
@@ -66,14 +72,22 @@ export function WhatsAppButton() {
             href={`https://wa.me/${WHATSAPP}?text=${MSG}`}
             target="_blank"
             rel="noopener noreferrer"
+            onClick={handleClick}
             whileHover={{ scale: 1.08 }}
             whileTap={{ scale: 0.95 }}
-            className="relative w-14 h-14 rounded-full bg-[#25D366] shadow-lg shadow-[#25D366]/40 flex items-center justify-center hover:shadow-xl hover:shadow-[#25D366]/50 transition-shadow"
-            aria-label="Contactar por WhatsApp"
+            className="relative w-16 h-16 rounded-full bg-[#25D366] shadow-lg shadow-[#25D366]/40 flex items-center justify-center hover:shadow-xl hover:shadow-[#25D366]/50 transition-shadow group"
+            aria-label="Contactar por WhatsApp - Respuesta rápida"
           >
-            {/* Ping */}
+            {/* Ping animation */}
             <span className="absolute inset-0 rounded-full bg-[#25D366] animate-ping opacity-20" />
-            <MessageCircle className="h-7 w-7 text-white relative z-10" />
+            
+            {/* Icon */}
+            <MessageCircle className="h-8 w-8 text-white relative z-10 group-hover:scale-110 transition-transform" />
+            
+            {/* Badge de notificación */}
+            <span className="absolute -top-1 -right-1 w-5 h-5 bg-red-500 rounded-full border-2 border-white flex items-center justify-center">
+              <span className="text-[10px] font-bold text-white">1</span>
+            </span>
           </motion.a>
         </motion.div>
       )}

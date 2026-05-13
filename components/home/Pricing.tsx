@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button'
 import { PRICING_PLANS } from '@/lib/constants'
 import { formatCurrency } from '@/lib/utils'
 import Link from 'next/link'
+import { trackEvent } from '@/lib/analytics'
 
 export function Pricing() {
   return (
@@ -99,6 +100,10 @@ export function Pricing() {
                 href={`https://wa.me/51918146783?text=${encodeURIComponent(`¡Hola! 👋 Me interesa el *Plan ${plan.name}* (S/ ${plan.price}).\n\n¿Podrían brindarme más información sobre cómo empezar?`)}`}
                 target="_blank"
                 rel="noopener noreferrer"
+                onClick={() => {
+                  trackEvent.selectPlan(plan.name)
+                  trackEvent.requestQuote(`Plan ${plan.name}`)
+                }}
                 className="w-full block mt-auto"
               >
                 <Button

@@ -2,10 +2,11 @@
 
 import Link from 'next/link'
 import { motion, useMotionValue, useSpring } from 'framer-motion'
-import { ArrowRight, Sparkles, Zap, CheckCircle2, ChevronDown, Code2, Star, Download } from 'lucide-react'
+import { ArrowRight, Sparkles, Zap, CheckCircle2, ChevronDown, Star, Download, Phone } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { useEffect, useState } from 'react'
 import Swal from 'sweetalert2'
+import { trackEvent } from '@/lib/analytics'
 
 const benefits = [
   'Equipo experto dedicado',
@@ -243,19 +244,35 @@ export function Hero() {
 
             {/* CTAs */}
             <div className="flex flex-col sm:flex-row flex-wrap gap-3 mb-6 w-full">
-              <Link href="/contacto" className="w-full sm:w-auto">
+              <Link 
+                href="/contacto" 
+                className="w-full sm:w-auto"
+                onClick={() => trackEvent.clickCTA('Iniciar Proyecto', 'Hero')}
+              >
                 <Button size="lg" className="group shadow-lg shadow-primary/30 w-full sm:min-w-[160px]">
                   Iniciar Proyecto
                   <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
                 </Button>
               </Link>
-              <Link href="/portafolio" className="w-full sm:w-auto">
+              <Link 
+                href="/portafolio" 
+                className="w-full sm:w-auto"
+                onClick={() => trackEvent.clickCTA('Ver Portafolio', 'Hero')}
+              >
                 <Button size="lg" variant="outline" className="group w-full sm:min-w-[160px] border-slate-200">
                   <Zap className="mr-2 h-4 w-4 text-amber-500" />
                   Ver Portafolio
                 </Button>
               </Link>
-              <Button size="lg" variant="outline" onClick={handleInstallClick} className="group w-full sm:w-auto sm:min-w-[160px] border-slate-200 bg-white hover:bg-slate-50 transition-colors">
+              <Button 
+                size="lg" 
+                variant="outline" 
+                onClick={() => {
+                  handleInstallClick()
+                  trackEvent.installPWA()
+                }} 
+                className="group w-full sm:w-auto sm:min-w-[160px] border-slate-200 bg-white hover:bg-slate-50 transition-colors"
+              >
                 <Download className="mr-2 h-4 w-4 text-blue-500" />
                 Descargar App
               </Button>
@@ -267,20 +284,21 @@ export function Hero() {
                 {[1, 2, 3, 4, 5].map((i) => (
                   <div
                     key={i}
-                    className="w-9 h-9 rounded-full border-2 border-white bg-slate-100 flex items-center justify-center text-[10px] font-bold"
+                    className="w-9 h-9 rounded-full border-2 border-white bg-gradient-to-br from-primary/20 to-chart-2/20 flex items-center justify-center text-[10px] font-bold text-primary"
+                    aria-label={`Cliente satisfecho ${i}`}
                   >
-                    User
+                    <span className="sr-only">Cliente {i}</span>
                   </div>
                 ))}
               </div>
               <div>
-                <div className="flex gap-0.5 mb-0.5">
+                <div className="flex gap-0.5 mb-0.5" role="img" aria-label="5 estrellas de 5">
                   {[...Array(5)].map((_, i) => (
                     <Star key={i} className="w-3.5 h-3.5 fill-yellow-400 text-yellow-400" />
                   ))}
                 </div>
                 <p className="text-xs text-slate-500 font-medium">
-                  <span className="font-bold text-slate-900">+120 clientes</span> satisfechos
+                  <span className="font-bold text-slate-900">+120 clientes</span> satisfechos en Cajamarca
                 </p>
               </div>
             </div>

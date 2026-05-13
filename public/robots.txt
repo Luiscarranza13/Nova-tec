@@ -1,0 +1,30 @@
+# robots.txt para NovaTec - Optimizado para SEO
+User-agent: *
+Allow: /
+Disallow: /admin/
+Disallow: /api/
+Disallow: /_next/
+Disallow: /login
+Disallow: /registro
+Disallow: /recuperar-password
+Disallow: /mantenimiento
+
+# Sitemaps
+Sitemap: https://www.novatec.ink/sitemap.xml
+
+# Crawl-delay para bots específicos
+User-agent: Googlebot
+Crawl-delay: 0
+
+User-agent: Bingbot
+Crawl-delay: 0
+
+# Bloquear bots malos
+User-agent: AhrefsBot
+Disallow: /
+
+User-agent: SemrushBot
+Disallow: /
+
+User-agent: DotBot
+Disallow: /

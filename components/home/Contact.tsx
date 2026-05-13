@@ -4,6 +4,7 @@ import { motion } from 'framer-motion'
 import { MessageCircle, Clock, Zap, Shield, ArrowRight } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import Link from 'next/link'
+import { trackEvent } from '@/lib/analytics'
 
 const WHATSAPP_NUMBER = '51918146783'
 
@@ -85,7 +86,7 @@ export function Contact() {
               Un mensaje es todo lo que necesitas para empezar. Te respondemos rápido y sin rodeos.
             </p>
 
-            <Link href="/contacto">
+            <Link href="/contacto" onClick={() => trackEvent.contactWhatsApp()}>
               <Button
                 size="lg"
                 className="w-full bg-[#25D366] hover:bg-[#20b858] text-white shadow-lg shadow-[#25D366]/25 transition-all group h-12"
@@ -124,6 +125,7 @@ export function Contact() {
                   href={buildWhatsAppUrl(service)}
                   target="_blank"
                   rel="noopener noreferrer"
+                  onClick={() => trackEvent.requestQuote(service)}
                   initial={{ opacity: 0, x: 20 }}
                   whileInView={{ opacity: 1, x: 0 }}
                   viewport={{ once: true }}

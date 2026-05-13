@@ -1,8 +1,9 @@
 'use client'
 
 import { motion, AnimatePresence } from 'framer-motion'
-import { Quote, Star, ChevronLeft, ChevronRight } from 'lucide-react'
+import { Quote, Star, ChevronLeft, ChevronRight, TrendingUp } from 'lucide-react'
 import { useState, useEffect } from 'react'
+import Image from 'next/image'
 
 const testimonials = [
   {
@@ -13,9 +14,11 @@ const testimonials = [
     quote: 'NovaTec transformó completamente nuestra presencia digital. Su equipo entendió perfectamente nuestra visión y entregó un producto que superó nuestras expectativas en tiempo récord.',
     rating: 5,
     avatar: 'MG',
+    image: '/testimonials/maria-gonzalez.jpg', // Agregar foto real si está disponible
     gradient: 'from-blue-500 to-cyan-500',
     color: '#3b82f6',
     result: '+180% ventas online',
+    date: '2024-03-15',
   },
   {
     id: 2,
@@ -25,9 +28,11 @@ const testimonials = [
     quote: 'Trabajar con NovaTec fue una experiencia excepcional. Su metodología ágil nos mantuvo informados en cada etapa. La app de banca ha recibido elogios de nuestros usuarios.',
     rating: 5,
     avatar: 'CR',
+    image: '/testimonials/carlos-ruiz.jpg',
     gradient: 'from-violet-500 to-purple-500',
     color: '#8b5cf6',
     result: '4.9★ en App Store',
+    date: '2024-02-20',
   },
   {
     id: 3,
@@ -37,9 +42,11 @@ const testimonials = [
     quote: 'Necesitábamos un partner tecnológico que entendiera el ritmo startup. NovaTec no solo entregó código de calidad, sino que también aportó ideas estratégicas valiosas.',
     rating: 5,
     avatar: 'AM',
+    image: '/testimonials/ana-martinez.jpg',
     gradient: 'from-pink-500 to-rose-500',
     color: '#ec4899',
     result: 'Lanzamiento en 6 semanas',
+    date: '2024-01-10',
   },
   {
     id: 4,
@@ -49,9 +56,11 @@ const testimonials = [
     quote: 'La app de logística optimizó nuestras operaciones en un 40%. Su equipo técnico es de primer nivel y el soporte post-lanzamiento ha sido excelente.',
     rating: 5,
     avatar: 'RS',
+    image: '/testimonials/roberto-sanchez.jpg',
     gradient: 'from-amber-500 to-orange-500',
     color: '#f59e0b',
     result: '-40% costos operativos',
+    date: '2023-12-05',
   },
   {
     id: 5,
@@ -61,9 +70,11 @@ const testimonials = [
     quote: 'El dashboard que desarrollaron para nosotros es increíblemente intuitivo. Nuestro equipo médico lo adoptó de inmediato y la productividad aumentó notablemente.',
     rating: 5,
     avatar: 'LV',
+    image: '/testimonials/laura-vega.jpg',
     gradient: 'from-emerald-500 to-teal-500',
     color: '#10b981',
     result: '+60% productividad',
+    date: '2023-11-18',
   },
 ]
 
@@ -172,15 +183,19 @@ export function Testimonials() {
                 {/* Author + result */}
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                   <div className="flex items-center gap-4">
-                    <div className={`w-12 h-12 rounded-full bg-gradient-to-br ${t.gradient} flex items-center justify-center text-white font-bold shrink-0`}>
+                    <div className={`w-14 h-14 rounded-full bg-gradient-to-br ${t.gradient} flex items-center justify-center text-white font-bold text-lg shrink-0 shadow-lg`}>
                       {t.avatar}
                     </div>
                     <div>
-                      <p className="font-semibold">{t.name}</p>
+                      <p className="font-semibold text-base">{t.name}</p>
                       <p className="text-sm text-muted-foreground">{t.position} · {t.company}</p>
+                      <p className="text-xs text-muted-foreground/70 mt-0.5">
+                        {new Date(t.date).toLocaleDateString('es-PE', { year: 'numeric', month: 'long' })}
+                      </p>
                     </div>
                   </div>
-                  <div className={`inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r ${t.gradient} bg-opacity-10 border border-border/50`}>
+                  <div className={`inline-flex items-center gap-2 px-4 py-2.5 rounded-full bg-gradient-to-r ${t.gradient} bg-opacity-10 border border-border/50 shadow-sm`}>
+                    <TrendingUp className="w-4 h-4 text-foreground" />
                     <span className="text-sm font-semibold text-foreground">{t.result}</span>
                   </div>
                 </div>
